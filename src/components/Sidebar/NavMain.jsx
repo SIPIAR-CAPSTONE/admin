@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -7,18 +9,20 @@ import {
 } from "@/components/ui/sidebar";
 
 export function NavMain({ navLinks }) {
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Application</SidebarGroupLabel>
       <SidebarMenu>
         {navLinks.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
+            <SidebarMenuButton
+              asChild
+              style={({ isActive }) => (isActive ? { color: "#ee4048" } : {})}
+            >
+              <NavLink to={item.url} className="text-black dark:text-white">
                 <item.icon />
-                <span>{item.name}</span>
-              </a>
+                <span className="select-none">{item.name}</span>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

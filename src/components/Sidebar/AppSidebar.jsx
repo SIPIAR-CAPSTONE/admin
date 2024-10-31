@@ -18,7 +18,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-
 const data = {
   user: {
     name: "shadcn",
@@ -28,27 +27,27 @@ const data = {
   navMain: [
     {
       name: "Dashboard",
-      url: "#",
+      url: "/",
       icon: LayoutDashboard,
     },
     {
       name: "Verification Request",
-      url: "#",
+      url: "verification-request",
       icon: BadgeCheck,
     },
     {
       name: "Verified Users",
-      url: "#",
+      url: "verified-user",
       icon: UserCheck,
     },
     {
       name: "Incident History",
-      url: "#",
+      url: "incident",
       icon: FileClock,
     },
     {
       name: "Broadcast",
-      url: "#",
+      url: "broadcast",
       icon: Map,
     },
   ],
