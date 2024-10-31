@@ -17,6 +17,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import AppLogo from "@/components/Sidebar/AppLogo";
 
 const data = {
   user: {
@@ -54,12 +55,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }) {
-  const { open } = useSidebar();
+  const { state } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" className="py-2" {...props}>
       <SidebarHeader>
-        <h1 className="text-red-500 ">{open ? "Temp " : ""}Logo</h1>
+        <AppLogo logoOnly={state === "collapsed"} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain navLinks={data.navMain} />
