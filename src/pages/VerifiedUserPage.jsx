@@ -1,5 +1,5 @@
 import Header from "@/components/Header/Header";
-import { columns } from "@/components/VerificationRequest/column";
+import { columns } from "@/components/VerifiedUser/column";
 import { DataTable } from "@/components/DataTable/DataTable";
 
 export default function VerifiedUserPage() {
