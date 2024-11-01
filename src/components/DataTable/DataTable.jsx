@@ -21,7 +21,7 @@ import VisibleColumns from "@/components/DataTable/VisibleColumns";
 import SearchBox from "./SearchBox";
 import { useNavigate } from "react-router-dom";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, searchColumn = "email" }) {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -47,7 +47,7 @@ export function DataTable({ columns, data }) {
   return (
     <div className="px-6 py-2 border rounded-lg">
       <div className="flex justify-end py-4 gap-x-2">
-        <SearchBox table={table} />
+        <SearchBox table={table} searchColumn={searchColumn} />
         <VisibleColumns table={table} />
       </div>
 

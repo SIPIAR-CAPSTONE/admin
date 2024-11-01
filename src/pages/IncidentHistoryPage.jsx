@@ -35,7 +35,7 @@ export default function IncidentHistoryPage() {
     <div>
       <Header title="Incident History" />
       <div className="px-4 py-10 mx-auto max-w-screen-2xl">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data} searchColumn="location" />
       </div>
     </div>
   );
