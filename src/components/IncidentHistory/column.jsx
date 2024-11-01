@@ -1,7 +1,5 @@
-import { ArrowUpDown } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import moment from "moment";
+import TableHeadButton from "@/components/DataTable/TableHeadButton";
 
 export const columns = [
   {
@@ -15,13 +13,10 @@ export const columns = [
     accessorKey: "location",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Location"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Location
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
@@ -32,13 +27,10 @@ export const columns = [
     accessorKey: "date",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Date"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
@@ -50,13 +42,10 @@ export const columns = [
     accessorKey: "condition",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Condition"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Condition
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {

@@ -1,7 +1,5 @@
-import { ArrowUpDown } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import moment from "moment";
+import TableHeadButton from "@/components/DataTable/TableHeadButton";
 
 export const columns = [
   {
@@ -15,13 +13,10 @@ export const columns = [
     accessorKey: "email",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Email"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
@@ -32,13 +27,10 @@ export const columns = [
     accessorKey: "firstName",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="First Name"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          First Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
@@ -49,13 +41,10 @@ export const columns = [
     accessorKey: "lastName",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Last Name"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Last Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
@@ -66,13 +55,10 @@ export const columns = [
     accessorKey: "verifiedDate",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <TableHeadButton
+          label="Verified Date"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Verified Date
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
+        />
       );
     },
     cell: ({ row }) => {
