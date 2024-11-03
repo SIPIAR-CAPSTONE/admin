@@ -13,10 +13,10 @@ export default function VisibleColumns({ table }) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-transparent ps-3 pe-1 md:pe-3.5 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-400"
+          className="bg-transparent ps-3 md:pe-3.5 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-400"
         >
           <Settings2 />
-          <span>Columns</span>
+          <span className="font-normal">Columns</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

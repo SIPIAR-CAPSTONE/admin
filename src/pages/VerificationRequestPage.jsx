@@ -1,10 +1,15 @@
-import Header from "@/components/Header/Header";
+import TopBar from "@/components/TopBar/TopBar";
 import { columns } from "@/components/VerificationRequest/column";
 import { DataTable } from "@/components/DataTable/DataTable";
 
-export default function VerificationRequestPage() {
-  //!todo: change this to supabase fetch
-  const data = [
+const data = {
+  breadcrumbs: [
+    {
+      name: "Verification Request",
+      href: "verification-request",
+    },
+  ],
+  tempTableData: [
     {
       id: "728ed52f",
       firstName: "John",
@@ -33,13 +38,19 @@ export default function VerificationRequestPage() {
       email: "b@example.com",
       requestDate: "2023-07-10T00:00:00.000Z",
     },
-  ];
+  ],
+};
 
+export default function VerificationRequestPage() {
   return (
     <div>
-      <Header title="Verification Request" />
+      <TopBar breadcrumbsData={data.breadcrumbs} />
       <div className="px-4 py-10 mx-auto max-w-screen-2xl">
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          tableName="Verification Request"
+          columns={columns}
+          data={data.tempTableData}
+        />
       </div>
     </div>
   );

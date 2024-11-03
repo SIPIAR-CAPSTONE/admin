@@ -20,8 +20,14 @@ import TableFooter from "@/components/DataTable/TableFooter";
 import VisibleColumns from "@/components/DataTable/VisibleColumns";
 import SearchBox from "./SearchBox";
 import { useNavigate } from "react-router-dom";
+import H1 from "../ui/H1";
 
-export function DataTable({ columns, data, searchColumn = "email" }) {
+export function DataTable({
+  columns,
+  data,
+  tableName,
+  searchColumn = "email",
+}) {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -45,61 +51,72 @@ export function DataTable({ columns, data, searchColumn = "email" }) {
   });
 
   return (
-    <div className="px-6 py-2 border rounded-lg">
-      <div className="flex justify-end py-4 gap-x-2">
-        <SearchBox table={table} searchColumn={searchColumn} />
-        <VisibleColumns table={table} />
+    <div className="py-4 rounded-lg md:px-6 md:border md:shadow md:py-2">
+      <div className="flex flex-col gap-2 py-4 md:items-center md:justify-between md:flex-row">
+        <H1 className="pb-0">{tableName}</H1>
+        <div className="flex justify-end w-full md:w-auto gap-x-2">
+          <SearchBox table={table} searchColumn={searchColumn} />
+          <VisibleColumns table={table} />
+        </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow
-              key={headerGroup.id}
-              className="bg-primary-500 hover:bg-primary-500"
-            >
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    className="font-semibold text-center text-white"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody className="border">
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+      <div className="border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                onClick={() => navigate(row.original.id)}
+                key={headerGroup.id}
+                className="bg-primary-500 hover:bg-primary-500"
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="text-center">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className="font-semibold text-center text-white"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  onClick={() => navigate(row.original.id)}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="text-center">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       <TableFooter table={table} />
     </div>
   );

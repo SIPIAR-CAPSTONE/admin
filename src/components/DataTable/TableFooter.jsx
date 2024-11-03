@@ -18,7 +18,7 @@ export default function TableFooter({ table }) {
   return (
     <div className="flex items-center justify-between pt-3 pb-1 md:px-2">
       <div className="flex items-center space-x-2">
-        <p className="hidden text-sm font-medium md:inline">Rows per page</p>
+        <p className="hidden text-sm font-normal md:inline">Rows per page</p>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
@@ -38,7 +38,7 @@ export default function TableFooter({ table }) {
         </Select>
       </div>
       <div className="flex items-center">
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex w-[100px] items-center justify-center text-sm font-normal">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
