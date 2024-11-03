@@ -56,7 +56,7 @@ export const columns = [
     accessorKey: "assessment",
     header: "Assessment",
     cell: ({ row }) => {
-      return <div>{row.getValue("assessment")}</div>;
+      return <div className="min-w-40 md:min-w-0">{row.getValue("assessment")}</div>;
     },
   },
 ];

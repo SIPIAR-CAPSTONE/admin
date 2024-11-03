@@ -1,10 +1,15 @@
-import Header from "@/components/Header/Header";
+import TopBar from "@/components/TopBar/TopBar";
 import { columns } from "@/components/IncidentHistory/column";
 import { DataTable } from "@/components/DataTable/DataTable";
 
-export default function IncidentHistoryPage() {
-  //!todo: change this to supabase fetch
-  const data = [
+const data = {
+  breadcrumbs: [
+    {
+      name: "Incident History",
+      href: "",
+    },
+  ],
+  tempTableData: [
     {
       id: "728ed52f",
       location: "123 Main St",
@@ -29,13 +34,20 @@ export default function IncidentHistoryPage() {
       assessment:
         "The patient’s chest was stiff, we struggled to achieve sufficient depth.",
     },
-  ];
+  ],
+};
 
+export default function IncidentHistoryPage() {
   return (
     <div>
-      <Header title="Incident History" />
+      <TopBar breadcrumbsData={data.breadcrumbs} />
       <div className="px-4 py-10 mx-auto max-w-screen-2xl">
-        <DataTable columns={columns} data={data} searchColumn="location" />
+        <DataTable
+          tableName="Incident History"
+          columns={columns}
+          data={data.tempTableData}
+          searchColumn="location"
+        />
       </div>
     </div>
   );
