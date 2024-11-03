@@ -1,23 +1,28 @@
-import Header from "@/components/Header/Header";
-import { columns } from "@/components/VerifiedUser/column";
+import TopBar from "@/components/TopBar/TopBar";
+import { columns } from "@/components/User/column";
 import { DataTable } from "@/components/DataTable/DataTable";
 
-export default function VerifiedUserPage() {
-  //!todo: change this to supabase fetch
-  const data = [
+const data = {
+  breadcrumbs: [
+    {
+      name: "Users",
+      href: "users",
+    },
+  ],
+  tempTableData: [
     {
       id: "728ed52f",
       firstName: "John",
       lastName: "Doe",
       email: "a@example.com",
-      verifiedDate: "2023-07-25T00:00:00.000Z",
+      isVerified: true,
     },
     {
       id: "42f51c34",
       firstName: "Jane",
       lastName: "Smith",
       email: "b@example.com",
-      verifiedDate: "2022-01-15T00:00:00.000Z",
+      isVerified: true,
     },
 
     {
@@ -25,7 +30,7 @@ export default function VerifiedUserPage() {
       firstName: "Bob",
       lastName: "Johnson",
       email: "c@example.com",
-      verifiedDate: "2021-06-20T00:00:00.000Z",
+      isVerified: false,
     },
 
     {
@@ -33,7 +38,7 @@ export default function VerifiedUserPage() {
       firstName: "Alice",
       lastName: "Williams",
       email: "d@example.com",
-      verifiedDate: "2023-03-01T00:00:00.000Z",
+      isVerified: true,
     },
 
     {
@@ -41,7 +46,7 @@ export default function VerifiedUserPage() {
       firstName: "Mike",
       lastName: "Davis",
       email: "e@example.com",
-      verifiedDate: "2022-09-10T00:00:00.000Z",
+      isVerified: false,
     },
 
     {
@@ -49,15 +54,21 @@ export default function VerifiedUserPage() {
       firstName: "Emily",
       lastName: "Taylor",
       email: "f@example.com",
-      verifiedDate: "2021-11-25T00:00:00.000Z",
+      isVerified: false,
     },
-  ];
+  ],
+};
 
+export default function UsersPage() {
   return (
     <div>
-      <Header title="Verified User" />
+      <TopBar breadcrumbsData={data.breadcrumbs} />
       <div className="px-4 py-10 mx-auto max-w-screen-2xl">
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          tableName="Users"
+          columns={columns}
+          data={data.tempTableData}
+        />
       </div>
     </div>
   );

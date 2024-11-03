@@ -1,5 +1,6 @@
-import moment from "moment";
 import TableHeadButton from "@/components/DataTable/TableHeadButton";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const columns = [
   {
@@ -52,18 +53,30 @@ export const columns = [
     },
   },
   {
-    accessorKey: "verifiedDate",
+    accessorKey: "isVerified",
     header: ({ column }) => {
       return (
         <TableHeadButton
-          label="Verified Date"
+          label="Verified"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         />
       );
     },
     cell: ({ row }) => {
-      const date = moment(row.getValue("verifiedDate")).format("YYYY-MM-DD");
-      return <div>{date}</div>;
+      const isVerified = row.getValue("isVerified") == true ? "Yes" : "No";
+
+      return (
+        <Badge
+          className={cn(
+            " rounded-xl",
+            isVerified === "Yes"
+              ? "bg-green-500 hover:bg-green-500"
+              : "bg-neutral-400 hover:bg-neutral-400"
+          )}
+        >
+          {isVerified}
+        </Badge>
+      );
     },
   },
 ];
