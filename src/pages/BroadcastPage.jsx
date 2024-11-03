@@ -1,9 +1,18 @@
-import Header from "@/components/Header/Header";
+import TopBar from "@/components/TopBar/TopBar";
+
+const data = {
+  breadcrumbs: [
+    {
+      name: "Broadcast",
+      href: "broadcast",
+    },
+  ],
+};
 
 export default function BroadcastPage() {
   return (
     <div>
-      <Header title="Broadcast" />
+      <TopBar breadcrumbsData={data.breadcrumbs} />
     </div>
   );
 }
