@@ -19,7 +19,7 @@ export function NavMain({ navLinks }) {
               asChild
               style={({ isActive }) => (isActive ? { color: "#ee4048" } : {})}
             >
-              <NavLink to={item.url} className="text-black dark:text-white">
+              <NavLink to={item.url} className="text-black dark:text-white focus:ring-black">
                 <item.icon />
                 <span className="select-none">{item.name}</span>
               </NavLink>

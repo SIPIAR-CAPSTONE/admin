@@ -3,8 +3,8 @@ import {
   Map,
   LayoutDashboard,
   BadgeCheck,
-  UserCheck,
   FileClock,
+  Users,
 } from "lucide-react";
 
 import { NavMain } from "@/components/Sidebar/NavMain";
@@ -37,19 +37,19 @@ const data = {
       icon: BadgeCheck,
     },
     {
-      name: "Verified Users",
-      url: "verified-user",
-      icon: UserCheck,
-    },
-    {
       name: "Incident History",
-      url: "incident",
+      url: "incidents",
       icon: FileClock,
     },
     {
       name: "Broadcast",
       url: "broadcast",
       icon: Map,
+    },
+    {
+      name: "Users",
+      url: "users",
+      icon: Users,
     },
   ],
 };
@@ -58,7 +58,7 @@ export function AppSidebar({ ...props }) {
   const { state } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" className="py-2" {...props}>
+    <Sidebar collapsible="icon" className="pt-2 bg-sidebar" {...props}>
       <SidebarHeader>
         <AppLogo logoOnly={state === "collapsed"} />
       </SidebarHeader>
