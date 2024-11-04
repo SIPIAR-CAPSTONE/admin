@@ -15,6 +15,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import moment from "moment";
+import { cn } from "@/lib/utils";
 
 const chartData = [
   { month: "Jan", incidents: 10 },
@@ -42,7 +43,7 @@ export default function IncidentOverviewChart({ className, ...props }) {
   const currentYear = moment().year();
 
   return (
-    <Card className={className} {...props}>
+    <Card className={cn("dark:bg-neutral-800", className)} {...props}>
       <CardHeader>
         <CardTitle>Incidents Overview</CardTitle>
         <CardDescription>January - December {currentYear}</CardDescription>

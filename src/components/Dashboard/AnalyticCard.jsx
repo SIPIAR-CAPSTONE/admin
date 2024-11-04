@@ -20,7 +20,7 @@ export default function AnalyticsCard({
   );
 
   return (
-    <Card className="shadow rounded-xl">
+    <Card className="shadow rounded-xl dark:bg-neutral-800">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="font-semibold">{title}</CardTitle>
         {Icon && <Icon className="size-4 text-neutral-500" />}

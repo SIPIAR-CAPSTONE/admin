@@ -54,12 +54,12 @@ export default function UserInfoPage() {
       <div className="max-w-5xl px-4 py-8 mx-auto">
         <div className="flex items-center justify-between gap-2 pb-6">
           <H1 className="pb-0">User Info</H1>
-          <Menubar className="p-0 border-none shadow-none">
+          <Menubar className="p-0 border-none shadow-none dark:bg-transparent">
             <MenubarMenu>
-              <MenubarTrigger className="py-1 px-1.5">
+              <MenubarTrigger className="py-1 px-1.5 dark:bg-transparent dark:text-white hover:dark:bg-neutral-700">
                 <EllipsisVertical />
               </MenubarTrigger>
-              <MenubarContent>
+              <MenubarContent className="dark:bg-neutral-700">
                 {/* TODO: Add verification requests functionality */}
                 <MenubarItem disabled>View Verification Request</MenubarItem>
                 <MenubarSeparator />

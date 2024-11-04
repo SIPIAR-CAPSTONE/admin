@@ -71,7 +71,7 @@ export function PeakTimeIncidentChart({ className, ...props }) {
   const currentYear = moment().year();
 
   return (
-    <Card className={cn("flex flex-col", className)} {...props}>
+    <Card className={cn("flex flex-col dark:bg-neutral-800", className)} {...props}>
       <CardHeader className="items-center pb-0">
         <CardTitle>Peak TIme Incident</CardTitle>
         <CardDescription>January - December {currentYear}</CardDescription>
@@ -79,7 +79,7 @@ export function PeakTimeIncidentChart({ className, ...props }) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto md:mt-4 aspect-square max-h-80"
+          className="mx-auto md:mt-4 aspect-square max-h-72 2xl:max-h-80"
         >
           <PieChart>
             <ChartTooltip

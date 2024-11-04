@@ -13,13 +13,13 @@ export default function VisibleColumns({ table }) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-transparent ps-3 md:pe-3.5 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-400"
+          className="bg-transparent ps-3 md:pe-3.5 dark:bg-transparent dark:bg-neutral-700  dark:text-white"
         >
           <Settings2 />
           <span className="font-normal">Columns</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="dark:bg-neutral-700">
         {table
           .getAllColumns()
           .filter((column) => column.getCanHide())

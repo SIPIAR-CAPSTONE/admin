@@ -70,8 +70,8 @@ export const columns = [
           className={cn(
             " rounded-xl",
             isVerified === "Yes"
-              ? "bg-green-500 hover:bg-green-500"
-              : "bg-neutral-400 hover:bg-neutral-400"
+              ? "bg-green-500 hover:bg-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-600"
+              : "bg-neutral-400 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600"
           )}
         >
           {isVerified}

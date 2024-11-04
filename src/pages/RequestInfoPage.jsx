@@ -41,10 +41,16 @@ export default function RequestInfoPage() {
         <div className="flex flex-col items-center justify-between gap-2 pb-6 md:flex-row">
           <H1 className="pb-0">Verification Request Info</H1>
           <div className="space-x-1.5">
-            <Button size="lg" className="bg-green-500 hover:bg-green-600">
+            <Button
+              size="lg"
+              className="bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:text-white hover:dark:bg-green-600"
+            >
               Accept
             </Button>
-            <Button size="lg" className="bg-red-500 hover:bg-red-600">
+            <Button
+              size="lg"
+              className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:text-white hover:dark:bg-red-600"
+            >
               Reject
             </Button>
           </div>

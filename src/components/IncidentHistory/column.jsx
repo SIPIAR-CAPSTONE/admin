@@ -58,8 +58,8 @@ export const columns = [
           className={cn(
             "rounded-md",
             condition === "Stable"
-              ? "bg-green-500 hover:bg-green-500"
-              : "bg-red-500 hover:bg-red-500"
+              ? "bg-green-500 hover:bg-green-500 dark:bg-green-600 dark:text-white dark:hover:bg-green-600"
+              : "bg-red-500 hover:bg-red-500 dark:bg-red-600 dark:text-white dark:hover:bg-red-600"
           )}
         >
           {condition}

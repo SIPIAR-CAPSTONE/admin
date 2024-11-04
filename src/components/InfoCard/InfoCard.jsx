@@ -10,10 +10,12 @@ export default function InfoCard({
   ...props
 }) {
   return (
-    <Card className={className} {...props}>
+    <Card className={cn("dark:bg-neutral-800 ", className)} {...props}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg font-medium">
-          {LabelIcon && <LabelIcon className="text-primary-500"  />}
+          {LabelIcon && (
+            <LabelIcon className="text-primary-500 dark:text-primary-600" />
+          )}
           {label}
         </CardTitle>
       </CardHeader>

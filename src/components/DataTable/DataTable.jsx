@@ -51,7 +51,7 @@ export function DataTable({
   });
 
   return (
-    <div className="rounded-lg md:px-6 md:border md:shadow md:py-2">
+    <div className="rounded-lg md:px-6 md:border md:shadow md:py-2 dark:bg-neutral-800 md:dark:border-neutral-700 dark:text-white">
       <div className="flex flex-col gap-2 py-4 md:items-center md:justify-between md:flex-row">
         <H1 className="md:pb-0">{tableName}</H1>
         <div className="flex justify-end w-full md:w-auto gap-x-2">
@@ -60,19 +60,19 @@ export function DataTable({
         </div>
       </div>
 
-      <div className="border">
+      <div className="border dark:border-neutral-700">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-primary-500 hover:bg-primary-500"
+                className="bg-primary-500 hover:bg-primary-500 dark:bg-primary-700 hover:dark:bg-primary-800"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="font-semibold text-center text-white"
+                      className="font-semibold text-center text-white dark:text-white"
                     >
                       {header.isPlaceholder
                         ? null
@@ -108,7 +108,7 @@ export function DataTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center dark:text-white"
                 >
                   No results.
                 </TableCell>

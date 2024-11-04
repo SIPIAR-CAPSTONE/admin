@@ -9,8 +9,11 @@ import RequestInfoPage from "@/pages/RequestInfoPage";
 import UserInfoPage from "@/pages/UserInfoPage";
 import VerificationRequestPage from "@/pages/VerificationRequestPage";
 import UsersPage from "@/pages/UsersPage";
+import useTheme from "@/components/ThemeSwitcher/useTheme";
 
 function App() {
+  useTheme(); //initialize theme
+
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>

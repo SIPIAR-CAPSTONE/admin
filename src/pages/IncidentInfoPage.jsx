@@ -58,12 +58,12 @@ export default function IncidentInfoPage() {
       <div className="max-w-5xl px-4 py-8 mx-auto">
         <div className="flex items-center justify-between gap-2 pb-6">
           <H1 className="pb-0">Incident Report</H1>
-          <Menubar className="p-0 border-none shadow-none">
+          <Menubar className="p-0 border-none shadow-none dark:bg-transparent">
             <MenubarMenu>
-              <MenubarTrigger className="py-1 px-1.5">
+              <MenubarTrigger className="py-1 px-1.5 dark:bg-transparent dark:text-white hover:dark:bg-neutral-700">
                 <EllipsisVertical />
               </MenubarTrigger>
-              <MenubarContent>
+              <MenubarContent className="dark:bg-neutral-700">
                 <MenubarItem
                   className="text-red-500"
                   onClick={handleReportDelete}
@@ -103,8 +103,10 @@ export default function IncidentInfoPage() {
               value={info.assessment}
               className="h-40"
             />
-            <div className="w-32 h-20 px-2 py-3 mx-auto text-center border rounded-md shadow border-neutral-100">
-              <span className="block text-sm text-neutral-600">condition</span>
+            <div className="w-32 h-20 px-2 py-3 mx-auto text-center border rounded-md shadow border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600">
+              <span className="block text-sm text-neutral-600 dark:text-neutral-300">
+                condition
+              </span>
               {info.condition === "stable" ? (
                 <span className="block text-lg font-bold text-green-500">
                   STABLE
