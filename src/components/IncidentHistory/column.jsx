@@ -1,5 +1,7 @@
 import moment from "moment";
 import TableHeadButton from "@/components/DataTable/TableHeadButton";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const columns = [
   {
@@ -49,14 +51,29 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.getValue("condition")}</div>;
+      const condition =
+        row.getValue("condition") === "stable" ? "Stable" : "Unstable";
+      return (
+        <Badge
+          className={cn(
+            "rounded-md",
+            condition === "Stable"
+              ? "bg-green-500 hover:bg-green-500"
+              : "bg-red-500 hover:bg-red-500"
+          )}
+        >
+          {condition}
+        </Badge>
+      );
     },
   },
   {
     accessorKey: "assessment",
     header: "Assessment",
     cell: ({ row }) => {
-      return <div className="min-w-40 md:min-w-0">{row.getValue("assessment")}</div>;
+      return (
+        <div className="min-w-40 md:min-w-0">{row.getValue("assessment")}</div>
+      );
     },
   },
 ];
