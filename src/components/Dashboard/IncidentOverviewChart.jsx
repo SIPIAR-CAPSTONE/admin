@@ -34,7 +34,7 @@ const chartData = [
 const chartConfig = {
   incidents: {
     label: "Incidents",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-5))",
   },
 };
 

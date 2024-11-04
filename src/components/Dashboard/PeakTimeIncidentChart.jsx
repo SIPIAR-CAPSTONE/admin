@@ -22,39 +22,48 @@ import moment from "moment";
 export const description = "A donut chart with an active sector";
 
 const chartData = [
-  { timeBlock: "12 AM - 3 AM", incidents: 5, fill: "var(--color-chrome)" },
-  { timeBlock: "3 AM - 6 AM", incidents: 3, fill: "var(--color-safari)" },
-  { timeBlock: "6 AM - 9 AM", incidents: 30, fill: "var(--color-firefox)" },
-  { timeBlock: "9 AM - 12 PM", incidents: 10, fill: "var(--color-edge)" },
-  { timeBlock: "12 PM - 3 PM", incidents: 8, fill: "var(--color-other)" },
-  { timeBlock: "3 PM - 6 PM", incidents: 9, fill: "var(--color-other)" },
-  { timeBlock: "6 PM - 9 PM", incidents: 25, fill: "var(--color-other)" },
-  { timeBlock: "9 PM - 12 AM", incidents: 10, fill: "var(--color-other)" },
+  { timeBlock: "12 AM - 3 AM", incidents: 5, fill: "var(--color-twelveAmToThreeAm)" },
+  { timeBlock: "3 AM - 6 AM", incidents: 3, fill: "var(--color-threeAmToSixAm)" },
+  { timeBlock: "6 AM - 9 AM", incidents: 30, fill: "var(--color-sixAmToNineAm)" },
+  { timeBlock: "9 AM - 12 PM", incidents: 10, fill: "var(--color-nineAmToTwelvePm)" },
+  { timeBlock: "12 PM - 3 PM", incidents: 8, fill: "var(--color-twelvePmToThreePm)" },
+  { timeBlock: "3 PM - 6 PM", incidents: 9, fill: "var(--color-threePmToSixPm)" },
+  { timeBlock: "6 PM - 9 PM", incidents: 25, fill: "var(--color-sixPmToNinePm)" },
+  { timeBlock: "9 PM - 12 AM", incidents: 10, fill: "var(--color-ninePmToTwelveAm)" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
+  twelveAmToThreeAm: {
+    label: "12 AM - 3 AM",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  threeAmToSixAm: {
+    label: "3 AM - 6 AM",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
-    label: "Firefox",
+  sixAmToNineAm: {
+    label: "6 AM - 9 AM",
     color: "hsl(var(--chart-3))",
   },
-  edge: {
-    label: "Edge",
+  nineAmToTwelvePm: {
+    label: "9 AM - 12 PM",
     color: "hsl(var(--chart-4))",
   },
-  other: {
-    label: "Other",
+  twelvePmToThreePm: {
+    label: "12 PM - 3 PM",
     color: "hsl(var(--chart-5))",
+  },
+  threePmToSixPm: {
+    label: "3 PM - 6 PM",
+    color: "hsl(var(--chart-6))",
+  },
+  sixPmToNinePm: {
+    label: "6 PM - 9 PM",
+    color: "hsl(var(--chart-7))",
+  },
+  ninePmToTwelveAm: {
+    label: "9 PM - 12 AM",
+    color: "hsl(var(--chart-8))",
   },
 };
 
