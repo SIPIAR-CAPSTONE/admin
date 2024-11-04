@@ -41,7 +41,7 @@ export default function IncidentHistoryPage() {
   return (
     <div>
       <TopBar breadcrumbsData={data.breadcrumbs} />
-      <div className="px-4 py-10 mx-auto max-w-screen-2xl">
+      <div className="px-4 pb-4 mx-auto md:py-8 max-w-screen-2xl">
         <DataTable
           tableName="Incident History"
           columns={columns}

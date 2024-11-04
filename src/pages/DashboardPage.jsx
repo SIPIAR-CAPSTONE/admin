@@ -61,7 +61,7 @@ export default function DashboardPage() {
   return (
     <div>
       <TopBar breadcrumbsData={data.breadcrumbs} />
-      <div className="px-4 py-8 mx-auto space-y-4 max-w-screen-2xl">
+      <div className="px-4 pb-4 mx-auto space-y-4 md:py-8 max-w-screen-2xl">
         <H1>Analytics Dashboard</H1>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {data.TopSummary.map((item) => (

@@ -51,9 +51,9 @@ export function DataTable({
   });
 
   return (
-    <div className="py-4 rounded-lg md:px-6 md:border md:shadow md:py-2">
+    <div className="rounded-lg md:px-6 md:border md:shadow md:py-2">
       <div className="flex flex-col gap-2 py-4 md:items-center md:justify-between md:flex-row">
-        <H1 className="pb-0">{tableName}</H1>
+        <H1 className="md:pb-0">{tableName}</H1>
         <div className="flex justify-end w-full md:w-auto gap-x-2">
           <SearchBox table={table} searchColumn={searchColumn} />
           <VisibleColumns table={table} />
