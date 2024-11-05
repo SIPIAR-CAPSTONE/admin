@@ -22,14 +22,46 @@ import moment from "moment";
 export const description = "A donut chart with an active sector";
 
 const chartData = [
-  { timeBlock: "12 AM - 3 AM", incidents: 5, fill: "var(--color-twelveAmToThreeAm)" },
-  { timeBlock: "3 AM - 6 AM", incidents: 3, fill: "var(--color-threeAmToSixAm)" },
-  { timeBlock: "6 AM - 9 AM", incidents: 30, fill: "var(--color-sixAmToNineAm)" },
-  { timeBlock: "9 AM - 12 PM", incidents: 10, fill: "var(--color-nineAmToTwelvePm)" },
-  { timeBlock: "12 PM - 3 PM", incidents: 8, fill: "var(--color-twelvePmToThreePm)" },
-  { timeBlock: "3 PM - 6 PM", incidents: 9, fill: "var(--color-threePmToSixPm)" },
-  { timeBlock: "6 PM - 9 PM", incidents: 25, fill: "var(--color-sixPmToNinePm)" },
-  { timeBlock: "9 PM - 12 AM", incidents: 10, fill: "var(--color-ninePmToTwelveAm)" },
+  {
+    timeBlock: "12 AM - 3 AM",
+    incidents: 5,
+    fill: "var(--color-twelveAmToThreeAm)",
+  },
+  {
+    timeBlock: "3 AM - 6 AM",
+    incidents: 3,
+    fill: "var(--color-threeAmToSixAm)",
+  },
+  {
+    timeBlock: "6 AM - 9 AM",
+    incidents: 30,
+    fill: "var(--color-sixAmToNineAm)",
+  },
+  {
+    timeBlock: "9 AM - 12 PM",
+    incidents: 10,
+    fill: "var(--color-nineAmToTwelvePm)",
+  },
+  {
+    timeBlock: "12 PM - 3 PM",
+    incidents: 8,
+    fill: "var(--color-twelvePmToThreePm)",
+  },
+  {
+    timeBlock: "3 PM - 6 PM",
+    incidents: 9,
+    fill: "var(--color-threePmToSixPm)",
+  },
+  {
+    timeBlock: "6 PM - 9 PM",
+    incidents: 25,
+    fill: "var(--color-sixPmToNinePm)",
+  },
+  {
+    timeBlock: "9 PM - 12 AM",
+    incidents: 10,
+    fill: "var(--color-ninePmToTwelveAm)",
+  },
 ];
 
 const chartConfig = {
@@ -71,7 +103,10 @@ export function PeakTimeIncidentChart({ className, ...props }) {
   const currentYear = moment().year();
 
   return (
-    <Card className={cn("flex flex-col dark:bg-neutral-800", className)} {...props}>
+    <Card
+      className={cn("flex flex-col dark:bg-neutral-800", className)}
+      {...props}
+    >
       <CardHeader className="items-center pb-0">
         <CardTitle>Peak TIme Incident</CardTitle>
         <CardDescription>January - December {currentYear}</CardDescription>
@@ -93,9 +128,6 @@ export function PeakTimeIncidentChart({ className, ...props }) {
               innerRadius={60}
               strokeWidth={5}
               activeIndex={0}
-              activeShape={({ outerRadius = 0, ...props }) => (
-                <Sector {...props} outerRadius={outerRadius + 10} />
-              )}
             />
           </PieChart>
         </ChartContainer>
