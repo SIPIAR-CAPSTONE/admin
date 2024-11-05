@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Bell, ChevronsUpDown, LogOut, User } from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -15,9 +17,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getNameInitial } from "./sidebar.helper";
-import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
-import { useState } from "react";
+import { getNameInitial } from "@/components/Sidebar/sidebar.helper";
+import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
+
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 
 export function NavUser({ user }) {
@@ -39,7 +41,7 @@ export function NavUser({ user }) {
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground dark:hover:bg-neutral-800"
               >
                 <Avatar className="w-8 h-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
