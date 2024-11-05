@@ -34,33 +34,10 @@ export default function RequestInfoPage() {
     street: "Main Street",
     houseNumber: "456",
   };
-
-  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
-    useState({
-      accept: false,
-      reject: false,
-    });
-
-  const openAcceptConfirmationDialog = () =>
-    setIsConfirmationDialogVisible((prevIsVisible) => ({
-      ...prevIsVisible,
-      accept: true,
-    }));
-  const openRejectConfirmationDialog = () =>
-    setIsConfirmationDialogVisible((prevIsVisible) => ({
-      ...prevIsVisible,
-      reject: true,
-    }));
-  const closeAcceptConfirmationDialog = () =>
-    setIsConfirmationDialogVisible((prevIsVisible) => ({
-      ...prevIsVisible,
-      accept: false,
-    }));
-  const closeRejectConfirmationDialog = () =>
-    setIsConfirmationDialogVisible((prevIsVisible) => ({
-      ...prevIsVisible,
-      reject: false,
-    }));
+  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+  const openAcceptDialog = () => setIsAcceptDialogOpen(true);
+  const openRejectDialog = () => setIsRejectDialogOpen(true);
 
   const handleAcceptVerification = () => console.log("accepted");
   const handleRejectVerification = () => console.log("rejected");
@@ -75,14 +52,14 @@ export default function RequestInfoPage() {
             <Button
               size="lg"
               className="bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:text-white hover:dark:bg-green-600"
-              onClick={openAcceptConfirmationDialog}
+              onClick={openAcceptDialog}
             >
               Accept
             </Button>
             <Button
               size="lg"
               className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:text-white hover:dark:bg-red-600"
-              onClick={openRejectConfirmationDialog}
+              onClick={openRejectDialog}
             >
               Reject
             </Button>
@@ -122,18 +99,18 @@ export default function RequestInfoPage() {
         </div>
 
         <ConfirmationDialog
-          isOpen={isConfirmationDialogVisible.accept}
+          isOpen={isAcceptDialogOpen}
+          setOpen={setIsAcceptDialogOpen}
           title="Accept Verification Request"
           description="Are you sure you want to accept this incident report?"
           onConfirm={handleAcceptVerification}
-          onCancel={closeAcceptConfirmationDialog}
         />
         <ConfirmationDialog
-          isOpen={isConfirmationDialogVisible.reject}
+          isOpen={isRejectDialogOpen}
+          setOpen={setIsRejectDialogOpen}
           title="Reject Verification Request"
           description="Are you sure you want to reject this incident report?"
           onConfirm={handleRejectVerification}
-          onCancel={closeRejectConfirmationDialog}
           variant="destructive"
         />
       </div>

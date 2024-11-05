@@ -11,12 +11,12 @@ import {
 
 export default function ConfirmationDialog({
   isOpen,
+  setOpen,
   title,
   description,
   cancelLabel = "Cancel",
   confirmLabel = "Confirm",
   onConfirm = () => {},
-  onCancel = () => {},
   variant = "default",
 }) {
   const buttonVariant = {
@@ -26,24 +26,17 @@ export default function ConfirmationDialog({
       "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white hover:dark:bg-red-700",
   };
 
-  const handleConfirm = () => {
-    onConfirm();
-    onCancel(); //after confirm hide the dialog
-  };
-
   return (
-    <AlertDialog open={isOpen}>
+    <AlertDialog open={isOpen} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>
-            {cancelLabel}
-          </AlertDialogCancel>
+          <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleConfirm}
+            onClick={onConfirm}
             className={buttonVariant[variant]}
           >
             {confirmLabel}

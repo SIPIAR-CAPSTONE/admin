@@ -26,10 +26,8 @@ export function NavUser({ user }) {
   const { isMobile } = useSidebar();
   const nameInitial = getNameInitial(user.name);
 
-  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
-    useState(false);
-  const openConfirmationDialog = () => setIsConfirmationDialogVisible(true);
-  const closeConfirmationDialog = () => setIsConfirmationDialogVisible(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
 
   const handleLogout = () => console.log("logged out");
 
@@ -100,11 +98,11 @@ export function NavUser({ user }) {
       </SidebarMenu>
 
       <ConfirmationDialog
-        isOpen={isConfirmationDialogVisible}
+        isOpen={isLogoutDialogOpen}
+        setOpen={setIsLogoutDialogOpen}
         title="Log out"
         description="Are you sure you want to log out?"
-        onConfirm={handleLogout}
-        onCancel={closeConfirmationDialog}
+        onConfirm={handleLogout}  
         variant="destructive"
       />
     </>

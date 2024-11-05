@@ -1,3 +1,12 @@
+import { useState } from "react";
+import {
+  BookUser,
+  ClipboardList,
+  EllipsisVertical,
+  OctagonAlert,
+  SquareActivity,
+} from "lucide-react";
+
 import InfoCard from "@/components/InfoCard/InfoCard";
 import InfoCardField from "@/components/InfoCard/InfoCardField";
 import TopBar from "@/components/TopBar/TopBar";
@@ -10,19 +19,11 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import {
-  BookUser,
-  ClipboardList,
-  EllipsisVertical,
-  OctagonAlert,
-  SquareActivity,
-} from "lucide-react";
-import { useState } from "react";
 
 const data = {
   breadcrumbs: [
     {
-      name: "Incidents",
+      name: "Incident History",
       href: "..",
     },
     {
@@ -53,10 +54,8 @@ export default function IncidentInfoPage() {
 
   const handleReportDelete = () => console.log("deleted");
 
-  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
-    useState(false);
-  const openConfirmationDialog = () => setIsConfirmationDialogVisible(true);
-  const closeConfirmationDialog = () => setIsConfirmationDialogVisible(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
 
   return (
     <>
@@ -126,12 +125,12 @@ export default function IncidentInfoPage() {
         </div>
 
         <ConfirmationDialog
-          isOpen={isConfirmationDialogVisible}
+          isOpen={isDeleteDialogOpen}
+          setOpen={setIsDeleteDialogOpen}
           title="Delete Incident Report"
           description="Permanently delete this incident report? You can't undo this action."
           confirmLabel="Delete"
           onConfirm={handleReportDelete}
-          onCancel={closeConfirmationDialog}
           variant="destructive"
         />
       </div>
