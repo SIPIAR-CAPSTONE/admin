@@ -1,13 +1,13 @@
 import InfoCard from "@/components/InfoCard/InfoCard";
 import InfoCardField from "@/components/InfoCard/InfoCardField";
 import TopBar from "@/components/TopBar/TopBar";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import H1 from "@/components/ui/H1";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import {
@@ -17,6 +17,7 @@ import {
   OctagonAlert,
   SquareActivity,
 } from "lucide-react";
+import { useState } from "react";
 
 const data = {
   breadcrumbs: [
@@ -52,6 +53,11 @@ export default function IncidentInfoPage() {
 
   const handleReportDelete = () => console.log("deleted");
 
+  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+    useState(false);
+  const openConfirmationDialog = () => setIsConfirmationDialogVisible(true);
+  const closeConfirmationDialog = () => setIsConfirmationDialogVisible(false);
+
   return (
     <>
       <TopBar breadcrumbsData={data.breadcrumbs} addBackButton />
@@ -66,7 +72,7 @@ export default function IncidentInfoPage() {
               <MenubarContent className="dark:bg-neutral-700">
                 <MenubarItem
                   className="text-red-500"
-                  onClick={handleReportDelete}
+                  onClick={openConfirmationDialog}
                 >
                   Delete Report
                 </MenubarItem>
@@ -74,7 +80,6 @@ export default function IncidentInfoPage() {
             </MenubarMenu>
           </Menubar>
         </div>
-
         <div className="grid gap-6 md:grid-cols-2">
           <InfoCard LabelIcon={OctagonAlert} label="Incident Details">
             <InfoCardField label="Location" value={info.location} />
@@ -119,6 +124,16 @@ export default function IncidentInfoPage() {
             </div>
           </InfoCard>
         </div>
+
+        <ConfirmationDialog
+          isOpen={isConfirmationDialogVisible}
+          title="Delete Incident Report"
+          description="Permanently delete this incident report? You can't undo this action."
+          confirmLabel="Delete"
+          onConfirm={handleReportDelete}
+          onCancel={closeConfirmationDialog}
+          variant="destructive"
+        />
       </div>
     </>
   );

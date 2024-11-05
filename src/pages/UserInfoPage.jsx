@@ -16,6 +16,8 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import { useState } from "react";
 
 const data = {
   breadcrumbs: [
@@ -48,6 +50,11 @@ export default function UserInfoPage() {
 
   const handleAccountDelete = () => console.log("deleted");
 
+  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+    useState(false);
+  const openConfirmationDialog = () => setIsConfirmationDialogVisible(true);
+  const closeConfirmationDialog = () => setIsConfirmationDialogVisible(false);
+
   return (
     <>
       <TopBar breadcrumbsData={data.breadcrumbs} addBackButton />
@@ -65,9 +72,9 @@ export default function UserInfoPage() {
                 <MenubarSeparator />
                 <MenubarItem
                   className="text-red-500"
-                  onClick={handleAccountDelete}
+                  onClick={openConfirmationDialog}
                 >
-                  Delete Account
+                  Delete Report
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>
@@ -105,6 +112,16 @@ export default function UserInfoPage() {
             <InfoCardField label="House Number" value={user.houseNumber} />
           </InfoCard>
         </div>
+
+        <ConfirmationDialog
+          isOpen={isConfirmationDialogVisible}
+          title="Delete Incident Report"
+          description="Permanently delete this incident report? You can't undo this action."
+          confirmLabel="Delete"
+          onConfirm={handleAccountDelete}
+          onCancel={closeConfirmationDialog}
+          variant="destructive"
+        />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { CircleUserRound, MapPinHouse, IdCard } from "lucide-react";
 import TopBar from "@/components/TopBar/TopBar";
 import InfoCard from "@/components/InfoCard/InfoCard";
@@ -6,6 +6,7 @@ import InfoCardField from "@/components/InfoCard/InfoCardField";
 import IdImage from "@/components/InfoCard/IdImage";
 import H1 from "@/components/ui/H1";
 import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 
 const data = {
   breadcrumbs: [
@@ -34,6 +35,36 @@ export default function RequestInfoPage() {
     houseNumber: "456",
   };
 
+  const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+    useState({
+      accept: false,
+      reject: false,
+    });
+
+  const openAcceptConfirmationDialog = () =>
+    setIsConfirmationDialogVisible((prevIsVisible) => ({
+      ...prevIsVisible,
+      accept: true,
+    }));
+  const openRejectConfirmationDialog = () =>
+    setIsConfirmationDialogVisible((prevIsVisible) => ({
+      ...prevIsVisible,
+      reject: true,
+    }));
+  const closeAcceptConfirmationDialog = () =>
+    setIsConfirmationDialogVisible((prevIsVisible) => ({
+      ...prevIsVisible,
+      accept: false,
+    }));
+  const closeRejectConfirmationDialog = () =>
+    setIsConfirmationDialogVisible((prevIsVisible) => ({
+      ...prevIsVisible,
+      reject: false,
+    }));
+
+  const handleAcceptVerification = () => console.log("accepted");
+  const handleRejectVerification = () => console.log("rejected");
+
   return (
     <>
       <TopBar breadcrumbsData={data.breadcrumbs} addBackButton />
@@ -44,12 +75,14 @@ export default function RequestInfoPage() {
             <Button
               size="lg"
               className="bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:text-white hover:dark:bg-green-600"
+              onClick={openAcceptConfirmationDialog}
             >
               Accept
             </Button>
             <Button
               size="lg"
               className="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:text-white hover:dark:bg-red-600"
+              onClick={openRejectConfirmationDialog}
             >
               Reject
             </Button>
@@ -87,6 +120,22 @@ export default function RequestInfoPage() {
             <InfoCardField label="House #" value={user.houseNumber} />
           </InfoCard>
         </div>
+
+        <ConfirmationDialog
+          isOpen={isConfirmationDialogVisible.accept}
+          title="Accept Verification Request"
+          description="Are you sure you want to accept this incident report?"
+          onConfirm={handleAcceptVerification}
+          onCancel={closeAcceptConfirmationDialog}
+        />
+        <ConfirmationDialog
+          isOpen={isConfirmationDialogVisible.reject}
+          title="Reject Verification Request"
+          description="Are you sure you want to reject this incident report?"
+          onConfirm={handleRejectVerification}
+          onCancel={closeRejectConfirmationDialog}
+          variant="destructive"
+        />
       </div>
     </>
   );
