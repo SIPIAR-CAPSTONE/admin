@@ -19,6 +19,8 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { useLocation } from "react-router-dom";
+import { getDateString } from "@/lib/utils";
 
 const data = {
   breadcrumbs: [
@@ -34,6 +36,9 @@ const data = {
 };
 
 export default function IncidentInfoPage() {
+  const { state } = useLocation();
+  const { id } = state;
+
   const info = {
     location: "123 Main St",
     date: "2023-07-25T00:00:00.000Z",
@@ -51,6 +56,7 @@ export default function IncidentInfoPage() {
       "The patient’s chest was stiff, we struggled to achieve sufficient depth.",
     condition: "stable",
   };
+  const reportSubmitted = getDateString(info.date);
 
   const handleReportDelete = () => console.log("deleted");
 
@@ -82,7 +88,7 @@ export default function IncidentInfoPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <InfoCard LabelIcon={OctagonAlert} label="Incident Details">
             <InfoCardField label="Location" value={info.location} />
-            <InfoCardField label="Date" value={info.date} />
+            <InfoCardField label="Date" value={reportSubmitted} />
             <InfoCardField label="Bystander" value={info.bystander} />
             <InfoCardField label="Responder ID" value={info.responderId} />
           </InfoCard>
@@ -93,8 +99,11 @@ export default function IncidentInfoPage() {
             <InfoCardField label="Sex" value={info.sex} />
           </InfoCard>
           <InfoCard LabelIcon={SquareActivity} label="Medical Information">
-            <InfoCardField label="Heart Rate" value={info.heartRate} />
-            <InfoCardField label="Blood Pressure" value={info.bloodPressure} />
+            <InfoCardField label="Heart Rate" value={`${info.heartRate} bpm`} />
+            <InfoCardField
+              label="Blood Pressure"
+              value={`${info.bloodPressure} mmHg`}
+            />
             <InfoCardField
               label="Medical History"
               value={info.medicalHistory}

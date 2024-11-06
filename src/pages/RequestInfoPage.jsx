@@ -7,6 +7,8 @@ import IdImage from "@/components/InfoCard/IdImage";
 import H1 from "@/components/ui/H1";
 import { Button } from "@/components/ui/button";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import { useLocation } from "react-router-dom";
+import { getDate } from "@/lib/utils";
 
 const data = {
   breadcrumbs: [
@@ -22,18 +24,22 @@ const data = {
 };
 
 export default function RequestInfoPage() {
+  const { state } = useLocation();
+  const { id } = state;
+
   const user = {
     firstName: "John",
     middleName: "Michael",
     lastName: "Doe",
     suffix: "Jr.",
-    birthday: "1990-01-01",
+    birthday: "2003-04-15T00:00:00.000Z",
     phoneNumber: "09123456789",
     city: "Cagayan de Oro City",
     barangay: "Barangay 123",
     street: "Main Street",
     houseNumber: "456",
   };
+  const birthDate = getDate(user.birthday);
   const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const openAcceptDialog = () => setIsAcceptDialogOpen(true);
@@ -72,7 +78,7 @@ export default function RequestInfoPage() {
             <InfoCardField label="Middle Name" value={user.middleName} />
             <InfoCardField label="Last Name" value={user.lastName} />
             <InfoCardField label="Suffix" value={user.suffix} />
-            <InfoCardField label="Birthday" value={user.birthday} />
+            <InfoCardField label="Birthday" value={birthDate} />
             <InfoCardField label="Phone Number" value={user.phoneNumber} />
           </InfoCard>
           <InfoCard
