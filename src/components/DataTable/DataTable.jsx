@@ -92,7 +92,11 @@ export function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => navigate(row.original.id)}
+                  onClick={() =>
+                    navigate(row.original.id, {
+                      state: { id: row.original.id },
+                    })
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-center">

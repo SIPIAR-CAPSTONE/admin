@@ -9,6 +9,8 @@ import RequestInfoPage from "@/pages/RequestInfoPage";
 import UserInfoPage from "@/pages/UserInfoPage";
 import VerificationRequestPage from "@/pages/VerificationRequestPage";
 import UsersPage from "@/pages/UsersPage";
+import BugReportPage from "@/pages/BugReportPage";
+import BugInfoPage from "@/pages/BugInfoPage";
 import useTheme from "@/components/ThemeSwitcher/useTheme";
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="incidents" element={<IncidentHistoryPage />} />
         <Route path="incidents/:id" element={<IncidentInfoPage />} />
         <Route path="broadcast" element={<BroadcastPage />} />
+        <Route path="bug-report" element={<BugReportPage />} />
+        <Route path="bug-report/:id" element={<BugInfoPage />} />
         <Route
           path="verification-request"
           element={<VerificationRequestPage />}
