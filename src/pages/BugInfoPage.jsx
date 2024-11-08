@@ -13,7 +13,6 @@ import {
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import InfoCard from "@/components/InfoCard/InfoCard";
 import InfoCardField from "@/components/InfoCard/InfoCardField";
-import IdImage from "@/components/InfoCard/IdImage";
 import { useLocation } from "react-router-dom";
 import { getDateString } from "@/lib/utils";
 
@@ -74,20 +73,16 @@ export default function BugInfoPage() {
           </Menubar>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <InfoCard LabelIcon={Info} label="Report Details">
-            <InfoCardField label="Issue Type" value={bugInfo.issueType} />
-            <InfoCardField
-              label="Issue Description"
-              value={bugInfo.issueDescription}
-            />
-            <InfoCardField label="User Email" value={bugInfo.email} />
-            <InfoCardField label="Date Reported" value={dateReported} />
-          </InfoCard>
-          <InfoCard LabelIcon={Image} label="Report Image">
-            <IdImage src={bugInfo.image} />
-          </InfoCard>
-        </div>
+        <InfoCard LabelIcon={Info} label="Report Details">
+          <InfoCardField label="Issue Type" value={bugInfo.issueType} />
+          <InfoCardField
+            label="Issue Description"
+            value={bugInfo.issueDescription}
+          />
+          <InfoCardField label="User Email" value={bugInfo.email} />
+          <InfoCardField label="Date Reported" value={dateReported} />
+        </InfoCard>
+
         <ConfirmationDialog
           isOpen={isDeleteDialogOpen}
           setOpen={setIsDeleteDialogOpen}
