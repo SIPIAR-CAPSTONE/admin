@@ -16,11 +16,11 @@ import {
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useLocation } from "react-router-dom";
 import { getDate, getDateString } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const data = {
   breadcrumbs: [
@@ -38,6 +38,7 @@ const data = {
 export default function UserInfoPage() {
   const { state } = useLocation();
   const { id } = state;
+  const { toast } = useToast();
 
   const user = {
     firstName: "John",
@@ -56,7 +57,15 @@ export default function UserInfoPage() {
   const birthDate = getDate(user.birthday);
   const verificationDate = getDateString(user.verificationDate);
 
-  const handleAccountDelete = () => console.log("deleted");
+  const handleAccountDelete = () => {
+    console.log("deleted");
+
+    toast({
+      title: "Deleted Successfully",
+      description: "Successfully deleted user account.",
+      duration: 1000
+    });
+  };
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
@@ -77,7 +86,7 @@ export default function UserInfoPage() {
                   className="text-red-500"
                   onClick={openConfirmationDialog}
                 >
-                  Delete Report
+                  Delete Account
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>

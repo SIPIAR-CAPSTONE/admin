@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { useLocation } from "react-router-dom";
 import { getDate } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const data = {
   breadcrumbs: [
@@ -26,6 +27,7 @@ const data = {
 export default function RequestInfoPage() {
   const { state } = useLocation();
   const { id } = state;
+  const { toast } = useToast();
 
   const user = {
     firstName: "John",
@@ -45,8 +47,23 @@ export default function RequestInfoPage() {
   const openAcceptDialog = () => setIsAcceptDialogOpen(true);
   const openRejectDialog = () => setIsRejectDialogOpen(true);
 
-  const handleAcceptVerification = () => console.log("accepted");
-  const handleRejectVerification = () => console.log("rejected");
+  const handleAcceptVerification = () => {
+    console.log("accepted");
+
+    toast({
+      title: "Verified Successfully",
+      description: "Successfully verified user account.",
+    });
+  };
+  const handleRejectVerification = () => {
+    console.log("rejected");
+
+    toast({
+      title: "Rejected Successfully",
+      description: "Successfully rejected user account verification.",
+      duration: 1000,
+    });
+  };
 
   return (
     <>

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/menubar";
 import { useLocation } from "react-router-dom";
 import { getDateString } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const data = {
   breadcrumbs: [
@@ -38,6 +39,7 @@ const data = {
 export default function IncidentInfoPage() {
   const { state } = useLocation();
   const { id } = state;
+  const { toast } = useToast();
 
   const info = {
     location: "123 Main St",
@@ -58,7 +60,15 @@ export default function IncidentInfoPage() {
   };
   const reportSubmitted = getDateString(info.date);
 
-  const handleReportDelete = () => console.log("deleted");
+  const handleReportDelete = () => {
+    console.log("deleted");
+
+    toast({
+      title: "Deleted Successfully",
+      description: "Successfully deleted incident report.",
+      duration: 1000,
+    });
+  };
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const openConfirmationDialog = () => setIsDeleteDialogOpen(true);

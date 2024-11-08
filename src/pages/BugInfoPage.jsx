@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import TopBar from "@/components/TopBar/TopBar";
-import { EllipsisVertical, Info, Image } from "lucide-react";
+import { EllipsisVertical, Info } from "lucide-react";
 import H1 from "@/components/ui/H1";
 import {
   Menubar,
@@ -15,6 +15,7 @@ import InfoCard from "@/components/InfoCard/InfoCard";
 import InfoCardField from "@/components/InfoCard/InfoCardField";
 import { useLocation } from "react-router-dom";
 import { getDateString } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const data = {
   breadcrumbs: [
@@ -32,6 +33,7 @@ const data = {
 export default function BugInfoPage() {
   const { state } = useLocation();
   const { id } = state;
+  const { toast } = useToast();
 
   const bugInfo = {
     id: "728ed52f",
@@ -45,7 +47,15 @@ export default function BugInfoPage() {
   };
   const dateReported = getDateString(bugInfo.date);
 
-  const handleAccountDelete = () => console.log("deleted");
+  const handleAccountDelete = () => {
+    console.log("deleted");
+
+    toast({
+      title: "Deleted Successfully",
+      description: "Successfully deleted bug report.",
+      duration: 1000
+    });
+  };
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
