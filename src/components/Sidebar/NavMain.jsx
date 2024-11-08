@@ -15,15 +15,22 @@ export function NavMain({ navLinks }) {
       <SidebarMenu>
         {navLinks.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton
-              asChild
-              style={({ isActive }) => (isActive ? { color: "#ee4048" } : {})}
+            <NavLink
+              to={item.url}
+              className={({ isActive }) =>
+                isActive
+                  ? "text-primary-500 block dark:text-primary-400 bg-neutral-100 dark:bg-neutral-700  rounded-md"
+                  : "block text-black dark:text-white focus:ring-black"
+              }
             >
-              <NavLink to={item.url} className="text-black dark:text-white focus:ring-black">
+              <SidebarMenuButton
+                className="hover:text-none focus-visible:ring-0 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                tabindex="-1"
+              >
                 <item.icon />
                 <span className="select-none">{item.name}</span>
-              </NavLink>
-            </SidebarMenuButton>
+              </SidebarMenuButton>
+            </NavLink>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
