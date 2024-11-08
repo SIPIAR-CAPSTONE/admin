@@ -17,11 +17,12 @@ export default function ConfirmationDialog({
   cancelLabel = "Cancel",
   confirmLabel = "Confirm",
   onConfirm = () => {},
+  onCancel = () => {},
   variant = "default",
 }) {
   const buttonVariant = {
     default:
-      "bg-blue-500 dark:bg-blue-600 dark:text-white hover:dark:bg-blue-700",
+      "bg-blue-500 dark:bg-blue-600 dark:text-white hover:bg-blue-600 hover:dark:bg-blue-700",
     destructive:
       "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white hover:dark:bg-red-700",
   };
@@ -34,7 +35,9 @@ export default function ConfirmationDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>
+            {cancelLabel}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className={buttonVariant[variant]}

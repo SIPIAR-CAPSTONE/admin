@@ -1,24 +1,50 @@
 import { Popup } from "react-leaflet";
 import PopupField from "@/components/Broadcast/PopupField";
-import { Ambulance, Calendar, Clock, User } from "lucide-react";
+import { Ambulance, Calendar, Clock, Pencil, Save, User } from "lucide-react";
 import { cn, getDateString, getTimeGap } from "@/lib/utils";
 import { Select, SelectTrigger } from "@radix-ui/react-select";
 import { SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "../ui/ConfirmationDialog";
+import { useToast } from "@/hooks/use-toast";
 
 function PopupAlert({ alert, responders }) {
+  const { toast } = useToast();
   const fullName = `${alert.first_name} ${alert.last_name}`;
   const timeRequested = getTimeGap(alert.time);
   const dateRequested = getDateString(alert.time);
   const status =
     alert.status === "pending" ? "No Responder" : "Responder going";
+
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
+
+  const [editMode, setEditMode] = useState(false);
   const assignedResponderName =
     responders.find((responder) => responder.id === alert.assignedResponderId)
       ?.name || "None";
+  const [selectedResponder, setSelectedResponder] = useState(
+    assignedResponderName
+  );
+  const handleSelectChange = (selectedResponderId) => {
+    setSelectedResponder(
+      responders.find((responder) => responder.id === selectedResponderId)?.name
+    );
+  };
 
-  const setAssignedResponder = (selectedResponderId) => {
-    console.log("change assigned responder in database", selectedResponderId);
-    // then refetch and render
+  const handleSave = () => {
+    //!TODO:
+    console.log("change assigned responder in database", selectedResponder);
+
+    //!TODO: adjust kung success ba or dili
+    toast({
+      title: "Assigned Successfully",
+      description: "Successfully assigned responder.",
+      duration: 1000,
+    });
+    setEditMode(false);
   };
 
   return (
@@ -53,50 +79,87 @@ function PopupAlert({ alert, responders }) {
           iconColor="#54B0A2"
           iconBgColor="#D0FEF5"
         />
-        <div className="pt-4">
-          <span className="block text-xs mb-1.5 font-semibold">
+        <div className="pt-6">
+          <span className="block text-sm mb-1.5 font-semibold">
             Assigned Responder:
           </span>
-          <Select
-            defaultValue={alert.assignedResponderId}
-            onValueChange={setAssignedResponder}
-          >
-            <SelectTrigger
-              className={cn(
-                "w-full p-2 border rounded text-start",
-                assignedResponderName === "None" && "text-red-500"
-              )}
+          <div className="flex items-center gap-x-1.5">
+            <Select
+              defaultValue={alert.assignedResponderId}
+              onValueChange={handleSelectChange}
+              disabled={editMode === false}
             >
-              {assignedResponderName}
-            </SelectTrigger>
-            <SelectContent>
-              {responders.map((responder) => (
-                <SelectItem
-                  key={responder.id}
-                  value={responder.id}
-                  disabled={responder.status === "unavailable"}
-                >
-                  <div className="space-x-4">
-                    <span aria-label="responder name">{responder.name}</span>
-                    <Badge
-                      aria-label="responder availability status"
-                      className={
-                        responder.status === "available"
-                          ? "bg-green-500"
-                          : "bg-red-500"
-                      }
-                    >
-                      {responder.status}
-                    </Badge>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <SelectTrigger
+                className={cn(
+                  "w-full border p-2 rounded h-9 text-start",
+                  editMode ? "border-black" : "border-neutral-300"
+                )}
+              >
+                {selectedResponder}
+              </SelectTrigger>
+              <SelectContent>
+                {responders.map((responder) => (
+                  <SelectItem
+                    key={responder.id}
+                    value={responder.id}
+                    disabled={responder.status === "unavailable"}
+                  >
+                    <div className="space-x-4">
+                      <span aria-label="responder name">{responder.name}</span>
+                      <Badge
+                        aria-label="responder availability status"
+                        className={
+                          responder.status === "available"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }
+                      >
+                        {responder.status}
+                      </Badge>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <ActionButton
+              editMode={editMode}
+              setEditMode={setEditMode}
+              onSave={openConfirmationDialog}
+            />
+          </div>
         </div>
       </div>
+
+      <ConfirmationDialog
+        isOpen={isLogoutDialogOpen}
+        setOpen={setIsLogoutDialogOpen}
+        title="Assign Responder"
+        description="Are you sure you want to assign this responder to this emergency request?"
+        onConfirm={handleSave}
+        onCancel={() => setEditMode(false)}
+      />
     </Popup>
   );
 }
 
 export default PopupAlert;
+
+function ActionButton({ editMode, setEditMode, onSave }) {
+  if (editMode) {
+    return (
+      <Button
+        className="bg-green-500 rounded size-9 hover:bg-green-600"
+        onClick={onSave}
+      >
+        <Save />
+      </Button>
+    );
+  }
+
+  return (
+    <Button className="rounded size-9" onClick={() => setEditMode(true)}>
+      <Pencil />
+    </Button>
+  );
+}
