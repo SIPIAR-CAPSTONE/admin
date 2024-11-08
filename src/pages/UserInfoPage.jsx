@@ -73,9 +73,6 @@ export default function UserInfoPage() {
                 <EllipsisVertical />
               </MenubarTrigger>
               <MenubarContent className="dark:bg-neutral-700">
-                {/* TODO: Add verification requests functionality */}
-                <MenubarItem disabled>View Verification Request</MenubarItem>
-                <MenubarSeparator />
                 <MenubarItem
                   className="text-red-500"
                   onClick={openConfirmationDialog}
