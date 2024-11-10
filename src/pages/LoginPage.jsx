@@ -1,8 +1,13 @@
-import AppLogo from "@/components/Sidebar/AppLogo";
+import { AtSign, Eye, EyeOff, Lock } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
+import AppLogo from "@/components/Sidebar/AppLogo";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,9 +15,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { AtSign, Lock } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -20,6 +22,7 @@ const formSchema = z.object({
 });
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,23 +72,39 @@ export default function LoginPage() {
                     <FormControl>
                       <Input
                         placeholder="Password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="h-10 pl-8 dark:border-neutral-700"
                         autoComplete="current-password"
                         {...field}
                       />
                     </FormControl>
+                    {showPassword ? (
+                      <Eye
+                        className="absolute top-0.5 text-neutral-300 dark:text-neutral-600 size-5 right-2.5"
+                        role="button"
+                        onClick={() => setShowPassword(false)}
+                      />
+                    ) : (
+                      <EyeOff
+                        className="absolute top-0.5 text-neutral-300 dark:text-neutral-600 size-5 right-2.5"
+                        role="button"
+                        onClick={() => setShowPassword(true)}
+                      />
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
-              >
-                Login
-              </Button>
+
+              <div className="pt-2.5">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
+                >
+                  Login
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>
