@@ -20,8 +20,9 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useLocation } from "react-router-dom";
-import { getDateString } from "@/lib/utils";
+import { cn, getDateString, getTimeString } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 const data = {
   breadcrumbs: [
@@ -43,22 +44,18 @@ export default function IncidentInfoPage() {
 
   const info = {
     location: "123 Main St",
+    landMark: "Near hospital",
+    barangay: "Barangay 123",
     date: "2023-07-25T00:00:00.000Z",
-    bystander: "John Doe",
+    requestorName: "John Doe",
+    requestType: "Cardiac Arrest",
     responderId: "728ed52f",
-    patientName: "Jane Doe",
-    age: "25",
-    address: "456 Oak Ave",
-    sex: "Female",
-    heartRate: "75",
-    bloodPressure: "120/80",
-    medicalHistory: "Hypertension, Diabetes Type 2.",
-    medication: "Metformin",
-    assessment:
+    phoneNumber: "09123456789",
+    remarks:
       "The patient’s chest was stiff, we struggled to achieve sufficient depth.",
-    condition: "stable",
   };
-  const reportSubmitted = getDateString(info.date);
+  const reportDateSubmitted = getDateString(info.date);
+  const reportTimeSubmitted = getTimeString(info.date);
 
   const handleReportDelete = () => {
     console.log("deleted");
@@ -96,50 +93,38 @@ export default function IncidentInfoPage() {
           </Menubar>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          <InfoCard LabelIcon={OctagonAlert} label="Incident Details">
-            <InfoCardField label="Location" value={info.location} />
-            <InfoCardField label="Date" value={reportSubmitted} />
-            <InfoCardField label="Bystander" value={info.bystander} />
-            <InfoCardField label="Responder ID" value={info.responderId} />
+          <InfoCard
+            LabelIcon={OctagonAlert}
+            label="Incident Details"
+            className="row-span-2"
+          >
+            <InfoCardField label="Requestor Name" value={info.requestorName} />
+            <InfoCardField label="Request Type" value={info.requestType} />
+            <InfoCardField label="Date" value={reportDateSubmitted} />
+            <InfoCardField label="Time" value={reportTimeSubmitted} />
+            <InfoCardField label="Contact" value={info.phoneNumber} />
+            <div className="h-40 space-y-2">
+              <Label className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                Patient Status
+              </Label>
+              <ConditionCard condition={info.condition} />
+            </div>
           </InfoCard>
-          <InfoCard LabelIcon={BookUser} label="Patient Information">
-            <InfoCardField label="Patient Name" value={info.patientName} />
-            <InfoCardField label="Age" value={info.age} />
-            <InfoCardField label="Address" value={info.address} />
-            <InfoCardField label="Sex" value={info.sex} />
+          <InfoCard LabelIcon={BookUser} label="Location Information">
+            <InfoCardField label="Barangay" value={info.barangay} />
+            <InfoCardField label="Landmark" value={info.landMark} />
+            <InfoCardField label="Address" value={info.location} />
           </InfoCard>
-          <InfoCard LabelIcon={SquareActivity} label="Medical Information">
-            <InfoCardField label="Heart Rate" value={`${info.heartRate} bpm`} />
+          <InfoCard
+            LabelIcon={ClipboardList}
+            label="remarks"
+            contentClassName="block"
+          >
             <InfoCardField
-              label="Blood Pressure"
-              value={`${info.bloodPressure} mmHg`}
-            />
-            <InfoCardField
-              label="Medical History"
-              value={info.medicalHistory}
-            />
-            <InfoCardField label="Medication" value={info.medication} />
-          </InfoCard>
-          <InfoCard LabelIcon={ClipboardList} label="Assessment">
-            <InfoCardField
-              label="Assessment"
-              value={info.assessment}
+              label="remarks"
+              value={info.remarks}
               className="h-40"
             />
-            <div className="w-32 h-20 px-2 py-3 mx-auto text-center border rounded-md shadow border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600">
-              <span className="block text-sm text-neutral-600 dark:text-neutral-300">
-                condition
-              </span>
-              {info.condition === "stable" ? (
-                <span className="block text-lg font-bold text-green-500">
-                  STABLE
-                </span>
-              ) : (
-                <span className="block text-lg font-bold text-red-500">
-                  UNSTABLE
-                </span>
-              )}
-            </div>
           </InfoCard>
         </div>
 
@@ -154,5 +139,25 @@ export default function IncidentInfoPage() {
         />
       </div>
     </>
+  );
+}
+
+function ConditionCard({ condition, className }) {
+  return (
+    <div
+      className={cn(
+        "w-32 h-20 px-2 py-3 text-center border rounded-md shadow border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600",
+        className
+      )}
+    >
+      <span className="block text-sm text-neutral-600 dark:text-neutral-300">
+        condition
+      </span>
+      {condition === "stable" ? (
+        <span className="block text-lg font-bold text-green-500">STABLE</span>
+      ) : (
+        <span className="block text-lg font-bold text-red-500">UNSTABLE</span>
+      )}
+    </div>
   );
 }
