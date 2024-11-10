@@ -25,7 +25,7 @@ export function NavMain({ navLinks }) {
             >
               <SidebarMenuButton
                 className="hover:text-none focus-visible:ring-0 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                tabindex="-1"
+                tabIndex="-1"
               >
                 <item.icon />
                 <span className="select-none">{item.name}</span>
