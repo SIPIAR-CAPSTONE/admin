@@ -27,7 +27,7 @@ export function FacetedFilter({ column, title, options }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="border-dashed dark:bg-neutral-700">
+        <Button variant="outline" className="border-dashed ps-3 md:px-4 dark:bg-neutral-700">
           <PlusCircle />
           {title}
           {selectedValues?.size > 0 && (
