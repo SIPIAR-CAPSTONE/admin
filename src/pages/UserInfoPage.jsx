@@ -78,7 +78,7 @@ export default function UserInfoPage() {
           <H1 className="pb-0">User Info</H1>
           <Menubar className="p-0 border-none shadow-none dark:bg-transparent">
             <MenubarMenu>
-              <MenubarTrigger className="py-1 px-1.5 dark:bg-transparent dark:text-white hover:dark:bg-neutral-700">
+              <MenubarTrigger className="py-1 cursor-pointer px-1.5 dark:bg-transparent dark:text-white hover:bg-neutral-100 transition-colors hover:dark:bg-neutral-700">
                 <EllipsisVertical />
               </MenubarTrigger>
               <MenubarContent className="dark:bg-neutral-700">
