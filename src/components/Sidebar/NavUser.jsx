@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronsUpDown, LogOut, User } from "lucide-react";
+import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,10 +21,15 @@ import { getNameInitial } from "@/components/Sidebar/sidebar.helper";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import NotificationModal from "@/components/Notification/NotificationModal";
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
   const nameInitial = getNameInitial(user.name);
+
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const openNotification = () => setIsNotificationOpen(true);
+  const closeNotification = () => setIsNotificationOpen(false);
 
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
@@ -76,16 +81,11 @@ export function NavUser({ user }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <User />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={openNotification}>
                   <Bell />
                   Notifications
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
               <ThemeSwitcher />
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={openConfirmationDialog}>
@@ -102,8 +102,12 @@ export function NavUser({ user }) {
         setOpen={setIsLogoutDialogOpen}
         title="Log out"
         description="Are you sure you want to log out?"
-        onConfirm={handleLogout}  
+        onConfirm={handleLogout}
         variant="destructive"
+      />
+      <NotificationModal
+        isOpen={isNotificationOpen}
+        handleClose={closeNotification}
       />
     </>
   );
