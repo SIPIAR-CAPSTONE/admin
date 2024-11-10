@@ -5,6 +5,7 @@ import {
   BadgeCheck,
   FileClock,
   Users,
+  Bug,
 } from "lucide-react";
 
 import { NavMain } from "@/components/Sidebar/NavMain";
@@ -21,7 +22,7 @@ import AppLogo from "@/components/Sidebar/AppLogo";
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "admin",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
@@ -32,9 +33,9 @@ const data = {
       icon: LayoutDashboard,
     },
     {
-      name: "Verification Request",
-      url: "verification-request",
-      icon: BadgeCheck,
+      name: "Broadcast",
+      url: "broadcast",
+      icon: Map,
     },
     {
       name: "Incident History",
@@ -42,14 +43,19 @@ const data = {
       icon: FileClock,
     },
     {
-      name: "Broadcast",
-      url: "broadcast",
-      icon: Map,
-    },
-    {
       name: "Users",
       url: "users",
       icon: Users,
+    },
+    {
+      name: "Verification Request",
+      url: "verification-request",
+      icon: BadgeCheck,
+    },
+    {
+      name: "Bug Report",
+      url: "bug-report",
+      icon: Bug,
     },
   ],
 };

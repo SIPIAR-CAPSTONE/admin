@@ -1,5 +1,7 @@
 import moment from "moment";
 import TableHeadButton from "@/components/DataTable/TableHeadButton";
+import { Badge } from "@/components/ui/badge";
+import { capitalize, cn, exactMatchFilter } from "@/lib/utils";
 
 export const columns = [
   {
@@ -7,6 +9,20 @@ export const columns = [
     header: "ID",
     cell: ({ row }) => {
       return <div>{row.getValue("id")}</div>;
+    },
+  },
+  {
+    accessorKey: "requestType",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Request Type"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("requestType")}</div>;
     },
   },
   {
@@ -21,6 +37,20 @@ export const columns = [
     },
     cell: ({ row }) => {
       return <div>{row.getValue("location")}</div>;
+    },
+  },
+  {
+    accessorKey: "barangay",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Barangay"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("barangay")}</div>;
     },
   },
   {
@@ -39,7 +69,9 @@ export const columns = [
     },
   },
   {
+    id: "condition",
     accessorKey: "condition",
+    filterFn: exactMatchFilter,
     header: ({ column }) => {
       return (
         <TableHeadButton
@@ -49,14 +81,19 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.getValue("condition")}</div>;
-    },
-  },
-  {
-    accessorKey: "assessment",
-    header: "Assessment",
-    cell: ({ row }) => {
-      return <div className="min-w-40 md:min-w-0">{row.getValue("assessment")}</div>;
+      const condition = capitalize(row.getValue("condition"));
+      return (
+        <Badge
+          className={cn(
+            "rounded-md",
+            condition === "Stable"
+              ? "bg-green-500  dark:bg-green-600 dark:text-white"
+              : "bg-red-500  dark:bg-red-600 dark:text-white"
+          )}
+        >
+          {condition}
+        </Badge>
+      );
     },
   },
 ];

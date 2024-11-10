@@ -25,10 +25,10 @@ export default function TableFooter({ table }) {
             table.setPageSize(Number(value));
           }}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-[70px] dark:bg-neutral-700">
             <SelectValue placeholder={table.getState().pagination.pageSize} />
           </SelectTrigger>
-          <SelectContent side="top">
+          <SelectContent side="top" className="dark:bg-neutral-700">
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <SelectItem key={pageSize} value={`${pageSize}`}>
                 {pageSize}
@@ -45,7 +45,7 @@ export default function TableFooter({ table }) {
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
-            className="hidden w-8 h-8 p-0 lg:flex"
+            className="hidden w-8 h-8 p-0 lg:flex dark:bg-neutral-700"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
@@ -54,7 +54,7 @@ export default function TableFooter({ table }) {
           </Button>
           <Button
             variant="outline"
-            className="w-8 h-8 p-0"
+            className="w-8 h-8 p-0 dark:bg-neutral-700"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -63,7 +63,7 @@ export default function TableFooter({ table }) {
           </Button>
           <Button
             variant="outline"
-            className="w-8 h-8 p-0"
+            className="w-8 h-8 p-0 dark:bg-neutral-700"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -72,7 +72,7 @@ export default function TableFooter({ table }) {
           </Button>
           <Button
             variant="outline"
-            className="hidden w-8 h-8 p-0 lg:flex"
+            className="hidden w-8 h-8 p-0 lg:flex dark:bg-neutral-700"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >

@@ -15,34 +15,24 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import moment from "moment";
-
-const chartData = [
-  { month: "Jan", incidents: 10 },
-  { month: "Feb", incidents: 25 },
-  { month: "Mar", incidents: 1 },
-  { month: "Apr", incidents: 13 },
-  { month: "May", incidents: 39 },
-  { month: "Jun", incidents: 14 },
-  { month: "Jul", incidents: 39 },
-  { month: "Aug", incidents: 11 },
-  { month: "Sep", incidents: 22 },
-  { month: "Oct", incidents: 17 },
-  { month: "Nov", incidents: 5 },
-  { month: "Dec", incidents: 2 },
-];
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   incidents: {
     label: "Incidents",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-5))",
   },
 };
 
-export default function IncidentOverviewChart({ className, ...props }) {
+export default function IncidentOverviewChart({
+  chartData,
+  className,
+  ...props
+}) {
   const currentYear = moment().year();
 
   return (
-    <Card className={className} {...props}>
+    <Card className={cn("dark:bg-neutral-800", className)} {...props}>
       <CardHeader>
         <CardTitle>Incidents Overview</CardTitle>
         <CardDescription>January - December {currentYear}</CardDescription>

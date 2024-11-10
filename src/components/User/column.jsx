@@ -1,6 +1,6 @@
 import TableHeadButton from "@/components/DataTable/TableHeadButton";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, exactMatchFilter } from "@/lib/utils";
 
 export const columns = [
   {
@@ -53,7 +53,9 @@ export const columns = [
     },
   },
   {
+    id: "isVerified",
     accessorKey: "isVerified",
+    filterFn: exactMatchFilter,
     header: ({ column }) => {
       return (
         <TableHeadButton
@@ -63,15 +65,15 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      const isVerified = row.getValue("isVerified") == true ? "Yes" : "No";
+      const isVerified = row.getValue("isVerified") === true ? "Yes" : "No";
 
       return (
         <Badge
           className={cn(
-            " rounded-xl",
+            "rounded-md",
             isVerified === "Yes"
-              ? "bg-green-500 hover:bg-green-500"
-              : "bg-neutral-400 hover:bg-neutral-400"
+              ? "bg-green-500  dark:bg-green-600 dark:text-white"
+              : "bg-neutral-400  dark:bg-neutral-600 dark:text-white"
           )}
         >
           {isVerified}

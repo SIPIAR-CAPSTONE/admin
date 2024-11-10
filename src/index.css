@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -31,20 +37,23 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 0 80% 47%; /* #ee4048 in HSL */
-    --chart-1: 347 77% 50%;
-    --chart-2: 352 83% 91%;
-    --chart-3: 350 80% 72%;
-    --chart-4: 351 83% 82%;
-    --chart-5: 349 77% 62%;
+    --ring: 0 80% 47%;
+    --chart-1: 347 77% 90%;
+    --chart-2: 352 83% 75%;
+    --chart-3: 350 80% 60%;
+    --chart-4: 351 83% 50%;
+    --chart-5: 349 77% 40%;
+    --chart-6: 348 79% 30%;
+    --chart-7: 353 85% 20%;
+    --chart-8: 346 78% 10%;
   }
 
   .dark {
-    --sidebar-background: 240 5.9% 10%;
+    --sidebar-background: 0, 0%, 9%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent: 0, 0%, 9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
@@ -66,11 +75,14 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 0 80% 47%; /* #ee4048 in HSL */
-    --chart-1: 347 77% 50%;
-    --chart-2: 349 77% 62%;
-    --chart-3: 350 80% 72%;
-    --chart-4: 351 83% 82%;
-    --chart-5: 352 83% 91%;
+    --ring: 0 80% 47%;
+    --chart-1: 347 77% 10%;
+    --chart-2: 352 83% 20%;
+    --chart-3: 350 80% 30%;
+    --chart-4: 351 83% 40%;
+    --chart-5: 349 77% 50%;
+    --chart-6: 348 79% 60%;
+    --chart-7: 353 85% 75%;
+    --chart-8: 346 78% 90%;
   }
 }

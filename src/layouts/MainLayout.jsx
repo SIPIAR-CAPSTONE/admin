@@ -6,7 +6,7 @@ export default function MainLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full">
+      <main className="w-full bg-white dark:bg-neutral-900">
         <Outlet />
       </main>
     </SidebarProvider>

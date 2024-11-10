@@ -24,13 +24,13 @@ export default function TopBar({
   return (
     <div
       className={cn(
-        "flex items-center justify-between px-2.5 py-3.5 bg-white",
+        "flex items-center justify-between px-2.5 py-3.5 ",
         className
       )}
       {...props}
     >
       <div className="flex items-center h-8">
-        <SidebarTrigger />
+        <SidebarTrigger className="dark:text-white" />
         <Separator orientation="vertical" className="h-4 ms-2 me-4" />
         <Breadcrumb>
           <BreadcrumbList>
@@ -63,7 +63,7 @@ export default function TopBar({
         <div className="flex items-center">
           <Separator orientation="vertical" className="h-4 me-2.5" />
           <Link to=".." relative="path">
-            <Button className="w-4 h-8 transition-colors shadow-none bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-black">
+            <Button className="w-4 h-8 transition-colors shadow-none bg-neutral-100 dark:bg-neutral-600 dark:text-white hover:dark:bg-neutral-500 hover:bg-neutral-200 text-neutral-500 hover:text-black">
               <ArrowLeftFromLine />
             </Button>
           </Link>
