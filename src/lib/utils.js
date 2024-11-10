@@ -22,6 +22,10 @@ export function getTime(date) {
   return moment(date).format("HH:mm:ss");
 }
 
+export function getTimeString(date) {
+  return moment(date).format("h:mm A");
+}
+
 export function getTimeGap(datetimeCreated, isFormatted = true) {
   const createdDate = moment(datetimeCreated).toDate();
   const currentDate = moment().toDate();
@@ -68,4 +72,10 @@ const formatTimeGap = (months, days, hours, minutes) => {
   } else {
     return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   }
+};
+
+// filter data table with exact match
+export const exactMatchFilter = (row, columnId, filterValue) => {
+  if (!filterValue || filterValue.length === 0) return true; // No filter set
+  return filterValue.includes(row.getValue(columnId));
 };

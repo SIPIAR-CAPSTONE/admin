@@ -1,6 +1,7 @@
 import TopBar from "@/components/TopBar/TopBar";
 import { columns } from "@/components/User/column";
 import { DataTable } from "@/components/DataTable/DataTable";
+import { Badge, BadgeCheck, CheckIcon } from "lucide-react";
 
 const data = {
   breadcrumbs: [
@@ -57,6 +58,18 @@ const data = {
       isVerified: false,
     },
   ],
+  filterOptions: [
+    {
+      label: "Yes",
+      value: true,
+      icon: BadgeCheck,
+    },
+    {
+      label: "No",
+      value: false,
+      icon: Badge,
+    },
+  ],
 };
 
 export default function UsersPage() {
@@ -68,6 +81,10 @@ export default function UsersPage() {
           tableName="Users"
           columns={columns}
           data={data.tempTableData}
+          searchColumn="email"
+          filterTitle="Verified"
+          filterColumn="isVerified"
+          filterOptions={data.filterOptions}
         />
       </div>
     </div>

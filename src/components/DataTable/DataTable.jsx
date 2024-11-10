@@ -18,15 +18,19 @@ import {
 } from "@/components/ui/table";
 import TableFooter from "@/components/DataTable/TableFooter";
 import VisibleColumns from "@/components/DataTable/VisibleColumns";
-import SearchBox from "./SearchBox";
+import SearchBox from "@/components/DataTable/SearchBox";
 import { useNavigate } from "react-router-dom";
-import H1 from "../ui/H1";
+import H1 from "@/components/ui/H1";
+import { FacetedFilter } from "@/components/DataTable/FacetedFilter";
 
 export function DataTable({
   columns,
   data,
   tableName,
   searchColumn = "email",
+  filterColumn,
+  filterTitle,
+  filterOptions,
 }) {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState([]);
@@ -36,18 +40,19 @@ export function DataTable({
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
+    filterFns: {},
     state: {
       sorting,
       columnFilters,
       columnVisibility,
     },
+    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
@@ -55,8 +60,15 @@ export function DataTable({
       <div className="flex flex-col gap-2 py-4 md:items-center md:justify-between md:flex-row">
         <H1 className="md:pb-0">{tableName}</H1>
         <div className="flex justify-end w-full md:w-auto gap-x-2">
-          <SearchBox table={table} searchColumn={searchColumn} />
+          {filterColumn && filterOptions && (
+            <FacetedFilter
+              column={table.getColumn(filterColumn)}
+              title={filterTitle}
+              options={filterOptions}
+            />
+          )}
           <VisibleColumns table={table} />
+          <SearchBox table={table} searchColumn={searchColumn} />
         </div>
       </div>
 
@@ -97,6 +109,7 @@ export function DataTable({
                       state: { id: row.original.id },
                     })
                   }
+                  className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-center">
