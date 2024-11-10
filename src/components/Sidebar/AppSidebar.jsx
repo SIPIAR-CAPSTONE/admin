@@ -22,7 +22,7 @@ import AppLogo from "@/components/Sidebar/AppLogo";
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "admin",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
