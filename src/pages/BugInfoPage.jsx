@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import TopBar from "@/components/TopBar/TopBar";
-import { EllipsisVertical, Info } from "lucide-react";
+import { EllipsisVertical, Image, Info } from "lucide-react";
 import H1 from "@/components/ui/H1";
 import {
   Menubar,
@@ -16,6 +16,7 @@ import InfoCardField from "@/components/InfoCard/InfoCardField";
 import { useLocation } from "react-router-dom";
 import { getDateString } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import IdImage from "@/components/InfoCard/IdImage";
 
 const data = {
   breadcrumbs: [
@@ -53,7 +54,7 @@ export default function BugInfoPage() {
     toast({
       title: "Deleted Successfully",
       description: "Successfully deleted bug report.",
-      duration: 1000
+      duration: 1000,
     });
   };
 
@@ -83,15 +84,20 @@ export default function BugInfoPage() {
           </Menubar>
         </div>
 
-        <InfoCard LabelIcon={Info} label="Report Details">
-          <InfoCardField label="Issue Type" value={bugInfo.issueType} />
-          <InfoCardField
-            label="Issue Description"
-            value={bugInfo.issueDescription}
-          />
-          <InfoCardField label="User Email" value={bugInfo.email} />
-          <InfoCardField label="Date Reported" value={dateReported} />
-        </InfoCard>
+        <div className="grid gap-6 md:grid-cols-3">
+          <InfoCard LabelIcon={Info} label="Report Details" className="md:col-span-2" contentClassName="grid-cols-1 md:grid-cols-2">
+            <InfoCardField label="Issue Type" value={bugInfo.issueType} />
+            <InfoCardField
+              label="Issue Description"
+              value={bugInfo.issueDescription}
+            />
+            <InfoCardField label="User Email" value={bugInfo.email} />
+            <InfoCardField label="Date Reported" value={dateReported} />
+          </InfoCard>
+          <InfoCard LabelIcon={Image} label="Report Image" contentClassName="grid-cols-1">
+            <IdImage src={bugInfo.image} />
+          </InfoCard>
+        </div>
 
         <ConfirmationDialog
           isOpen={isDeleteDialogOpen}
