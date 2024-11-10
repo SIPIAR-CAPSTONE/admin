@@ -50,6 +50,7 @@ export default function VerificationRequestPage() {
           tableName="Verification Request"
           columns={columns}
           data={data.tempTableData}
+          searchColumn="email"
         />
       </div>
     </div>
