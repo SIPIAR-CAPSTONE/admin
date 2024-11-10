@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TopBar from "@/components/TopBar/TopBar";
 import H1 from "@/components/ui/H1";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,9 +17,25 @@ const data = {
 
 export default function BroadcastPage() {
   const [focusPosition, setFocusPosition] = useState({});
-  const [emergencyAlerts, setEmergencyAlerts] = useState(TEMP_ALERTS_DATA);
   const [responders, setResponders] = useState(TEMP_RESPONDER_DATA);
-  const alertsLength = emergencyAlerts.length;
+  const [selectedFilterStatus, setSelectedFilterStatus] = useState(null);
+  const [origEmergencyAlerts, setOrigEmergencyAlerts] =
+    useState(TEMP_ALERTS_DATA);
+  const filteredAlerts = useMemo(
+    () =>
+      origEmergencyAlerts.filter((alert) => {
+        //if no selectedFilterStatus
+        if (selectedFilterStatus === null) {
+          return alert;
+        }
+        //if alert matched with selectedFilterStatus
+        else if (alert.status === selectedFilterStatus) {
+          return alert;
+        }
+      }),
+    [selectedFilterStatus, origEmergencyAlerts]
+  );
+  const alertsLength = filteredAlerts.length;
 
   return (
     <>
@@ -29,17 +45,22 @@ export default function BroadcastPage() {
         <div className="flex flex-col h-full gap-6 md:flex-row">
           <div className="flex-1 border aspect-video">
             <BroadcastMap
-              emergencyAlerts={emergencyAlerts}
+              emergencyAlerts={filteredAlerts}
               responders={responders}
               focusPosition={focusPosition}
             />
           </div>
 
           <div>
-            <AlertListHeader label="EMERGENCY ALERTS" length={alertsLength} />
+            <AlertListHeader
+              label="EMERGENCY ALERTS"
+              length={alertsLength}
+              selectedFilterStatus={selectedFilterStatus}
+              setSelectedFilterStatus={setSelectedFilterStatus}
+            />
             <ScrollArea className="md:w-96 h-[33rem] px-2.5 2xl:h-[38rem]">
               <div className="space-y-2">
-                {emergencyAlerts.map((alert) => {
+                {filteredAlerts.map((alert) => {
                   const fullName = `${alert.first_name} ${alert.last_name}`;
                   const position = {
                     lat: alert.coordinate.latitude,
