@@ -110,8 +110,8 @@ function PopupAlert({ alert, responders }) {
                         aria-label="responder availability status"
                         className={
                           responder.status === "available"
-                            ? "bg-green-500"
-                            : "bg-red-500"
+                            ? "bg-green-500 dark:bg-green-600 dark:text-white"
+                            : "bg-red-500 dark:bg-red-600 dark:text-white"
                         }
                       >
                         {responder.status}
@@ -149,7 +149,7 @@ function ActionButton({ editMode, setEditMode, onSave }) {
   if (editMode) {
     return (
       <Button
-        className="bg-green-500 rounded size-9 hover:bg-green-600"
+        className="text-white bg-green-500 rounded size-9 hover:bg-green-600 dark:bg-green-500 dark:hover:bg-green-600 dark:text-white"
         onClick={onSave}
       >
         <Save />
@@ -158,7 +158,10 @@ function ActionButton({ editMode, setEditMode, onSave }) {
   }
 
   return (
-    <Button className="rounded size-9" onClick={() => setEditMode(true)}>
+    <Button
+      className="text-white bg-black rounded size-9 dark:bg-black hover:bg-neutral-800 dark:text-white dark:hover:bg-neutral-800"
+      onClick={() => setEditMode(true)}
+    >
       <Pencil />
     </Button>
   );
