@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import moment from "moment";
+import * as XLSX from "xlsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -78,4 +79,47 @@ const formatTimeGap = (months, days, hours, minutes) => {
 export const exactMatchFilter = (row, columnId, filterValue) => {
   if (!filterValue || filterValue.length === 0) return true; // No filter set
   return filterValue.includes(row.getValue(columnId));
+};
+
+export const downloadExcel = (data, fileName) => {
+  const formattedData = [];
+
+  data.forEach((record, index) => {
+    // Add each key-value pair as a new row
+    Object.keys(record).forEach((key) => {
+      formattedData.push({ Field: key, Value: record[key] });
+    });
+    // Add an empty row to separate records, if not the last record
+    if (index < data.length - 1) {
+      formattedData.push({});
+    }
+  });
+
+  // Convert the vertically formatted data to a worksheet
+  const worksheet = XLSX.utils.json_to_sheet(formattedData);
+
+  // Adjust column width based on data
+  worksheet["!cols"] = [
+    { wch: 40 }, // Field column width
+    { wch: 30 }, // Value column width
+  ];
+
+  // Apply bold styling to 'Field' column headers for visual distinction
+  const range = XLSX.utils.decode_range(worksheet["!ref"]);
+  for (let row = range.s.r; row <= range.e.r; row++) {
+    const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: 0 })];
+    if (cell) {
+      cell.s = {
+        font: { bold: true },
+        fill: { fgColor: { rgb: "D3D3D3" } }, // Light gray background
+        alignment: { horizontal: "left" },
+      };
+    }
+  }
+
+  // Create a new workbook, append the worksheet, and save the file
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "DataSheet");
+  const fileNameWithExtension = `${fileName}.xlsx`;
+  XLSX.writeFile(workbook, fileNameWithExtension);
 };

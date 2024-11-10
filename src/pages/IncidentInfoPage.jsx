@@ -20,9 +20,10 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useLocation } from "react-router-dom";
-import { cn, getDateString, getTimeString } from "@/lib/utils";
+import { cn, downloadExcel, getDateString, getTimeString } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
+import moment from "moment";
 
 const data = {
   breadcrumbs: [
@@ -43,6 +44,7 @@ export default function IncidentInfoPage() {
   const { toast } = useToast();
 
   const info = {
+    id: "728ed52f",
     location: "123 Main St",
     landMark: "Near hospital",
     barangay: "Barangay 123",
@@ -67,8 +69,21 @@ export default function IncidentInfoPage() {
     });
   };
 
+  const handleDownloadReport = () => {
+    const jsonData = [
+      { ...info, date: reportDateSubmitted, time: reportTimeSubmitted },
+    ];
+    const timestamp = moment().format("YYYY-MM-DD");
+    const fileName = `Incident-Report_${timestamp}_${id}`;
+
+    downloadExcel(jsonData, fileName);
+  };
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
+
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
+  const openDownloadDialog = () => setIsDownloadDialogOpen(true);
 
   return (
     <>
@@ -78,10 +93,13 @@ export default function IncidentInfoPage() {
           <H1 className="pb-0">Incident Report</H1>
           <Menubar className="p-0 border-none shadow-none dark:bg-transparent">
             <MenubarMenu>
-              <MenubarTrigger className="py-1 px-1.5 dark:bg-transparent dark:text-white hover:dark:bg-neutral-700">
+              <MenubarTrigger className="py-1 cursor-pointer px-1.5 dark:bg-transparent dark:text-white hover:dark:bg-neutral-700">
                 <EllipsisVertical />
               </MenubarTrigger>
               <MenubarContent className="dark:bg-neutral-700">
+                <MenubarItem onClick={openDownloadDialog}>
+                  Download Report
+                </MenubarItem>
                 <MenubarItem
                   className="text-red-500"
                   onClick={openConfirmationDialog}
@@ -136,6 +154,13 @@ export default function IncidentInfoPage() {
           confirmLabel="Delete"
           onConfirm={handleReportDelete}
           variant="destructive"
+        />
+        <ConfirmationDialog
+          isOpen={isDownloadDialogOpen}
+          setOpen={setIsDownloadDialogOpen}
+          title="Download Incident Report"
+          description="Are you sure you want to download this incident report?"
+          onConfirm={handleDownloadReport}
         />
       </div>
     </>
