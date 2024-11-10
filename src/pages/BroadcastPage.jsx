@@ -40,7 +40,7 @@ export default function BroadcastPage() {
   return (
     <>
       <TopBar breadcrumbsData={data.breadcrumbs} />
-      <div className="px-4 pb-4 mx-auto space-y-4 md:py-8 max-w-screen-2xl">
+      <div className="px-4 pt-2 pb-4 mx-auto space-y-4 2xl:pt-4 max-w-screen-2xl">
         <H1>Current Incidents</H1>
         <div className="flex flex-col h-full gap-6 md:flex-row">
           <div className="flex-1 border aspect-video">
@@ -58,7 +58,7 @@ export default function BroadcastPage() {
               selectedFilterStatus={selectedFilterStatus}
               setSelectedFilterStatus={setSelectedFilterStatus}
             />
-            <ScrollArea className="md:w-96 h-[33rem] px-2.5 2xl:h-[38rem]">
+            <ScrollArea className="md:w-96 h-[28.5rem] px-2.5 2xl:h-[42rem]">
               <div className="space-y-2">
                 {filteredAlerts.map((alert) => {
                   const fullName = `${alert.first_name} ${alert.last_name}`;

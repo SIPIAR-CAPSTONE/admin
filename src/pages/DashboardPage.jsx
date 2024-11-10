@@ -142,7 +142,7 @@ export default function DashboardPage() {
   return (
     <div>
       <TopBar breadcrumbsData={data.breadcrumbs} />
-      <div className="px-4 pb-4 mx-auto space-y-4 md:py-8 max-w-screen-2xl">
+      <div className="px-4 pt-2 pb-4 mx-auto space-y-4 2xl:pt-4 max-w-screen-2xl">
         <div className="flex items-center justify-between">
           <H1>Analytics Dashboard</H1>
           <Button onClick={openConfirmationDialog}>Download</Button>
