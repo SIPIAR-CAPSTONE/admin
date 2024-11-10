@@ -1,4 +1,7 @@
 import { Routes, Route } from "react-router-dom";
+
+import useTheme from "@/components/ThemeSwitcher/useTheme";
+import { Toaster } from "@/components/ui/toaster";
 import MainLayout from "@/layouts/MainLayout";
 import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
@@ -11,8 +14,7 @@ import VerificationRequestPage from "@/pages/VerificationRequestPage";
 import UsersPage from "@/pages/UsersPage";
 import BugReportPage from "@/pages/BugReportPage";
 import BugInfoPage from "@/pages/BugInfoPage";
-import useTheme from "@/components/ThemeSwitcher/useTheme";
-import { Toaster } from "./components/ui/toaster";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 function App() {
   useTheme(); //initialize theme
@@ -22,13 +24,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<DashboardPage />} />
-          <Route path="users" element={<UsersPage />} />
-          <Route path="users/:id" element={<UserInfoPage />} />
-          <Route path="incidents" element={<IncidentHistoryPage />} />
-          <Route path="incidents/:id" element={<IncidentInfoPage />} />
-          <Route path="broadcast" element={<BroadcastPage />} />
-          <Route path="bug-report" element={<BugReportPage />} />
-          <Route path="bug-report/:id" element={<BugInfoPage />} />
           <Route
             path="verification-request"
             element={<VerificationRequestPage />}
@@ -37,8 +32,16 @@ function App() {
             path="verification-request/:id"
             element={<RequestInfoPage />}
           />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="users/:id" element={<UserInfoPage />} />
+          <Route path="incidents" element={<IncidentHistoryPage />} />
+          <Route path="incidents/:id" element={<IncidentInfoPage />} />
+          <Route path="broadcast" element={<BroadcastPage />} />
+          <Route path="bug-report" element={<BugReportPage />} />
+          <Route path="bug-report/:id" element={<BugInfoPage />} />
         </Route>
         <Route path="login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       <Toaster />
