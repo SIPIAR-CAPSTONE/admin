@@ -39,7 +39,7 @@ export default function DashboardPage() {
     },
     {
       id: 2,
-      title: "Total Users",
+      title: "Total Bystanders",
       value: 1750,
       valuePostfix: "",
       increase: 14,
@@ -49,7 +49,7 @@ export default function DashboardPage() {
     },
     {
       id: 3,
-      title: "Verified Users",
+      title: "Verified Bystanders",
       value: 750,
       valuePostfix: "",
       increase: 0,
