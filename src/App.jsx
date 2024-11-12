@@ -9,9 +9,9 @@ import BroadcastPage from "@/pages/BroadcastPage";
 import IncidentHistoryPage from "@/pages/IncidentHistoryPage";
 import IncidentInfoPage from "@/pages/IncidentInfoPage";
 import RequestInfoPage from "@/pages/RequestInfoPage";
-import UserInfoPage from "@/pages/UserInfoPage";
+import BystanderInfoPage from "@/pages/BystanderInfoPage";
 import VerificationRequestPage from "@/pages/VerificationRequestPage";
-import UsersPage from "@/pages/UsersPage";
+import BystandersPage from "@/pages/BystandersPage";
 import BugReportPage from "@/pages/BugReportPage";
 import BugInfoPage from "@/pages/BugInfoPage";
 import NotFoundPage from "@/pages/NotFoundPage";
@@ -32,8 +32,8 @@ function App() {
             path="verification-request/:id"
             element={<RequestInfoPage />}
           />
-          <Route path="users" element={<UsersPage />} />
-          <Route path="users/:id" element={<UserInfoPage />} />
+          <Route path="bystanders" element={<BystandersPage />} />
+          <Route path="bystanders/:id" element={<BystanderInfoPage />} />
           <Route path="incidents" element={<IncidentHistoryPage />} />
           <Route path="incidents/:id" element={<IncidentInfoPage />} />
           <Route path="broadcast" element={<BroadcastPage />} />
