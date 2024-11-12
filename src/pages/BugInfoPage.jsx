@@ -91,7 +91,7 @@ export default function BugInfoPage() {
               label="Issue Description"
               value={bugInfo.issueDescription}
             />
-            <InfoCardField label="User Email" value={bugInfo.email} />
+            <InfoCardField label="Bystander Email" value={bugInfo.email} />
             <InfoCardField label="Date Reported" value={dateReported} />
           </InfoCard>
           <InfoCard LabelIcon={Image} label="Report Image" contentClassName="grid-cols-1">
