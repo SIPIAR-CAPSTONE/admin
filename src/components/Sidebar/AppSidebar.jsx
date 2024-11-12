@@ -43,8 +43,8 @@ const data = {
       icon: FileClock,
     },
     {
-      name: "Users",
-      url: "users",
+      name: "Bystanders",
+      url: "bystanders",
       icon: Users,
     },
     {

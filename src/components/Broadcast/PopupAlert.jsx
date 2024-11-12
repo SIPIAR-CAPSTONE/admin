@@ -53,7 +53,7 @@ function PopupAlert({ alert, responders }) {
         <div className="mb-4 text-2xl font-bold">{alert.address}</div>
         <PopupField
           value={fullName}
-          label="User"
+          label="Bystander"
           Icon={User}
           iconColor="#FFCF67"
           iconBgColor="#FFF0D4"
