@@ -15,10 +15,19 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Link } from "react-router-dom";
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6).max(50),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" })
+    .max(50, { message: "Password must not exceed 50 characters" }),
 });
 
 export default function LoginPage() {
@@ -43,12 +52,12 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="relative">
+                  <FormItem className="relative mb-4">
                     <AtSign className="absolute size-4 top-3 left-2.5 text-neutral-400" />
                     <FormControl>
                       <Input
@@ -95,16 +104,34 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-
-              <div className="pt-2.5">
+              <div className="flex justify-end">
                 <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
+                  variant="link"
+                  className="p-0 mb-3 text-neutral-500"
+                  asChild
                 >
-                  Login
+                  <Link to="/forgot-password">Forgot Password</Link>
                 </Button>
               </div>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
+              >
+                Login
+              </Button>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger className="w-full mt-2 text-sm text-neutral-400">
+                  ! Login Credentials Disclaimer
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    For Authorized Personnel Only. Account credentials are
+                    provided by the office and are strictly for authorized
+                    users.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
             </form>
           </Form>
         </CardContent>
