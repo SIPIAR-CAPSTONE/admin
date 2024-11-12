@@ -49,8 +49,8 @@ export default function IncidentInfoPage() {
     landMark: "Near hospital",
     barangay: "Barangay 123",
     date: "2023-07-25T00:00:00.000Z",
-    requestorName: "John Doe",
-    requestType: "Cardiac Arrest",
+    bystanderName: "John Doe",
+    emergencyType: "Cardiac Arrest",
     responderId: "728ed52f",
     phoneNumber: "09123456789",
     remarks:
@@ -116,8 +116,8 @@ export default function IncidentInfoPage() {
             label="Incident Details"
             className="row-span-2"
           >
-            <InfoCardField label="Requestor Name" value={info.requestorName} />
-            <InfoCardField label="Request Type" value={info.requestType} />
+            <InfoCardField label="Bystander Name" value={info.requestorName} />
+            <InfoCardField label="Emergency Type" value={info.requestType} />
             <InfoCardField label="Date" value={reportDateSubmitted} />
             <InfoCardField label="Time" value={reportTimeSubmitted} />
             <InfoCardField label="Contact" value={info.phoneNumber} />
@@ -135,11 +135,11 @@ export default function IncidentInfoPage() {
           </InfoCard>
           <InfoCard
             LabelIcon={ClipboardList}
-            label="remarks"
+            label="Remarks"
             contentClassName="block"
           >
             <InfoCardField
-              label="remarks"
+              label="Remarks"
               value={info.remarks}
               className="h-40"
             />

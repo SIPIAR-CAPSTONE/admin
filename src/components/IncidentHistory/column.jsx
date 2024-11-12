@@ -12,17 +12,17 @@ export const columns = [
     },
   },
   {
-    accessorKey: "requestType",
+    accessorKey: "emergencyType",
     header: ({ column }) => {
       return (
         <TableHeadButton
-          label="Request Type"
+          label="Emergency Type"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         />
       );
     },
     cell: ({ row }) => {
-      return <div>{row.getValue("requestType")}</div>;
+      return <div>{row.getValue("emergencyType")}</div>;
     },
   },
   {
