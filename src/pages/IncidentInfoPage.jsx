@@ -50,6 +50,7 @@ export default function IncidentInfoPage() {
     barangay: "Barangay 123",
     date: "2023-07-25T00:00:00.000Z",
     bystanderName: "John Doe",
+    emergencyType: "Cardiac Arrest",
     responderId: "728ed52f",
     phoneNumber: "09123456789",
     remarks:
@@ -116,6 +117,7 @@ export default function IncidentInfoPage() {
             className="row-span-2"
           >
             <InfoCardField label="Bystander Name" value={info.requestorName} />
+            <InfoCardField label="Emergency Type" value={info.requestType} />
             <InfoCardField label="Date" value={reportDateSubmitted} />
             <InfoCardField label="Time" value={reportTimeSubmitted} />
             <InfoCardField label="Contact" value={info.phoneNumber} />
