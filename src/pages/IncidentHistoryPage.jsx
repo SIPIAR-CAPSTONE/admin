@@ -15,7 +15,6 @@ const data = {
       id: "728ed52f",
       location: "123 Main St",
       barangay: "Barangay 123",
-      emergencyType: "Cardiac Arrest",
       date: "2023-07-25T00:00:00.000Z",
       condition: "stable",
     },
@@ -24,7 +23,6 @@ const data = {
       location: "456 Oak Ave",
       date: "2022-01-15T00:00:00.000Z",
       barangay: "Barangay 5",
-      emergencyType: "Cardiac Arrest",
       condition: "unstable",
     },
     {
@@ -32,7 +30,6 @@ const data = {
       location: "789 Elm St",
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
-      emergencyType: "Fire",
       condition: "stable",
     },
     {
@@ -40,7 +37,6 @@ const data = {
       location: "789 Elm St",
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
-      emergencyType: "Fire",
       condition: "unstable",
     },
     {
@@ -48,7 +44,6 @@ const data = {
       location: "789 Elm St",
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
-      emergencyType: "Fire",
       condition: "stable",
     },
   ],

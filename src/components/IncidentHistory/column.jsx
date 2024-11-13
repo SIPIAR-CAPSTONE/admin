@@ -12,20 +12,6 @@ export const columns = [
     },
   },
   {
-    accessorKey: "emergencyType",
-    header: ({ column }) => {
-      return (
-        <TableHeadButton
-          label="Emergency Type"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        />
-      );
-    },
-    cell: ({ row }) => {
-      return <div>{row.getValue("emergencyType")}</div>;
-    },
-  },
-  {
     accessorKey: "location",
     header: ({ column }) => {
       return (
