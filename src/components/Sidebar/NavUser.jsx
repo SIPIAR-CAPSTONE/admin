@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { useState } from 'react'
+import { Bell, ChevronsUpDown, LogOut } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,31 +10,54 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { getNameInitial } from "@/components/Sidebar/sidebar.helper";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
+} from '@/components/ui/sidebar'
+import { getNameInitial } from '@/components/Sidebar/sidebar.helper'
+import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher'
 
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import NotificationModal from "@/components/Notification/NotificationModal";
+import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
+import NotificationModal from '@/components/Notification/NotificationModal'
+import { useAuth } from '@/context/AuthProvider'
+import { useNavigate } from 'react-router-dom'
 
 export function NavUser({ user }) {
-  const { isMobile } = useSidebar();
-  const nameInitial = getNameInitial(user.name);
+  const { isMobile } = useSidebar()
+  const nameInitial = getNameInitial(user.name)
 
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const openNotification = () => setIsNotificationOpen(true);
-  const closeNotification = () => setIsNotificationOpen(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  const openNotification = () => setIsNotificationOpen(true)
+  const closeNotification = () => setIsNotificationOpen(false)
 
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
+  const openConfirmationDialog = () => setIsLogoutDialogOpen(true)
 
-  const handleLogout = () => console.log("logged out");
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    // TODO:
+    /**
+     * - Loading UI Button (same sa mobile na naay circular indicator for loading)
+     * - Error UI (especially for showing server errors)
+     */
+
+    try {
+      const { error } = await logout()
+      if (error) {
+        //! TEMPORARY: Remove this console log and replace with Error UI implementation
+        console.error('Logout failed:', error.message)
+      } else {
+        navigate('/')
+      }
+    } catch (err) {
+      console.error('Unexpected error during logout:', err)
+    }
+  }
 
   return (
     <>
@@ -61,7 +84,7 @@ export function NavUser({ user }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg dark:bg-neutral-700"
-              side={isMobile ? "bottom" : "right"}
+              side={isMobile ? 'bottom' : 'right'}
               align="end"
               sideOffset={4}
             >
@@ -110,5 +133,5 @@ export function NavUser({ user }) {
         handleClose={closeNotification}
       />
     </>
-  );
+  )
 }
