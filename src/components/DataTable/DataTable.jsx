@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -15,27 +15,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import TableFooter from "@/components/DataTable/TableFooter";
-import VisibleColumns from "@/components/DataTable/VisibleColumns";
-import SearchBox from "@/components/DataTable/SearchBox";
-import { useNavigate } from "react-router-dom";
-import H1 from "@/components/ui/H1";
-import { FacetedFilter } from "@/components/DataTable/FacetedFilter";
+} from '@/components/ui/table'
+import TableFooter from '@/components/DataTable/TableFooter'
+import VisibleColumns from '@/components/DataTable/VisibleColumns'
+import SearchBox from '@/components/DataTable/SearchBox'
+import { useNavigate } from 'react-router-dom'
+import H1 from '@/components/ui/H1'
+import { FacetedFilter } from '@/components/DataTable/FacetedFilter'
 
 export function DataTable({
   columns,
   data,
   tableName,
-  searchColumn = "email",
+  searchColumn = 'email',
   filterColumn,
   filterTitle,
   filterOptions,
 }) {
-  const navigate = useNavigate();
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
+  const navigate = useNavigate()
+  const [sorting, setSorting] = useState([])
+  const [columnFilters, setColumnFilters] = useState([])
+  const [columnVisibility, setColumnVisibility] = useState({})
 
   const table = useReactTable({
     data,
@@ -53,7 +53,7 @@ export function DataTable({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-  });
+  })
 
   return (
     <div className="rounded-lg md:px-6 md:border md:shadow md:py-2 md:dark:bg-neutral-800 md:dark:border-neutral-700 dark:text-white">
@@ -90,10 +90,10 @@ export function DataTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -103,19 +103,25 @@ export function DataTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() =>
-                    navigate(row.original.id, {
-                      state: { id: row.original.id },
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => {
+                    navigate(`/bug-report/${row.original.id}`, {
+                      state: {
+                        id: row.original.id,
+                        issueDescription: row.original.issueDescription,
+                        issueType: row.original.issueType,
+                        email: row.original.email,
+                        date: row.original.date
+                      },
                     })
-                  }
+                  }}
                   className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -136,5 +142,5 @@ export function DataTable({
       </div>
       <TableFooter table={table} />
     </div>
-  );
+  )
 }

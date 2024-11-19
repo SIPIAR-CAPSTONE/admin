@@ -1,65 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react'
 
-import TopBar from "@/components/TopBar/TopBar";
-import { EllipsisVertical, Image, Info } from "lucide-react";
-import H1 from "@/components/ui/H1";
+import TopBar from '@/components/TopBar/TopBar'
+import { EllipsisVertical, Image, Info } from 'lucide-react'
+import H1 from '@/components/ui/H1'
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
-} from "@/components/ui/menubar";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import InfoCard from "@/components/InfoCard/InfoCard";
-import InfoCardField from "@/components/InfoCard/InfoCardField";
-import { useLocation } from "react-router-dom";
-import { getDateString } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import IdImage from "@/components/InfoCard/IdImage";
+} from '@/components/ui/menubar'
+import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
+import InfoCard from '@/components/InfoCard/InfoCard'
+import InfoCardField from '@/components/InfoCard/InfoCardField'
+import { useLocation } from 'react-router-dom'
+import { getDateString } from '@/lib/utils'
+import { useToast } from '@/hooks/use-toast'
+import IdImage from '@/components/InfoCard/IdImage'
+import supabase from '@/supabase/config'
 
 const data = {
   breadcrumbs: [
     {
-      name: "Bug Report",
-      href: "..",
+      name: 'Bug Report',
+      href: '..',
     },
     {
-      name: "Bug Info",
-      href: "",
+      name: 'Bug Info',
+      href: '',
     },
   ],
-};
+}
 
 export default function BugInfoPage() {
-  const { state } = useLocation();
-  const { id } = state;
-  const { toast } = useToast();
+  const { state } = useLocation()
+  const { id, issueDescription, issueType, email, date } = state
+  const { toast } = useToast()
+  const [blobUrl, setBlobUrl] = useState(null)
+  console.log('id sa bug', id);
 
-  const bugInfo = {
-    id: "728ed52f",
-    issueType: "Performance Issue",
-    issueDescription:
-      "The patient’s chest was stiff, we struggled to achieve sufficient depth.",
-    email: "a@example.com",
-    date: "2023-07-25T00:00:00.000Z",
-    image:
-      "https://imgs.search.brave.com/CcUiKNSCXN9KP7n6QiO5m0L5JqFdSQfvZCq2R1yX6kw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNjYz/NjEzMDQ2L3Bob3Rv/L3BpcGV0dGUtZHJv/cHBpbmctYS1zYW1w/bGUtaW50by1hLXRl/c3QtdHViZS1jbG9z/ZXVwLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1kN09uMllE/aldrWFljNDRYS2Jf/MXdGZ2hraVp1cjY3/Ym82VGZkNHlNS1A0/PQ",
-  };
-  const dateReported = getDateString(bugInfo.date);
+
+  useEffect(() => {
+    const imageDownloader = async () => {
+      const { data, error } = await supabase.storage
+        .from('bug_report')
+        .download(id)
+
+      if (error) {
+        console.error('Error downloading image:', error.message)
+      } else {
+
+        const url = URL.createObjectURL(data) // Convert blob to a URL
+        setBlobUrl(url) // Save the URL to state
+      }
+    }
+
+    imageDownloader()
+
+    return () => {
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl)
+      }
+    }
+  }, [blobUrl, id])
+
+  const dateReported = getDateString(date)
 
   const handleAccountDelete = () => {
-    console.log("deleted");
+    console.log('deleted')
 
     toast({
-      title: "Deleted Successfully",
-      description: "Successfully deleted bug report.",
+      title: 'Deleted Successfully',
+      description: 'Successfully deleted bug report.',
       duration: 1000,
-    });
-  };
+    })
+  }
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const openConfirmationDialog = () => setIsDeleteDialogOpen(true)
 
   return (
     <div>
@@ -85,17 +103,23 @@ export default function BugInfoPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          <InfoCard LabelIcon={Info} label="Report Details" className="md:col-span-2" contentClassName="grid-cols-1 md:grid-cols-2">
-            <InfoCardField label="Issue Type" value={bugInfo.issueType} />
-            <InfoCardField
-              label="Issue Description"
-              value={bugInfo.issueDescription}
-            />
-            <InfoCardField label="Bystander Email" value={bugInfo.email} />
+          <InfoCard
+            LabelIcon={Info}
+            label="Report Details"
+            className="md:col-span-2"
+            contentClassName="grid-cols-1 md:grid-cols-2"
+          >
+            <InfoCardField label="Issue Type" value={issueType} />
+            <InfoCardField label="Issue Description" value={issueDescription} />
+            <InfoCardField label="Bystander Email" value={email} />
             <InfoCardField label="Date Reported" value={dateReported} />
           </InfoCard>
-          <InfoCard LabelIcon={Image} label="Report Image" contentClassName="grid-cols-1">
-            <IdImage src={bugInfo.image} />
+          <InfoCard
+            LabelIcon={Image}
+            label="Report Image"
+            contentClassName="grid-cols-1"
+          >
+            <IdImage src={blobUrl} />
           </InfoCard>
         </div>
 
@@ -110,5 +134,5 @@ export default function BugInfoPage() {
         />
       </div>
     </div>
-  );
+  )
 }
