@@ -1,76 +1,69 @@
-import { AtSign } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { AtSign } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
+import useBoundStore from "@/zustand/useBoundStore";
+import supabase from "@/supabase/config";
+import useSendToken from "@/hooks/useSendToken";
+import ServerError from "@/components/ui/ServerError";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form'
-import { Link } from 'react-router-dom'
-import useBoundStore from '@/zustand/useBoundStore'
-import supabase from '@/supabase/config'
-import useSendToken from '@/hooks/useSendToken'
-import { useState } from 'react'
+} from "@/components/ui/form";
 
 const formSchema = z.object({
   email: z.string().email(),
-})
+});
 
 export default function ForgotPasswordPage() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      email: "",
     },
-  })
+  });
 
-  const setResetEmail = useBoundStore((state) => state.setPasswordResetEmail)
-  const [email, setEmail] = useState('')
+  const email = form.getValues().email;
 
-  //! Create Error UI & use this "errors" value below
-  const { errors, setErrors, process } = useSendToken(email, true)
+  const setResetEmail = useBoundStore((state) => state.setPasswordResetEmail);
+  const [loading, setLoading] = useState(false);
+  const {
+    error: serverError,
+    setError: setServerError,
+    process: sendTokenToEmail,
+  } = useSendToken(email, true);
 
   async function onSubmit(values) {
-    // TODO:
-    /**
-     ** - Form Validation
-     ** - Loading UI Button (same sa mobile na naay circular indicator for loading)
-     ** - Error UI (especially for showing server errors)
-     */
+    try {
+      // Add email as a global prop
+      setResetEmail(values.email);
+      setLoading(true);
 
-    // Add email as a global prop
-    setResetEmail(values.email)
+      const { data } = await supabase
+        .from("admin")
+        .select()
+        .eq("email", values.email);
 
-    // if (isFormValid(fields, form, setErrors)) {
-    //   setLoading(true)
-      try {
-        const { data } = await supabase
-          .from('admin')
-          .select()
-          .eq('email', values.email)
-
-        // Check if data is an array and has at least one element
-        if (Array.isArray(data) && data.length > 0) {
-          process() // Call the process function from the useSendToken hook for sending token to the provided email
-        } else {
-          let errors = {}
-          errors.email = 'Account not found.'
-          setErrors(errors)
-        }
-      } catch (error) {
-        const errorMessage = { email: `Server Error: ${error.message}` }
-        setErrors(errorMessage)
-      } finally {
-        // setLoading(false)
+      // Check if data is an array and has at least one element
+      if (Array.isArray(data) && data.length > 0) {
+        sendTokenToEmail();
+      } else {
+        setServerError("Account not found");
       }
-    // }
+    } catch (error) {
+      setServerError(`Server Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -89,7 +82,7 @@ export default function ForgotPasswordPage() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="relative mb-4">
+                  <FormItem className="relative">
                     <AtSign className="absolute size-4 top-3 left-2.5 text-neutral-400" />
                     <FormControl>
                       <Input
@@ -98,21 +91,18 @@ export default function ForgotPasswordPage() {
                         className="h-10 pl-8 dark:border-neutral-700"
                         autoComplete="email"
                         {...field}
-                        value={email} // Bind input value to state
-                        onChange={(e) => {
-                          setEmail(e.target.value)
-                          field.onChange(e) // Update form state with email
-                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <ServerError error={serverError} />
               <Button
                 type="submit"
                 size="lg"
-                className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
+                className="w-full mt-3 bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
+                disabled={loading}
               >
                 Send Code
               </Button>
@@ -128,5 +118,5 @@ export default function ForgotPasswordPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

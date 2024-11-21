@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthProvider";
-import ErrorMessage from "@/components/ui/ErrorMessage";
+import ServerError from "@/components/ui/ServerError";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -48,6 +48,7 @@ export default function LoginPage() {
 
   async function onSubmit(values) {
     try {
+      setServerErrorMsg("");
       setLoading(true);
 
       const { error } = await login(values.email, values.password);
@@ -121,7 +122,7 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <ErrorMessage errorMessage={serverErrorMsg} />
+              <ServerError error={serverErrorMsg} />
               <div className="flex justify-end">
                 <Button
                   variant="link"
