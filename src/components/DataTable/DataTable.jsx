@@ -31,6 +31,7 @@ export function DataTable({
   filterColumn,
   filterTitle,
   filterOptions,
+  statePropKeys = [],
 }) {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState([]);
@@ -104,11 +105,16 @@ export function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() =>
+                  onClick={() => {
+                    const state = statePropKeys.reduce((acc, key) => {
+                      acc[key] = row.original?.[key];
+                      return acc;
+                    }, {});
+
                     navigate(row.original.id, {
-                      state: { id: row.original.id },
-                    })
-                  }
+                      state: state,
+                    });
+                  }}
                   className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (

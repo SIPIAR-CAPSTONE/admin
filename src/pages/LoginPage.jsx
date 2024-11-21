@@ -22,14 +22,19 @@ import {
 } from "@/components/ui/tooltip";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthProvider";
-import ServerError from "@/components/ui/serverError";
+import ServerError from "@/components/ui/ServerError";
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1, { message: "Password is required" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" })
+    .max(50, { message: "Password must not exceed 50 characters" }),
 });
 
 export default function LoginPage() {
+  const [serverErrorMsg, setServerErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -40,17 +45,15 @@ export default function LoginPage() {
       password: "",
     },
   });
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
 
   async function onSubmit(values) {
     try {
-      setServerError("");
+      setServerErrorMsg("");
       setLoading(true);
 
       const { error } = await login(values.email, values.password);
       if (error) {
-        setServerError(error.message);
+        setServerErrorMsg(error.message);
       } else {
         navigate("/");
       }
@@ -119,12 +122,13 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <ServerError error={serverError} />
+              <ServerError error={serverErrorMsg} />
               <div className="flex justify-end">
                 <Button
                   variant="link"
                   className="p-0 mb-3 text-neutral-500"
                   asChild
+                  disabled={loading}
                 >
                   <Link to="/forgot-password">Forgot Password</Link>
                 </Button>
