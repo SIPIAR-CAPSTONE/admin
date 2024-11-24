@@ -49,17 +49,10 @@ export default function BugInfoPage() {
           .from('bug_report')
           .download(id)
 
-        if (error) {
-          toast({
-            title: 'Unable to get the image ',
-            description: error.name,
-            duration: 1000,
-            variant: 'destructive',
-          })
-        } else {
+        if (!error) {
           const url = URL.createObjectURL(data) // Convert blob to a URL
           setBlobUrl(url) // Save the URL to state
-        }
+        } 
       } catch (error) {
         toast({
           title: 'Error getting the image: ',
@@ -146,7 +139,9 @@ export default function BugInfoPage() {
             label="Report Image"
             contentClassName="grid-cols-1"
           >
-            <IdImage src={blobUrl} loading={loading} />
+            {blobUrl ? <IdImage src={blobUrl} loading={loading} /> : ''
+
+            }
           </InfoCard>
         </div>
 
