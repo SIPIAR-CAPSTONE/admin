@@ -22,7 +22,7 @@ const data = {
 
 export default function BystanderInfoPage() {
   const { state } = useLocation();
-  const { id } = state;
+  const { firstName, middleName, lastName, suffix, birthDate, phoneNumber, barangay, street, houseNumber, isVerified, verifiedDate } = state;
 
   const bystander = {
     firstName: "John",
@@ -38,8 +38,8 @@ export default function BystanderInfoPage() {
     isVerified: true,
     verificationDate: "2023-07-25T00:00:00.000Z",
   };
-  const birthDate = getDate(bystander.birthday);
-  const verificationDate = getDateString(bystander.verificationDate);
+  const birthDateParse = getDate(birthDate);
+  const verificationDate = getDateString(verifiedDate);
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function BystanderInfoPage() {
           <InfoCard LabelIcon={BadgeCheck} label="Verification Status">
             <InfoCardField
               label="Status"
-              value={bystander.isVerified ? "Verified" : "Not Verified"}
+              value={isVerified ? "Verified" : "Not Verified"}
             />
             <InfoCardField label="Date Verified" value={verificationDate} />
           </InfoCard>
@@ -61,18 +61,18 @@ export default function BystanderInfoPage() {
             className="md:row-span-2"
             contentClassName="grid-cols-1"
           >
-            <InfoCardField label="First Name" value={bystander.firstName} />
-            <InfoCardField label="Middle Name" value={bystander.middleName} />
-            <InfoCardField label="Last Name" value={bystander.lastName} />
-            <InfoCardField label="Suffix" value={bystander.suffix} />
-            <InfoCardField label="Birthday" value={birthDate} />
-            <InfoCardField label="Phone Number" value={bystander.phoneNumber} />
+            <InfoCardField label="First Name" value={firstName} />
+            <InfoCardField label="Middle Name" value={middleName} />
+            <InfoCardField label="Last Name" value={lastName} />
+            <InfoCardField label="Suffix" value={suffix} />
+            <InfoCardField label="Birthday" value={birthDateParse} />
+            <InfoCardField label="Phone Number" value={phoneNumber} />
           </InfoCard>
           <InfoCard LabelIcon={MapPinHouse} label="Address Information">
             <InfoCardField label="City" value="Cagayan de Oro City" />
-            <InfoCardField label="Barangay" value={bystander.barangay} />
-            <InfoCardField label="Street" value={bystander.street} />
-            <InfoCardField label="House Number" value={bystander.houseNumber} />
+            <InfoCardField label="Barangay" value={barangay} />
+            <InfoCardField label="Street" value={street} />
+            <InfoCardField label="House Number" value={houseNumber} />
           </InfoCard>
         </div>
       </div>
