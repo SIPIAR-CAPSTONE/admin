@@ -1,103 +1,114 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-import TopBar from '@/components/TopBar/TopBar'
-import { EllipsisVertical, Image, Info } from 'lucide-react'
-import H1 from '@/components/ui/H1'
+import TopBar from "@/components/TopBar/TopBar";
+import { EllipsisVertical, Image, Info } from "lucide-react";
+import H1 from "@/components/ui/H1";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
-} from '@/components/ui/menubar'
-import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
-import InfoCard from '@/components/InfoCard/InfoCard'
-import InfoCardField from '@/components/InfoCard/InfoCardField'
-import { useLocation } from 'react-router-dom'
-import { getDateString } from '@/lib/utils'
-import { useToast } from '@/hooks/use-toast'
-import IdImage from '@/components/InfoCard/IdImage'
-import supabase from '@/supabase/config'
+} from "@/components/ui/menubar";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import InfoCard from "@/components/InfoCard/InfoCard";
+import InfoCardField from "@/components/InfoCard/InfoCardField";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getDateString } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import IdImage from "@/components/InfoCard/IdImage";
+import supabase from "@/supabase/config";
 
 const data = {
   breadcrumbs: [
     {
-      name: 'Bug Report',
-      href: '..',
+      name: "Bug Report",
+      href: "..",
     },
     {
-      name: 'Bug Info',
-      href: '',
+      name: "Bug Info",
+      href: "",
     },
   ],
-}
+};
 
 export default function BugInfoPage() {
-  const { state } = useLocation()
-  const { id, issueDescription, issueType, email, date } = state
-  const dateReported = getDateString(date)
-  const { toast } = useToast()
-  const [blobUrl, setBlobUrl] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const { state } = useLocation();
+  const { id, issueDescription, issueType, email, date } = state;
+  const dateReported = getDateString(date);
+  const { toast } = useToast();
+  const [blobUrl, setBlobUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const imageDownloader = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
 
         const { data, error } = await supabase.storage
-          .from('bug_report')
-          .download(id)
+          .from("bug_report")
+          .download(id);
 
         if (!error) {
-          const url = URL.createObjectURL(data) // Convert blob to a URL
-          setBlobUrl(url) // Save the URL to state
-        } 
+          const url = URL.createObjectURL(data); // Convert blob to a URL
+          setBlobUrl(url); // Save the URL to state
+        }
       } catch (error) {
         toast({
-          title: 'Error getting the image: ',
+          title: "Error getting the image: ",
           description: error.message,
-          variant: 'destructive',
-        })
+          variant: "destructive",
+        });
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    imageDownloader()
+    imageDownloader();
 
     return () => {
       if (blobUrl) {
-        URL.revokeObjectURL(blobUrl)
+        URL.revokeObjectURL(blobUrl);
       }
-    }
-  }, [id])
+    };
+  }, [id]);
 
   const handleAccountDelete = async () => {
-    const { error } = await supabase
-      .from('bug_report')
-      .delete()
-      .eq('bug_id', id)
-      .select()
+    try {
+      setLoading(true);
 
-    if(error){
-      toast({
-        title: 'Error Deletion',
-        description: error.message,
-        duration: 1000,
-      })
-      return;
+      const { error, status } = await supabase
+        .from("bug_report")
+        .delete()
+        .eq("bug_id", id)
+        .select();
+
+      if (error) {
+        toast({
+          title: "Error Deletion",
+          description: error.message,
+          duration: 1000,
+        });
+        return;
+      }
+
+      if (status === 200) {
+        toast({
+          title: "Deleted Successfully",
+          description: "Successfully deleted bug report.",
+          duration: 1000,
+        });
+
+        navigate("/bug-report");
+      }
+    } finally {
+      setLoading(false);
     }
+  };
 
-    toast({
-      title: 'Deleted Successfully',
-      description: 'Successfully deleted bug report.',
-      duration: 1000,
-    })
-  }
-
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const openConfirmationDialog = () => setIsDeleteDialogOpen(true)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const openConfirmationDialog = () => setIsDeleteDialogOpen(true);
 
   return (
     <div>
@@ -114,6 +125,7 @@ export default function BugInfoPage() {
                 <MenubarItem
                   className="text-red-500"
                   onClick={openConfirmationDialog}
+                  disabled={loading}
                 >
                   Delete Report
                 </MenubarItem>
@@ -139,9 +151,7 @@ export default function BugInfoPage() {
             label="Report Image"
             contentClassName="grid-cols-1"
           >
-            {blobUrl ? <IdImage src={blobUrl} loading={loading} /> : ''
-
-            }
+            {blobUrl ? <IdImage src={blobUrl} loading={loading} /> : ""}
           </InfoCard>
         </div>
 
@@ -153,8 +163,9 @@ export default function BugInfoPage() {
           confirmLabel="Delete"
           onConfirm={handleAccountDelete}
           variant="destructive"
+          loading={loading}
         />
       </div>
     </div>
-  )
+  );
 }
