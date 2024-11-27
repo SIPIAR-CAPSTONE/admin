@@ -25,60 +25,44 @@ const filters = {
 export default function BystandersPage() {
   const [bystanderData, setBystanderData] = useState([])
 
-  useEffect(() => {
-    const fetchBystanderData = async () => {
-      const { data, error } = await supabase.from('bystander').select(`
-        *,
-        verification_request:verification_request!user_id (
-          created_at
-        )
-      `)
-
-      if (error) {
-        console.error('Error fetching bystander data:', error)
-      } else {
-        console.log('data', data)
-
-        const formattedData = data.map((item) => ({
-          id: String(item.id),
-          firstName: item.first_name,
-          middleName: item.middle_name,
-          lastName: item.last_name,
-          suffix: item.suffix,
-          birthDate: item.birth_date,
-          phoneNumber: item.phone_number,
-          barangay: item.barangay,
-          street: item.street,
-          houseNumber: item.house_number,
-          email: item.email,
-          isVerified: item.isVerified,
-          verifiedDate:
-            item.verification_request.length > 0
-              ? item.verification_request[0].created_at 
-              : null,
-        }))
-
-        setBystanderData(formattedData)
-      }
-    }
-
-    fetchBystanderData()
-
-    const channel = supabase
-      .channel('bystander-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'bystander' },
-        (payload) => {
-          console.log('Change received!', payload)
-          fetchBystanderData()
-        },
+  const fetchBystanderData = async () => {
+    const { data, error } = await supabase.from('bystander').select(`
+      *,
+      verification_request:verification_request!bystander_id (
+        request_date
       )
-      .subscribe()
+    `)
 
-    return () => {
-      channel.unsubscribe()
+    if (error) {
+      console.error('Error fetching bystander data:', error)
+    } else {
+      console.log('data', data)
+
+      const formattedData = data.map((item) => ({
+        id: String(item.id),
+        firstName: item.first_name,
+        middleName: item.middle_name,
+        lastName: item.last_name,
+        suffix: item.suffix,
+        birthDate: item.birth_date,
+        phoneNumber: item.phone_number,
+        barangay: item.barangay,
+        street: item.street,
+        houseNumber: item.house_number,
+        email: item.email,
+        isVerified: item.isVerified,
+        verifiedDate:
+          item.verification_request.length > 0
+            ? item.verification_request[0].request_date
+            : null,
+      }))
+
+      setBystanderData(formattedData)
     }
+  }
+
+  useEffect(() => {
+    fetchBystanderData()
   }, [])
 
   return (
@@ -93,6 +77,7 @@ export default function BystandersPage() {
           filterTitle="Verified"
           filterColumn="isVerified"
           filterOptions={filters.filterOptions}
+          func={fetchBystanderData}
           statePropKeys={[
             'id',
             'firstName',

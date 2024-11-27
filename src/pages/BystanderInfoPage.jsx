@@ -24,20 +24,6 @@ export default function BystanderInfoPage() {
   const { state } = useLocation();
   const { firstName, middleName, lastName, suffix, birthDate, phoneNumber, barangay, street, houseNumber, isVerified, verifiedDate } = state;
 
-  const bystander = {
-    firstName: "John",
-    middleName: "Michael",
-    lastName: "Doe",
-    suffix: "Jr.",
-    birthday: "2003-01-15T00:00:00.000Z",
-    phoneNumber: "09123456789",
-    city: "Cagayan de Oro City",
-    barangay: "Barangay 123",
-    street: "Main Street",
-    houseNumber: "456",
-    isVerified: true,
-    verificationDate: "2023-07-25T00:00:00.000Z",
-  };
   const birthDateParse = getDate(birthDate);
   const verificationDate = getDateString(verifiedDate);
 
