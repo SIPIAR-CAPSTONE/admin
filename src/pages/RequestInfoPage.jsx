@@ -1,69 +1,138 @@
-import { useState } from "react";
-import { CircleUserRound, MapPinHouse, IdCard } from "lucide-react";
-import TopBar from "@/components/TopBar/TopBar";
-import InfoCard from "@/components/InfoCard/InfoCard";
-import InfoCardField from "@/components/InfoCard/InfoCardField";
-import IdImage from "@/components/InfoCard/IdImage";
-import H1 from "@/components/ui/H1";
-import { Button } from "@/components/ui/button";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import { useLocation } from "react-router-dom";
-import { getDate } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from 'react'
+import { CircleUserRound, MapPinHouse, IdCard } from 'lucide-react'
+import TopBar from '@/components/TopBar/TopBar'
+import InfoCard from '@/components/InfoCard/InfoCard'
+import InfoCardField from '@/components/InfoCard/InfoCardField'
+import IdImage from '@/components/InfoCard/IdImage'
+import H1 from '@/components/ui/H1'
+import { Button } from '@/components/ui/button'
+import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getDate } from '@/lib/utils'
+import { useToast } from '@/hooks/use-toast'
+import supabase from '@/supabase/config'
 
 const data = {
   breadcrumbs: [
     {
-      name: "Verification Request",
-      href: "..",
+      name: 'Verification Request',
+      href: '..',
     },
     {
-      name: "Request Info",
-      href: "",
+      name: 'Request Info',
+      href: '',
     },
   ],
-};
+}
 
 export default function RequestInfoPage() {
-  const { state } = useLocation();
-  const { id } = state;
-  const { toast } = useToast();
+  const { state } = useLocation()
+  const {
+    id,
+    bystanderId,
+    firstName,
+    middleName,
+    lastName,
+    suffix,
+    birthDate,
+    phoneNumber,
+    city,
+    barangay,
+    street,
+    houseNumber,
+    email,
+  } = state
 
-  const user = {
-    firstName: "John",
-    middleName: "Michael",
-    lastName: "Doe",
-    suffix: "Jr.",
-    birthday: "2003-04-15T00:00:00.000Z",
-    phoneNumber: "09123456789",
-    city: "Cagayan de Oro City",
-    barangay: "Barangay 123",
-    street: "Main Street",
-    houseNumber: "456",
-  };
-  const birthDate = getDate(user.birthday);
-  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
-  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
-  const openAcceptDialog = () => setIsAcceptDialogOpen(true);
-  const openRejectDialog = () => setIsRejectDialogOpen(true);
+  const { toast } = useToast()
 
-  const handleAcceptVerification = () => {
-    console.log("accepted");
+  const formattedBirthDate = getDate(birthDate)
+  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false)
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
+  const openAcceptDialog = () => setIsAcceptDialogOpen(true)
+  const openRejectDialog = () => setIsRejectDialogOpen(true)
+  const navigate = useNavigate()
 
+  const [blobUrls, setBlobUrls] = useState({ frontImage: '', backImage: '' })
+  const frontImagePath = `verification_request/${email}/verification_id_front`
+  const backImagePath = `verification_request/${email}/verification_id_back`
+
+  // Reusable function to fetch images
+  const fetchImage = async (path) => {
+    const { data, error } = await supabase.storage
+      .from('bystander')
+      .download(path)
+    if (error) {
+      throw new Error(error.message)
+    }
+    return URL.createObjectURL(data)
+  }
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const [frontImage, backImage] = await Promise.all([
+          fetchImage(frontImagePath),
+          fetchImage(backImagePath),
+        ])
+
+        setBlobUrls({ frontImage, backImage })
+      } catch (error) {
+        toast({
+          title: 'Error fetching images',
+          description: error.message,
+          variant: 'destructive',
+        })
+      }
+    }
+
+    fetchImages()
+
+    // Cleanup object URLs
+    return () => {
+      blobUrls.frontImage && URL.revokeObjectURL(blobUrls.frontImage)
+      blobUrls.backImage && URL.revokeObjectURL(blobUrls.backImage)
+    }
+  }, [
+    backImagePath,
+    blobUrls.backImage,
+    blobUrls.frontImage,
+    email,
+    frontImagePath,
+    toast,
+  ])
+
+  const dbCleanerNavigator = async () => {
+    await supabase.from('verification_request').delete().eq('request_id', id)
+
+    await supabase.storage
+      .from('bystander')
+      .remove([frontImagePath, backImagePath])
+
+    navigate('/verification-request')
+  }
+
+  const handleAcceptVerification = async () => {
+    const { error } = await supabase
+      .from('bystander')
+      .update({ isVerified: true })
+      .eq('id', bystanderId)
+
+    if (!error) {
+      dbCleanerNavigator()
+      toast({
+        title: 'Verified Successfully',
+        description: 'Successfully verified user account.',
+      })
+    }
+  }
+  const handleRejectVerification = async () => {
+    dbCleanerNavigator()
     toast({
-      title: "Verified Successfully",
-      description: "Successfully verified user account.",
-    });
-  };
-  const handleRejectVerification = () => {
-    console.log("rejected");
-
-    toast({
-      title: "Rejected Successfully",
-      description: "Successfully rejected user account verification.",
+      title: 'Rejected Successfully',
+      description: 'Successfully rejected user account verification.',
       duration: 1000,
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -91,12 +160,12 @@ export default function RequestInfoPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <InfoCard LabelIcon={CircleUserRound} label="Personal Information">
-            <InfoCardField label="First Name" value={user.firstName} />
-            <InfoCardField label="Middle Name" value={user.middleName} />
-            <InfoCardField label="Last Name" value={user.lastName} />
-            <InfoCardField label="Suffix" value={user.suffix} />
-            <InfoCardField label="Birthday" value={birthDate} />
-            <InfoCardField label="Phone Number" value={user.phoneNumber} />
+            <InfoCardField label="First Name" value={firstName} />
+            <InfoCardField label="Middle Name" value={middleName} />
+            <InfoCardField label="Last Name" value={lastName} />
+            <InfoCardField label="Suffix" value={suffix} />
+            <InfoCardField label="Birthday" value={formattedBirthDate} />
+            <InfoCardField label="Phone Number" value={phoneNumber} />
           </InfoCard>
           <InfoCard
             LabelIcon={IdCard}
@@ -104,20 +173,14 @@ export default function RequestInfoPage() {
             className="md:row-span-2"
             contentClassName="grid-cols-1"
           >
-            <IdImage
-              label="Front"
-              src="https://marketplace.canva.com/EAFXhyJiKhc/1/0/400w/canva-white-and-red-modern-highschool-id-card-nKwomwYJiUU.jpg"
-            />
-            <IdImage
-              label="Back"
-              src="https://t4.ftcdn.net/jpg/02/32/92/21/360_F_232922178_YCAxIU0vlGoGY2H76ZsATswNrOVbWlUv.jpg"
-            />
+            <IdImage label="Front" src={blobUrls.frontImage} />
+            <IdImage label="Back" src={blobUrls.backImage} />
           </InfoCard>
           <InfoCard LabelIcon={MapPinHouse} label="Address Information">
-            <InfoCardField label="City" value={user.city} />
-            <InfoCardField label="Barangay" value={user.barangay} />
-            <InfoCardField label="Street" value={user.street} />
-            <InfoCardField label="House #" value={user.houseNumber} />
+            <InfoCardField label="City" value={city} />
+            <InfoCardField label="Barangay" value={barangay} />
+            <InfoCardField label="Street" value={street} />
+            <InfoCardField label="House #" value={houseNumber} />
           </InfoCard>
         </div>
 
@@ -125,18 +188,18 @@ export default function RequestInfoPage() {
           isOpen={isAcceptDialogOpen}
           setOpen={setIsAcceptDialogOpen}
           title="Accept Verification Request"
-          description="Are you sure you want to accept this incident report?"
+          description="Are you sure you want to accept this verification request?"
           onConfirm={handleAcceptVerification}
         />
         <ConfirmationDialog
           isOpen={isRejectDialogOpen}
           setOpen={setIsRejectDialogOpen}
           title="Reject Verification Request"
-          description="Are you sure you want to reject this incident report?"
+          description="Are you sure you want to reject this verification request?"
           onConfirm={handleRejectVerification}
           variant="destructive"
         />
       </div>
     </>
-  );
+  )
 }
