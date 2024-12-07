@@ -23,7 +23,6 @@ export default function BroadcastPage() {
   const [selectedFilterStatus, setSelectedFilterStatus] = useState(null);
 
   //! Fetch responders - can be moved to a custom hook (e.g., useResponders)
-  //! or e butang atong useBroadcast, ikaw bahala basta maka fetch biya ha ug ani
   useEffect(() => {
     const fetchResponders = async () => {
       const { data } = await supabase
@@ -44,7 +43,7 @@ export default function BroadcastPage() {
       emergencyAlerts.filter((alert) =>
         selectedFilterStatus === null
           ? true
-          : alert.is_responded === selectedFilterStatus
+          : alert.status === selectedFilterStatus
       ),
     [selectedFilterStatus, emergencyAlerts]
   );
@@ -75,7 +74,7 @@ export default function BroadcastPage() {
             <ScrollArea className="md:w-96 h-[28.5rem] px-2.5 2xl:h-[42rem]">
               <div className="space-y-2">
                 {filteredAlerts.map((alert) => {
-                  const fullName = `${alert.USER.first_name} ${alert.USER.last_name}`;
+                  const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`;
                   const position = {
                     lat: alert.latitude,
                     lng: alert.longitude,
@@ -86,7 +85,7 @@ export default function BroadcastPage() {
                       key={alert.broadcast_id}
                       bystanderName={fullName}
                       location={alert.address}
-                      status={alert.is_responded}
+                      status={alert.status}
                       time={alert.date}
                       onClick={() => setFocusPosition(position)}
                     />

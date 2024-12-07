@@ -42,20 +42,31 @@ export default function AlertListItem({
     </div>
   );
 }
-function ResponderStatus({ status = false }) {
+function ResponderStatus({ status = "Pending" }) {
   const statusValue = {
+    completed: "Completed",
     going: "Responder Going",
     pending: "No Responder",
   };
 
-  const statusKey = status ? "going" : "pending";
+  // Determine the appropriate key for the status
+  const statusKey =
+    status === "Completed"
+      ? "completed"
+      : status === "On Going"
+      ? "going"
+      : "pending";
 
   return (
     <div className="w-16">
       <Ambulance
         className={cn(
           "mx-auto size-6",
-          status ? "text-green-500" : "text-red-500"
+          statusKey === "completed"
+            ? "text-blue-500"
+            : statusKey === "going"
+            ? "text-green-500"
+            : "text-red-500"
         )}
       />
       <span
@@ -67,4 +78,5 @@ function ResponderStatus({ status = false }) {
     </div>
   );
 }
+
 
