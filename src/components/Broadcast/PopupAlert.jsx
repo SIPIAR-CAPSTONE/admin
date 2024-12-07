@@ -13,10 +13,15 @@ import supabase from '@/supabase/config'
 
 function PopupAlert({ alert, responders }) {
   const { toast } = useToast()
-  const fullName = `${alert.USER.first_name} ${alert.USER.last_name}`
+  const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`
   const timeRequested = getTimeGap(alert.date)
   const dateRequested = getDateString(alert.date)
-  const status = alert.is_responded ? 'Responder going' : 'No Responder'
+  const status = alert.status === "Completed"
+  ? "Completed"
+  : alert.status === "On Going"
+  ? "Responder Going"
+  : "No Responder";
+
 
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
   const openConfirmationDialog = () => setIsLogoutDialogOpen(true)

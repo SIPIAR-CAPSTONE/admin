@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "../ui/separator";
+import { useState } from "react";
 
 export default function AlertListHeader({
   label,
@@ -31,9 +32,11 @@ export default function AlertListHeader({
 }
 
 function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
+  const [isOpen, setIsOpen] = useState(false);
   const statusFilter = [
-    { label: "Responder Going", value: true },
-    { label: "No Responder", value: false },
+    { label: "Pending", value: "Pending" },
+    { label: "On Going", value: "On Going" },
+    { label: "Completed", value: "Completed" },
   ];
 
   return (
@@ -42,6 +45,7 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
         <Button
           size="icon"
           className="relative rounded-full shadow-none dark:hover:bg-neutral-800 dark:bg-neutral-700 text-neutral-800 size-7 hover:bg-neutral-200 bg-neutral-100 dark:text-white"
+          onClick={() => setIsOpen(!isOpen)}
         >
           <ListFilter className="size-4" />
         </Button>
@@ -78,6 +82,7 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
     </Popover>
   );
 }
+
 
 function ListCount({ length }) {
   return (
