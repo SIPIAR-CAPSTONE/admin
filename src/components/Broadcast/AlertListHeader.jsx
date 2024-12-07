@@ -1,6 +1,4 @@
 import { ListFilter, X } from "lucide-react";
-import { useState } from "react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,16 +31,9 @@ export default function AlertListHeader({
 }
 
 function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
-  const [isOpen, setIsOpen] = useState(false);
   const statusFilter = [
-    {
-      label: "Responder Going",
-      value: "going",
-    },
-    {
-      label: "No Responder",
-      value: "pending",
-    },
+    { label: "Responder Going", value: true },
+    { label: "No Responder", value: false },
   ];
 
   return (
@@ -51,7 +42,6 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
         <Button
           size="icon"
           className="relative rounded-full shadow-none dark:hover:bg-neutral-800 dark:bg-neutral-700 text-neutral-800 size-7 hover:bg-neutral-200 bg-neutral-100 dark:text-white"
-          onClick={() => setIsOpen(!isOpen)}
         >
           <ListFilter className="size-4" />
         </Button>
@@ -62,9 +52,9 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
             <Button
               key={item.value}
               className={cn(
-                "w-full text-black bg-transparent shadow-none hover:bg-neutral-100 dark:bg-neutral-700 dark:border-none border dark:hover:bg-neutral-800 dark:text-white",
+                "w-full text-black bg-transparent shadow-none hover:bg-neutral-100 dark:bg-neutral-700",
                 selectedFilterStatus === item.value &&
-                  "bg-primary-500 text-white select-none hover:bg-primary-600 border-none dark:hover:bg-primary-500 dark:bg-primary-600"
+                  "bg-primary-500 text-white"
               )}
               onClick={() => setSelectedFilterStatus(item.value)}
             >
@@ -72,11 +62,11 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
             </Button>
           ))}
         </div>
-        {selectedFilterStatus && (
+        {selectedFilterStatus !== null && (
           <>
             <Separator className="mt-3" />
             <Button
-              className="w-full text-black bg-transparent rounded-none shadow-none dark:bg-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-white"
+              className="w-full text-black bg-transparent shadow-none hover:bg-neutral-100 dark:bg-neutral-800"
               onClick={() => setSelectedFilterStatus(null)}
             >
               <span>Clear Filter</span>
@@ -92,9 +82,8 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
 function ListCount({ length }) {
   return (
     <div
-      aria-label="emergency alerts size"
       className={cn(
-        "text-white rounded-full size-7 font-medium bg-primary-500  grid place-items-center",
+        "text-white rounded-full size-7 font-medium bg-primary-500 grid place-items-center",
         alertCountStyle(length)
       )}
     >
@@ -104,13 +93,8 @@ function ListCount({ length }) {
 }
 
 function alertCountStyle(length) {
-  if (length < 10) {
-    return "text-sm";
-  } else if (length < 100) {
-    return "text-xs";
-  } else if (length < 1000) {
-    return "text-[0.65rem]";
-  } else {
-    return "text-[0.5rem]";
-  }
+  if (length < 10) return "text-sm";
+  if (length < 100) return "text-xs";
+  if (length < 1000) return "text-[0.65rem]";
+  return "text-[0.5rem]";
 }

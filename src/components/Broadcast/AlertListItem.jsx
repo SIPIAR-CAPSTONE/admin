@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, getTimeGap } from "@/lib/utils";
 import { Ambulance, ChevronRight } from "lucide-react";
 
 export default function AlertListItem({
@@ -9,7 +9,8 @@ export default function AlertListItem({
   onClick,
   ...props
 }) {
-  const timeValue = "now"; //! temp
+  const timeValue = getTimeGap(time);
+
 
   return (
     <div
@@ -41,27 +42,29 @@ export default function AlertListItem({
     </div>
   );
 }
-
-function ResponderStatus({ status = "pending" }) {
+function ResponderStatus({ status = false }) {
   const statusValue = {
     going: "Responder Going",
     pending: "No Responder",
   };
+
+  const statusKey = status ? "going" : "pending";
 
   return (
     <div className="w-16">
       <Ambulance
         className={cn(
           "mx-auto size-6",
-          status === "going" ? "text-green-500" : "text-red-500"
+          status ? "text-green-500" : "text-red-500"
         )}
       />
       <span
         aria-label="emergency request status"
         className="text-[0.5rem] block text-center text-neutral-600 dark:text-neutral-400"
       >
-        {statusValue[status]}
+        {statusValue[statusKey]}
       </span>
     </div>
   );
 }
+
