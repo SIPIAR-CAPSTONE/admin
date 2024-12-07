@@ -44,17 +44,20 @@ export default function IncidentHistoryPage() {
             first_name,
             last_name,
             phone_number
+        ),
+        responder:responder_id (
+            email
         )
     `,
       )
-      .eq('isActive', 'No')
 
     if (error) {
       console.error('Error fetching bug reports:', error)
     } else {
-      console.log('data', JSON.stringify(data), 2)
+      console.log('data fetching', JSON.stringify(data), 2)
       const formattedData = data.map((item) => {
         const incident = item.incident_history?.[0] || {}
+
         return {
           broadcastId: item.broadcast_id,
           id: incident.incident_id || item.broadcast_id,
@@ -69,6 +72,7 @@ export default function IncidentHistoryPage() {
           landmark: item.landmark || 'N/A',
           location: item.address || 'N/A',
           remarks: incident.remarks || 'N/A',
+          email: item.responder?.email || 'N/A'
         }
       })
 
@@ -105,7 +109,8 @@ export default function IncidentHistoryPage() {
             'landmark',
             'location',
             'remarks',
-            'broadcastId'
+            'broadcastId',
+            'email'
           ]}
         />
       </div>

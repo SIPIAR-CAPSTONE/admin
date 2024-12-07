@@ -52,6 +52,7 @@ export default function IncidentInfoPage() {
     phoneNumber,
     condition,
     broadcastId,
+    email
   } = state
   const { toast } = useToast()
 
@@ -151,6 +152,7 @@ export default function IncidentInfoPage() {
             <InfoCardField label="Date" value={reportDateSubmitted} />
             <InfoCardField label="Time" value={reportTimeSubmitted} />
             <InfoCardField label="Contact Number" value={phoneNumber} />
+            <InfoCardField label="Responder" value={email} />
             <div className="h-40 space-y-2">
               <Label className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 Patient Status
