@@ -22,7 +22,7 @@ import supabase from "@/supabase/config";
 const data = {
   breadcrumbs: [
     {
-      name: "Bug Report",
+      name: "Bug Reports",
       href: "..",
     },
     {
