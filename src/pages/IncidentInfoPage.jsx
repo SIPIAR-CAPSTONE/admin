@@ -4,7 +4,6 @@ import {
   ClipboardList,
   EllipsisVertical,
   OctagonAlert,
-  SquareActivity,
 } from "lucide-react";
 
 import InfoCard from "@/components/InfoCard/InfoCard";
@@ -53,6 +52,7 @@ export default function IncidentInfoPage() {
     emergencyType: "Cardiac Arrest",
     responderId: "728ed52f",
     phoneNumber: "09123456789",
+    isActive: "No",
     remarks:
       "The patient’s chest was stiff, we struggled to achieve sufficient depth.",
   };
@@ -117,10 +117,12 @@ export default function IncidentInfoPage() {
             className="row-span-2"
           >
             <InfoCardField label="Bystander Name" value={info.requestorName} />
+            <InfoCardField label="Contact Number" value={info.phoneNumber} />
             <InfoCardField label="Emergency Type" value={info.requestType} />
+            <InfoCardField label="Active Status" value={info.isActive} />
             <InfoCardField label="Date" value={reportDateSubmitted} />
             <InfoCardField label="Time" value={reportTimeSubmitted} />
-            <InfoCardField label="Contact Number" value={info.phoneNumber} />
+
             <div className="h-40 space-y-2">
               <Label className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 Patient Status

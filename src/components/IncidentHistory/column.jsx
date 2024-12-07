@@ -55,6 +55,34 @@ export const columns = [
     },
   },
   {
+    id: "isActive",
+    accessorKey: "isActive",
+    filterFn: exactMatchFilter,
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Active Status"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const isActive = capitalize(row.getValue("isActive"));
+      return (
+        <Badge
+          className={cn(
+            "rounded-md",
+            isActive === "Yes"
+              ? "bg-green-500  dark:bg-green-600 dark:text-white"
+              : "bg-red-500  dark:bg-red-600 dark:text-white"
+          )}
+        >
+          {isActive}
+        </Badge>
+      );
+    },
+  },
+  {
     id: "condition",
     accessorKey: "condition",
     filterFn: exactMatchFilter,

@@ -17,6 +17,7 @@ const data = {
       barangay: "Barangay 123",
       date: "2023-07-25T00:00:00.000Z",
       condition: "stable",
+      isActive: "No",
     },
     {
       id: "42f51c34",
@@ -24,6 +25,7 @@ const data = {
       date: "2022-01-15T00:00:00.000Z",
       barangay: "Barangay 5",
       condition: "unstable",
+      isActive: "No",
     },
     {
       id: "91a23e45",
@@ -31,6 +33,7 @@ const data = {
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
       condition: "stable",
+      isActive: "No",
     },
     {
       id: "91a23e41",
@@ -38,6 +41,7 @@ const data = {
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
       condition: "unstable",
+      isActive: "Yes",
     },
     {
       id: "81a23e45",
@@ -45,6 +49,7 @@ const data = {
       date: "2021-06-20T00:00:00.000Z",
       barangay: "indahag",
       condition: "stable",
+      isActive: "Yes",
     },
   ],
   filterOptions: [
