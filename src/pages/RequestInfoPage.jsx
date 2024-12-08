@@ -102,7 +102,7 @@ export default function RequestInfoPage() {
   ])
 
   const dbCleanerNavigator = async () => {
-    await supabase.from('verification_request').delete().eq('request_id', id)
+    await supabase.from('VERIFICATION REQUEST').delete().eq('request_id', id)
 
     await supabase.storage
       .from('bystander')
@@ -113,9 +113,9 @@ export default function RequestInfoPage() {
 
   const handleAcceptVerification = async () => {
     const { error } = await supabase
-      .from('bystander')
-      .update({ isVerified: true })
-      .eq('id', bystanderId)
+      .from('BYSTANDER')
+      .update({ is_verified: true })
+      .eq('user_id', bystanderId)
 
     if (!error) {
       dbCleanerNavigator()

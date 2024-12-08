@@ -79,7 +79,7 @@ export default function BugInfoPage() {
       setLoading(true);
 
       const { error, status } = await supabase
-        .from("bug_report")
+        .from("BUG REPORT")
         .delete()
         .eq("bug_id", id)
         .select();
@@ -92,6 +92,7 @@ export default function BugInfoPage() {
         });
         return;
       }
+
 
       if (status === 200) {
         toast({

@@ -10,12 +10,12 @@ export default function BugReportPage() {
   const [bugReports, setBugReports] = useState([])
 
   const fetchBugReports = async () => {
-    const { data, error } = await supabase.from('bug_report').select(`
+    const { data, error } = await supabase.from('BUG REPORT').select(`
         bug_id,
         issue_type,
         issue_description,
-        created_at,
-        bystander:bystander_id (
+        date,
+        USER:bystander_id (
           first_name,
           last_name,
           phone_number,
@@ -26,14 +26,15 @@ export default function BugReportPage() {
     if (error) {
       console.error('Error fetching bug reports:', error)
     } else {
+      console.log('SULOD NIYA', data);
       const formattedData = data.map((item) => ({
         id: String(item.bug_id),
         issueType: item.issue_type,
         issueDescription: item.issue_description,
         date: item.date,
-        reporterName: `${item.bystander.first_name} ${item.bystander.last_name}`,
-        phoneNumber: item.bystander.phone_number,
-        email: item.bystander.email,
+        reporterName: `${item.USER.first_name} ${item.USER.last_name}`,
+        phoneNumber: item.USER.phone_number,
+        email: item.USER.email,
       }))
 
       setBugReports(formattedData)
