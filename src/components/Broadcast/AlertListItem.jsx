@@ -20,15 +20,18 @@ export default function AlertListItem({
       <ResponderStatus status={status} />
       <div className="flex-1">
         <div className="space-x-1.5">
-          <span aria-label="emergency requestor name" className="font-semibold">
-            {location}
-          </span>
-          <span
-            aria-label="emergency request time"
-            className="text-xs text-neutral-500"
+          <div
+            aria-label="emergency requestor name"
+            className="space-x-2.5 overflow-hidden line-clamp-1"
           >
-            {timeValue}
-          </span>
+            <span className="font-semibold">{location}</span>
+            <span
+              aria-label="emergency request time"
+              className="text-xs text-neutral-500"
+            >
+              {timeValue}
+            </span>
+          </div>
         </div>
         <p
           aria-label="emergency request location"
