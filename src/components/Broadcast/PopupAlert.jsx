@@ -71,7 +71,7 @@ function PopupAlert({ alert, responders }) {
 
       const { error } = await supabase
         .from("BROADCAST")
-        .update({ responder_id: userId, status: "On Going" })
+        .update({ responder_id: userId })
         .eq("broadcast_id", alert.broadcast_id);
 
       if (!error) {
@@ -89,28 +89,6 @@ function PopupAlert({ alert, responders }) {
         });
         return;
       }
-
-      const { error: updateResponderError } = await supabase
-        .from("RESPONDER")
-        .update({ is_available: false })
-        .eq("responder_id", selectedResponder.id);
-
-      if (updateResponderError) {
-        toast({
-          title: "Error updating responder availability",
-          description: updateResponderError.message,
-          duration: 1000,
-          variant: "destructive",
-        });
-        return;
-      }
-    } catch (error) {
-      toast({
-        title: "Error updating responder availability",
-        description: error.message,
-        duration: 1000,
-        variant: "destructive",
-      });
     } finally {
       setEditMode(false);
     }
