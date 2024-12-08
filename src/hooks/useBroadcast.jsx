@@ -84,7 +84,7 @@ export default function useBroadcast() {
       .channel("broadcast-all-channel")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "broadcast" },
+        { event: "*", schema: "public", table: "BROADCAST" },
         async () => {
           console.log("realtime: new data received");
           fetchAlerts();
