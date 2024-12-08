@@ -119,7 +119,9 @@ function PopupAlert({ alert, responders }) {
   return (
     <Popup>
       <div className="space-y-2.5 w-80 pe-4">
-        <div className="mb-4 text-2xl font-bold">{alert.address}</div>
+        <div className="mb-4 overflow-hidden text-xl font-semibold line-clamp-2">
+          {alert.address}
+        </div>
         <PopupField
           value={fullName}
           label="Bystander"

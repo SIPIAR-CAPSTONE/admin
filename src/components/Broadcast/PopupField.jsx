@@ -19,11 +19,11 @@ export default function PopupField({
       <div>
         <span
           aria-label="value"
-          className="block text-base font-semibold dark:text-white"
+          className="block text-base font-medium dark:text-white"
         >
           {value || " - "}
         </span>
-        <span aria-label="label" className="block text-neutral-500 -mt-1.5">
+        <span aria-label="label" className="block -mt-1 text-neutral-500">
           {label}
         </span>
       </div>
