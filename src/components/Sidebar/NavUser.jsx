@@ -135,6 +135,7 @@ export function NavUser({ user }) {
         description="Are you sure you want to log out?"
         onConfirm={handleLogout}
         variant="destructive"
+        loading={loading}
       />
       <NotificationModal
         isOpen={isNotificationOpen}

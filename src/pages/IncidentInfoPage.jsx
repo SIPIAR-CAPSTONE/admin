@@ -4,7 +4,7 @@ import {
   ClipboardList,
   EllipsisVertical,
   OctagonAlert,
-} from 'lucide-react'
+} from "lucide-react";
 
 import InfoCard from '@/components/InfoCard/InfoCard'
 import InfoCardField from '@/components/InfoCard/InfoCardField'

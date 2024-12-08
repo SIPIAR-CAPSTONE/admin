@@ -1,8 +1,8 @@
-import { MapContainer, TileLayer } from 'react-leaflet'
-import CustomerMarker from '@/components/Broadcast/CustomMarker'
-import PopupAlert from '@/components/Broadcast/PopupAlert'
+import { MapContainer, TileLayer } from "react-leaflet";
+import CustomerMarker from "@/components/Broadcast/CustomMarker";
+import PopupAlert from "@/components/Broadcast/PopupAlert";
 
-export const DEFAULT_POSITION = [8.44, 124.64]
+export const DEFAULT_POSITION = [8.44, 124.64];
 
 export default function BroadcastMap({
   emergencyAlerts,
@@ -11,12 +11,12 @@ export default function BroadcastMap({
 }) {
   return (
     <div className="size-full">
-      <MapContainer center={DEFAULT_POSITION} zoom={13} scrollWheelZoom={true}>
+      <MapContainer center={DEFAULT_POSITION} zoom={11} scrollWheelZoom={true}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {emergencyAlerts.map((alert) => {
-          const lng = alert?.longitude || 0
-          const lat = alert?.latitude || 0
-          const position = [lat, lng]
+          const lng = alert?.longitude || 0;
+          const lat = alert?.latitude || 0;
+          const position = [lat, lng];
 
           return (
             <CustomerMarker
@@ -26,9 +26,9 @@ export default function BroadcastMap({
             >
               <PopupAlert alert={alert} responders={responders} />
             </CustomerMarker>
-          )
+          );
         })}
       </MapContainer>
     </div>
-  )
+  );
 }

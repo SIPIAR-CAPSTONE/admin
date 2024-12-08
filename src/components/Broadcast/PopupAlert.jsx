@@ -1,80 +1,120 @@
-import { Popup } from 'react-leaflet'
-import PopupField from '@/components/Broadcast/PopupField'
-import { Ambulance, Calendar, Clock, Pencil, Save, User } from 'lucide-react'
-import { cn, getDateString, getTimeGap } from '@/lib/utils'
-import { Select, SelectTrigger } from '@radix-ui/react-select'
-import { SelectContent, SelectItem } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import ConfirmationDialog from '../ui/ConfirmationDialog'
-import { useToast } from '@/hooks/use-toast'
-import supabase from '@/supabase/config'
+import { Popup } from "react-leaflet";
+import PopupField from "@/components/Broadcast/PopupField";
+import { Ambulance, Calendar, Clock, Pencil, Save, User } from "lucide-react";
+import { cn, getDateString, getTimeGap } from "@/lib/utils";
+import { Select, SelectTrigger } from "@radix-ui/react-select";
+import { SelectContent, SelectItem } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "../ui/ConfirmationDialog";
+import { useToast } from "@/hooks/use-toast";
+import supabase from "@/supabase/config";
 
 function PopupAlert({ alert, responders }) {
-  const { toast } = useToast()
-  const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`
-  const timeRequested = getTimeGap(alert.date)
-  const dateRequested = getDateString(alert.date)
-  const status = alert.status === "Completed"
-  ? "Completed"
-  : alert.status === "On Going"
-  ? "Responder Going"
-  : "No Responder";
+  const { toast } = useToast();
+  const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`;
+  const timeRequested = getTimeGap(alert.date);
+  const dateRequested = getDateString(alert.date);
 
+  const status =
+    alert.status === "Completed"
+      ? "Completed"
+      : alert.status === "On Going"
+      ? "Responder Going"
+      : "No Responder";
 
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
-  const openConfirmationDialog = () => setIsLogoutDialogOpen(true)
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
 
-  const [editMode, setEditMode] = useState(false)
+  const [editMode, setEditMode] = useState(false);
+
   const [selectedResponder, setSelectedResponder] = useState({
-    id: '',
-    name: alert?.RESPONDER ? `${alert?.RESPONDER?.first_name} ${alert?.RESPONDER?.last_name}` : 'None',
-  })
+    id: alert?.responder_id,
+    name: alert?.RESPONDER
+      ? `${alert?.RESPONDER?.first_name} ${alert?.RESPONDER?.last_name}`
+      : "None",
+  });
+
   const handleSelectChange = (selectedResponderId) => {
     const selected = responders.find(
-      (responder) => responder.responder_id === selectedResponderId,
-    )
+      (responder) => responder?.responder_id === selectedResponderId
+    );
     if (selected) {
       setSelectedResponder({
-        id: selectedResponderId,
+        id: selected?.responder_id,
         name: `${selected.USER.first_name} ${selected.USER.last_name}`,
-      })
+      });
     }
-  }
+  };
 
   const handleSave = async () => {
-    const { data, error: fetchUserId } = await supabase
-      .from('RESPONDER')
-      .select('user_id')
-      .eq('responder_id', selectedResponder.id)
+    try {
+      if (!selectedResponder.id) return;
 
-    if (fetchUserId) {
-      return
-    }
-    const userId = data[0].user_id
+      const { data, error: fetchREsponderError } = await supabase
+        .from("RESPONDER")
+        .select("user_id")
+        .eq("responder_id", selectedResponder.id)
+        .single();
 
-    const { error } = await supabase
-      .from('BROADCAST')
-      .update({ responder_id: userId })
-      .eq('broadcast_id', alert.broadcast_id)
+      if (fetchREsponderError) {
+        toast({
+          title: "Error fetching responder",
+          description: fetchREsponderError.message,
+          duration: 1000,
+          variant: "destructive",
+        });
+        return;
+      }
+      const userId = data.user_id;
 
-    if (!error) {
+      const { error } = await supabase
+        .from("BROADCAST")
+        .update({ responder_id: userId })
+        .eq("broadcast_id", alert.broadcast_id);
+
+      if (!error) {
+        toast({
+          title: "Assigned Successfully",
+          description: "Successfully assigned responder.",
+          duration: 1000,
+        });
+      } else {
+        toast({
+          title: "Assigning Unsuccessful",
+          description: "Responder not assigned.",
+          duration: 1000,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error: updateResponderError } = await supabase
+        .from("RESPONDER")
+        .update({ is_available: false })
+        .eq("responder_id", selectedResponder.id);
+
+      if (updateResponderError) {
+        toast({
+          title: "Error updating responder availability",
+          description: updateResponderError.message,
+          duration: 1000,
+          variant: "destructive",
+        });
+        return;
+      }
+    } catch (error) {
       toast({
-        title: 'Assigned Successfully',
-        description: 'Successfully assigned responder.',
+        title: "Error updating responder availability",
+        description: error.message,
         duration: 1000,
-      })
-    } else {
-      toast({
-        title: 'Assigning Unsuccessful',
-        description: 'Responder not assigned.',
-        duration: 1000,
-      })
+        variant: "destructive",
+      });
+    } finally {
+      setEditMode(false);
     }
-
-    setEditMode(false)
-  }
+  };
 
   return (
     <Popup>
@@ -120,36 +160,40 @@ function PopupAlert({ alert, responders }) {
             >
               <SelectTrigger
                 className={cn(
-                  'w-full border p-2 rounded h-9 text-start',
-                  editMode ? 'border-black' : 'border-neutral-300',
+                  "w-full border p-2 rounded h-9 text-start",
+                  editMode ? "border-black" : "border-neutral-300"
                 )}
               >
                 {selectedResponder.name}
               </SelectTrigger>
               <SelectContent>
-                {responders.map((responder) => (
-                  <SelectItem
-                    key={responder?.responder_id}
-                    value={responder?.responder_id}
-                    disabled={!responder?.is_available}
-                  >
-                    <div className="space-x-4">
-                      <span aria-label="responder name">{`${responder?.USER.first_name} ${responder?.USER.last_name}`}</span>
-                      <Badge
-                        aria-label="responder availability status"
-                        className={
-                          responder?.is_available
-                            ? 'bg-green-500 dark:bg-green-600 dark:text-white'
-                            : 'bg-red-500 dark:bg-red-600 dark:text-white'
-                        }
-                      >
-                        {`${
-                          responder?.is_available ? 'Available' : 'Not Available'
-                        }`}
-                      </Badge>
-                    </div>
-                  </SelectItem>
-                ))}
+                {responders.map((responder) => {
+                  return (
+                    <SelectItem
+                      key={responder?.responder_id}
+                      value={responder?.responder_id}
+                      disabled={!responder?.is_available}
+                    >
+                      <div className="space-x-4">
+                        <span aria-label="responder name">{`${responder?.USER.first_name} ${responder?.USER.last_name}`}</span>
+                        <Badge
+                          aria-label="responder availability status"
+                          className={
+                            responder?.is_available
+                              ? "bg-green-500 dark:bg-green-600 dark:text-white"
+                              : "bg-red-500 dark:bg-red-600 dark:text-white"
+                          }
+                        >
+                          {`${
+                            responder?.is_available
+                              ? "Available"
+                              : "Not Available"
+                          }`}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
 
@@ -171,10 +215,10 @@ function PopupAlert({ alert, responders }) {
         onCancel={() => setEditMode(false)}
       />
     </Popup>
-  )
+  );
 }
 
-export default PopupAlert
+export default PopupAlert;
 
 function ActionButton({ editMode, setEditMode, onSave }) {
   if (editMode) {
@@ -185,7 +229,7 @@ function ActionButton({ editMode, setEditMode, onSave }) {
       >
         <Save />
       </Button>
-    )
+    );
   }
 
   return (
@@ -195,5 +239,5 @@ function ActionButton({ editMode, setEditMode, onSave }) {
     >
       <Pencil />
     </Button>
-  )
+  );
 }

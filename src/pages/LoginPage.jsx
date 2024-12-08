@@ -1,4 +1,4 @@
-import { AtSign, Eye, EyeOff, Lock } from "lucide-react";
+import { AtSign, Eye, EyeOff, LoaderCircle, Lock } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -127,7 +127,6 @@ export default function LoginPage() {
                 <Button
                   variant="link"
                   className="p-0 mb-3 text-neutral-500"
-                  asChild
                   disabled={loading}
                 >
                   <Link to="/forgot-password">Forgot Password</Link>
@@ -139,6 +138,14 @@ export default function LoginPage() {
                 className="w-full bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 dark:text-white"
                 disabled={loading}
               >
+                {loading && (
+                  <LoaderCircle
+                    className="-ms-1 me-2 animate-spin"
+                    size={16}
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                )}
                 Login
               </Button>
               <Tooltip delayDuration={0}>

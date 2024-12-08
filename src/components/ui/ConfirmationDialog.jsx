@@ -19,6 +19,7 @@ export default function ConfirmationDialog({
   onConfirm = () => {},
   onCancel = () => {},
   variant = "default",
+  loading = false,
 }) {
   const buttonVariant = {
     default:
@@ -35,12 +36,13 @@ export default function ConfirmationDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>
+          <AlertDialogCancel onClick={onCancel} disabled={loading}>
             {cancelLabel}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className={buttonVariant[variant]}
+            disabled={loading}
           >
             {confirmLabel}
           </AlertDialogAction>

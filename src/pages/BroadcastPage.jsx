@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import TopBar from "@/components/TopBar/TopBar";
 import H1 from "@/components/ui/H1";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -6,7 +6,6 @@ import AlertListItem from "@/components/Broadcast/AlertListItem";
 import AlertListHeader from "@/components/Broadcast/AlertListHeader";
 import BroadcastMap from "@/components/Broadcast/BroadcastMap";
 import useBroadcast from "@/hooks/useBroadcast";
-import supabase from "@/supabase/config";
 
 const data = {
   breadcrumbs: [
@@ -19,24 +18,8 @@ const data = {
 
 export default function BroadcastPage() {
   const [focusPosition, setFocusPosition] = useState({});
-  const [responders, setResponders] = useState();
   const [selectedFilterStatus, setSelectedFilterStatus] = useState(null);
-
-  //! Fetch responders - can be moved to a custom hook (e.g., useResponders)
-  useEffect(() => {
-    const fetchResponders = async () => {
-      const { data } = await supabase
-        .from("RESPONDER")
-        .select(`
-          *,
-          USER: user_id (first_name, last_name)
-        `);
-      setResponders(data);
-    };
-    fetchResponders();
-  }, []);
-
-  const { emergencyAlerts } = useBroadcast();
+  const { emergencyAlerts, responders } = useBroadcast();
 
   const filteredAlerts = useMemo(
     () =>
@@ -55,7 +38,7 @@ export default function BroadcastPage() {
       <TopBar breadcrumbsData={data.breadcrumbs} />
       <div className="px-4 pt-2 pb-4 mx-auto space-y-4 2xl:pt-4 max-w-screen-2xl">
         <H1>Current Incidents</H1>
-        <div className="flex flex-col h-full gap-6 md:flex-row">
+        <div className="flex flex-col h-full gap-4 md:flex-row">
           <div className="flex-1 border aspect-video">
             <BroadcastMap
               emergencyAlerts={filteredAlerts}
