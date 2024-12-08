@@ -6,7 +6,7 @@ export default function AuthLayout() {
   const { user } = useAuth();
   const location = useLocation();
 
-  return !user ? (
+  return user ? (
     <MainLayout>
       <Outlet />
     </MainLayout>
