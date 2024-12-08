@@ -75,7 +75,7 @@ export default function BugInfoPage() {
 
   const handleAccountDelete = async () => {
     const { error } = await supabase
-      .from('bug_report')
+      .from('BUG REPORT')
       .delete()
       .eq('bug_id', id)
       .select()
