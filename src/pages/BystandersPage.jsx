@@ -26,35 +26,38 @@ export default function BystandersPage() {
   const [bystanderData, setBystanderData] = useState([])
 
   const fetchBystanderData = async () => {
-    const { data, error } = await supabase.from('bystander').select(`
+    const { data, error } = await supabase.from('BYSTANDER').select(`
+    *,
+    USER:user_id (
       *,
-      verification_request:verification_request!bystander_id (
+      "VERIFICATION REQUEST"!user_id (
         request_date
       )
-    `)
-
+    )
+  `)
     if (error) {
       console.error('Error fetching bystander data:', error)
     } else {
       console.log('data', data)
 
       const formattedData = data.map((item) => ({
-        id: String(item.id),
-        firstName: item.first_name,
-        middleName: item.middle_name,
-        lastName: item.last_name,
-        suffix: item.suffix,
-        birthDate: item.birth_date,
-        phoneNumber: item.phone_number,
-        barangay: item.barangay,
-        street: item.street,
-        houseNumber: item.house_number,
-        email: item.email,
-        isVerified: item.isVerified,
+        id: String(item.bystander_id),
+        firstName: item.USER.first_name,
+        middleName: item.USER.middle_name,
+        lastName: item.USER.last_name,
+        suffix: item.USER.suffix,
+        birthDate: item.USER.birth_date,
+        phoneNumber: item.USER.phone_number,
+        barangay: item.USER.barangay,
+        street: item.USER.street,
+        houseNumber: item.USER.house_number,
+        email: item.USER.email,
+        isVerified: item.is_verified,
         verifiedDate:
-          item.verification_request.length > 0
-            ? item.verification_request[0].request_date
-            : null,
+          item.USER['VERIFICATION REQUEST'] &&
+          item.USER['VERIFICATION REQUEST'].length > 0
+            ? item.USER['VERIFICATION REQUEST'][0].request_date
+            : null
       }))
 
       setBystanderData(formattedData)

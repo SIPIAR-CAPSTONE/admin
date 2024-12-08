@@ -12,28 +12,34 @@ export default function VerificationRequestPage() {
   const [bystanderData, setBystanderData] = useState([])
 
   const fetchBystanderData = async () => {
-    const { data, error } = await supabase.from('verification_request').select()
+    const { data, error } = await supabase.from('VERIFICATION REQUEST')
+    .select(`
+      *,
+      USER:user_id (
+        *
+      )`
+    )
 
     if (error) {
       console.error('Error fetching bystander data:', error)
     } else {
-      console.log('data verif page', data)
+      console.log('VERIFICATION - REQ', data)
 
       const formattedData = data.map((item) => ({
         id: String(item.request_id),
-        bystanderId: String(item.bystander_id),
-        firstName: item.first_name,
-        middleName: item.middle_name,
-        lastName: item.last_name,
-        suffix: item.suffix,
-        birthDate: item.birth_date,
-        phoneNumber: item.phone_number,
+        bystanderId: String(item.user_id),
+        firstName: item.USER.first_name,
+        middleName: item.USER.middle_name,
+        lastName: item.USER.last_name,
+        suffix: item.USER.suffix,
+        birthDate: item.USER.birth_date,
+        phoneNumber: item.USER.phone_number,
         city: 'Cagayan de Oro City',
-        barangay: item.barangay,
-        street: item.street,
-        houseNumber: item.house_number,
-        email: item.email,
-        request_date: item.request_date,
+        barangay: item.USER.barangay,
+        street: item.USER.street,
+        houseNumber: item.USER.house_number,
+        email: item.USER.email,
+        request_date: item.USER.request_date
       }))
 
       setBystanderData(formattedData)
