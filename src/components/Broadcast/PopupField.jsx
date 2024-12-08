@@ -21,7 +21,7 @@ export default function PopupField({
           aria-label="value"
           className="block text-base font-semibold dark:text-white"
         >
-          {value}
+          {value || " - "}
         </span>
         <span aria-label="label" className="block text-neutral-500 -mt-1.5">
           {label}

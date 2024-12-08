@@ -11,7 +11,6 @@ export default function AlertListItem({
 }) {
   const timeValue = getTimeGap(time);
 
-
   return (
     <div
       onClick={onClick}
@@ -22,7 +21,7 @@ export default function AlertListItem({
       <div className="flex-1">
         <div className="space-x-1.5">
           <span aria-label="emergency requestor name" className="font-semibold">
-            {bystanderName}
+            {location}
           </span>
           <span
             aria-label="emergency request time"
@@ -35,7 +34,7 @@ export default function AlertListItem({
           aria-label="emergency request location"
           className="overflow-hidden text-xs truncate md:w-60 text-neutral-800 dark:text-neutral-300"
         >
-          {location}
+          {bystanderName}
         </p>
       </div>
       <ChevronRight className="size-6" />
@@ -78,5 +77,3 @@ function ResponderStatus({ status = "Pending" }) {
     </div>
   );
 }
-
-
