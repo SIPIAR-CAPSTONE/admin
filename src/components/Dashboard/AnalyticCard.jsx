@@ -11,11 +11,9 @@ export default function AnalyticsCard({
 }) {
   const IncreaseValue = increase && (
     <span
-      className={`text-sm ${increase > 0 ? "text-green-500" : "text-red-500"}`}
+      className={`text-sm text-green-500`}
     >
-      {increase > 0
-        ? `+${increase}${increasePostfix}`
-        : `${increase}${increasePostfix}`}
+      {`+${increase}${increasePostfix}`}
     </span>
   );
 
