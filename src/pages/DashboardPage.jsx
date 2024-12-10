@@ -46,20 +46,7 @@ export default function DashboardPage() {
 
   const [TopSummary, setTopSummary] = useState([])
 
-  const [incidentOverviewChartData, setIncidentOverviewChartData] = useState([
-    { month: 'Jan', incidents: 0 },
-    { month: 'Feb', incidents: 0 },
-    { month: 'Mar', incidents: 0 },
-    { month: 'Apr', incidents: 0 },
-    { month: 'May', incidents: 0 },
-    { month: 'Jun', incidents: 0 },
-    { month: 'Jul', incidents: 0 },
-    { month: 'Aug', incidents: 0 },
-    { month: 'Sep', incidents: 0 },
-    { month: 'Oct', incidents: 0 },
-    { month: 'Nov', incidents: 0 },
-    { month: 'Dec', incidents: 0 },
-  ])
+  const [incidentOverviewChartData, setIncidentOverviewChartData] = useState([])
 
   const [peakTimeChartData, setPeakTimeChartData] = useState([
     {
