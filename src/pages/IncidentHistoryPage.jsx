@@ -8,12 +8,12 @@ import supabase from '@/supabase/config'
 const filterOptions = [
   {
     label: 'Stable',
-    value: 'stable',
+    value: 'Stable',
     icon: ThumbsUp,
   },
   {
     label: 'Unstable',
-    value: 'not stable',
+    value: 'Unstable',
     icon: ThumbsDown,
   },
 ]
@@ -24,59 +24,44 @@ export default function IncidentHistoryPage() {
   const [incidentHistory, setIncidentHistory] = useState([])
 
   const fetchIncidentHistory = async () => {
-    const { data, error } = await supabase
-      .from('broadcast')
-      .select(
-        `
-        broadcast_id,
-        address,
-        barangay,
-        landmark,
-        created_at,
-        incident_history (
-            incident_id,
-            emergency_type,
-            condition,
-            remarks,
-            is_created
-        ),
-        bystander:user_id (
-            first_name,
-            last_name,
-            phone_number
-        ),
-        responder:responder_id (
-            email
-        )
-    `,
-      )
+    const { data, error } = await supabase.from('BROADCAST')
+    .select(`
+      *,
+      USER:user_id (
+        *
+      ),
+      RESPONDER:responder_id(
+        *
+      )`
+    )
 
     if (error) {
       console.error('Error fetching bug reports:', error)
     } else {
-      console.log('data fetching', JSON.stringify(data), 2)
-      const formattedData = data.map((item) => {
-        const incident = item.incident_history?.[0] || {}
+      // console.log('data fetching', JSON.stringify(data), 2)
+      console.log('data fetching', data)
 
-        return {
-          broadcastId: item.broadcast_id,
-          id: incident.incident_id || item.broadcast_id,
-          reporterName: item.bystander
-            ? `${item.bystander.first_name} ${item.bystander.last_name}`
-            : 'Unknown Reporter',
-          emergencyType: incident.emergency_type || 'N/A',
-          date: item.created_at || 'N/A',
-          phoneNumber: item.bystander?.phone_number || 'N/A',
-          condition: incident.condition || 'N/A',
-          barangay: item.barangay || 'N/A',
-          landmark: item.landmark || 'N/A',
-          location: item.address || 'N/A',
-          remarks: incident.remarks || 'N/A',
-          email: item.responder?.email || 'N/A'
-        }
-      })
+      const formattedData = data.map((item) => ({
+        broadcastId: item?.broadcast_id || 'N/A',
+        id: item?.broadcast_id || 'N/A',
+        reporterName: item.USER
+          ? `${item?.USER?.first_name || ''} ${item?.USER?.last_name || ''}`.trim()
+          : 'Unknown Reporter',
+        emergencyType: item?.emergency_type || 'N/A',
+        date: item?.date || 'N/A',
+        phoneNumber: item?.USER?.phone_number || 'N/A',
+        condition: item?.condition || 'N/A',
+        barangay: item?.barangay || 'N/A',
+        landmark: item?.landmark || 'N/A',
+        location: item?.address || 'N/A',
+        remarks: item?.remarks || 'N/A',
+        email: item?.RESPONDER?.email || 'N/A',
+        status: item?.status
+      }));
+      
 
       setIncidentHistory(formattedData)
+      console.log('state -data', incidentHistory);
       console.log('formatted data', formattedData)
     }
   }
@@ -110,7 +95,8 @@ export default function IncidentHistoryPage() {
             'location',
             'remarks',
             'broadcastId',
-            'email'
+            'email',
+            'status'
           ]}
         />
       </div>

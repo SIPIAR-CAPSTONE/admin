@@ -111,7 +111,6 @@ export default function IncidentInfoPage() {
   }
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const openConfirmationDialog = () => setIsDeleteDialogOpen(true)
 
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
   const openDownloadDialog = () => setIsDownloadDialogOpen(true)
@@ -130,12 +129,6 @@ export default function IncidentInfoPage() {
               <MenubarContent className="dark:bg-neutral-700">
                 <MenubarItem onClick={openDownloadDialog}>
                   Download Report
-                </MenubarItem>
-                <MenubarItem
-                  className="text-red-500"
-                  onClick={openConfirmationDialog}
-                >
-                  Delete Report
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>
@@ -173,16 +166,6 @@ export default function IncidentInfoPage() {
             <InfoCardField label="Remarks" value={remarks} className="h-40" />
           </InfoCard>
         </div>
-
-        <ConfirmationDialog
-          isOpen={isDeleteDialogOpen}
-          setOpen={setIsDeleteDialogOpen}
-          title="Delete Incident Report"
-          description="Permanently delete this incident report? You can't undo this action."
-          confirmLabel="Delete"
-          onConfirm={handleReportDelete}
-          variant="destructive"
-        />
         <ConfirmationDialog
           isOpen={isDownloadDialogOpen}
           setOpen={setIsDownloadDialogOpen}
@@ -206,7 +189,7 @@ function ConditionCard({ condition, className }) {
       <span className="block text-sm text-neutral-600 dark:text-neutral-300">
         condition
       </span>
-      {condition === 'stable' ? (
+      {condition === 'Stable' ? (
         <span className="block text-lg font-bold text-green-500">STABLE</span>
       ) : (
         <span className="block text-lg font-bold text-red-500">UNSTABLE</span>
