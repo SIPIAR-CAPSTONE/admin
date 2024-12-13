@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -15,31 +15,32 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import TableFooter from '@/components/DataTable/TableFooter'
-import VisibleColumns from '@/components/DataTable/VisibleColumns'
-import SearchBox from '@/components/DataTable/SearchBox'
-import { useNavigate } from 'react-router-dom'
-import H1 from '@/components/ui/H1'
-import { FacetedFilter } from '@/components/DataTable/FacetedFilter'
+} from "@/components/ui/table";
+import TableFooter from "@/components/DataTable/TableFooter";
+import VisibleColumns from "@/components/DataTable/VisibleColumns";
+import SearchBox from "@/components/DataTable/SearchBox";
+import { useNavigate } from "react-router-dom";
+import H1 from "@/components/ui/H1";
+import { FacetedFilter } from "@/components/DataTable/FacetedFilter";
 import ReloadButton from "./ReloadButton";
-
+import TableSkeleton from "../Skeletons/TableSkeleton";
 
 export function DataTable({
+  loading,
   columns,
   data,
   tableName,
-  searchColumn = 'email',
+  searchColumn = "email",
   filterColumn,
   filterTitle,
   filterOptions,
   statePropKeys = [],
-  func
+  func,
 }) {
-  const navigate = useNavigate()
-  const [sorting, setSorting] = useState([])
-  const [columnFilters, setColumnFilters] = useState([])
-  const [columnVisibility, setColumnVisibility] = useState({})
+  const navigate = useNavigate();
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
 
   const table = useReactTable({
     data,
@@ -57,7 +58,44 @@ export function DataTable({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-  })
+  });
+
+  const tableBodyContent = loading ? (
+    <TableSkeleton numberOfCells={table.getHeaderGroups()[0].headers.length} />
+  ) : table.getRowModel().rows?.length ? (
+    table.getRowModel().rows.map((row) => (
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && "selected"}
+        onClick={() => {
+          const state = statePropKeys.reduce((acc, key) => {
+            acc[key] = row.original?.[key];
+            return acc;
+          }, {});
+
+          navigate(row.original.id, {
+            state: state,
+          });
+        }}
+        className="cursor-pointer"
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id} className="text-center">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell
+        colSpan={columns.length}
+        className="h-24 text-center dark:text-white"
+      >
+        No results.
+      </TableCell>
+    </TableRow>
+  );
 
   return (
     <div className="rounded-lg md:px-6 md:border md:shadow md:py-2 md:dark:bg-neutral-800 md:dark:border-neutral-700 dark:text-white">
@@ -95,56 +133,18 @@ export function DataTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  onClick={() => {
-                    const state = statePropKeys.reduce((acc, key) => {
-                      acc[key] = row.original?.[key]
-                      return acc
-                    }, {})
-
-                    navigate(row.original.id, {
-                      state: state,
-                    })
-                  }}
-                  className="cursor-pointer"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-center">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center dark:text-white"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          <TableBody>{tableBodyContent}</TableBody>
         </Table>
       </div>
       <TableFooter table={table} />
     </div>
-  )
+  );
 }
