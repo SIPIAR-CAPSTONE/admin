@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react'
-import { CircleUserRound, MapPinHouse, IdCard } from 'lucide-react'
-import TopBar from '@/components/TopBar/TopBar'
-import InfoCard from '@/components/InfoCard/InfoCard'
-import InfoCardField from '@/components/InfoCard/InfoCardField'
-import IdImage from '@/components/InfoCard/IdImage'
-import H1 from '@/components/ui/H1'
-import { Button } from '@/components/ui/button'
-import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { getDate } from '@/lib/utils'
-import { useToast } from '@/hooks/use-toast'
-import supabase from '@/supabase/config'
+import { useEffect, useState } from "react";
+import { CircleUserRound, MapPinHouse, IdCard } from "lucide-react";
+import TopBar from "@/components/TopBar/TopBar";
+import InfoCard from "@/components/InfoCard/InfoCard";
+import InfoCardField from "@/components/InfoCard/InfoCardField";
+import IdImage from "@/components/InfoCard/IdImage";
+import H1 from "@/components/ui/H1";
+import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getDate } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import supabase from "@/supabase/config";
 
 const data = {
   breadcrumbs: [
     {
-      name: 'Verification Request',
-      href: '..',
+      name: "Verification Request",
+      href: "..",
     },
     {
-      name: 'Request Info',
-      href: '',
+      name: "Request Info",
+      href: "",
     },
   ],
-}
+};
 
 export default function RequestInfoPage() {
-  const { state } = useLocation()
+  const { state } = useLocation();
   const {
     id,
     bystanderId,
@@ -41,98 +41,94 @@ export default function RequestInfoPage() {
     street,
     houseNumber,
     email,
-  } = state
+  } = state;
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const formattedBirthDate = getDate(birthDate)
-  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false)
-  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
-  const openAcceptDialog = () => setIsAcceptDialogOpen(true)
-  const openRejectDialog = () => setIsRejectDialogOpen(true)
-  const navigate = useNavigate()
+  const formattedBirthDate = getDate(birthDate);
+  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+  const openAcceptDialog = () => setIsAcceptDialogOpen(true);
+  const openRejectDialog = () => setIsRejectDialogOpen(true);
+  const navigate = useNavigate();
 
-  const [blobUrls, setBlobUrls] = useState({ frontImage: '', backImage: '' })
-  const frontImagePath = `verification_request/${email}/verification_id_front`
-  const backImagePath = `verification_request/${email}/verification_id_back`
+  const [blobUrls, setBlobUrls] = useState({ frontImage: "", backImage: "" });
+  const [imageLoading, setImageLoading] = useState(false);
+  const frontImagePath = `verification_request/${email}/verification_id_front`;
+  const backImagePath = `verification_request/${email}/verification_id_back`;
 
   // Reusable function to fetch images
   const fetchImage = async (path) => {
+    const currentTimestamp = new Date().getTime();
     const { data, error } = await supabase.storage
-      .from('bystander')
-      .download(path)
+      .from("bystander")
+      .download(`${path}?bust=${currentTimestamp}`);
     if (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
-    return URL.createObjectURL(data)
-  }
+
+    return URL.createObjectURL(data);
+  };
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
+        setImageLoading(true);
+
         const [frontImage, backImage] = await Promise.all([
           fetchImage(frontImagePath),
           fetchImage(backImagePath),
-        ])
+        ]);
 
-        setBlobUrls({ frontImage, backImage })
+        setBlobUrls({ frontImage, backImage });
       } catch (error) {
-        toast({
-          title: 'Error fetching images',
-          description: error.message,
-          variant: 'destructive',
-        })
+        console.log("Error fetching images", error.message);
+      } finally {
+        setImageLoading(false);
       }
-    }
+    };
 
-    fetchImages()
+    fetchImages();
 
     // Cleanup object URLs
     return () => {
-      blobUrls.frontImage && URL.revokeObjectURL(blobUrls.frontImage)
-      blobUrls.backImage && URL.revokeObjectURL(blobUrls.backImage)
-    }
-  }, [
-    backImagePath,
-    blobUrls.backImage,
-    blobUrls.frontImage,
-    email,
-    frontImagePath,
-    toast,
-  ])
+      blobUrls.frontImage && URL.revokeObjectURL(blobUrls.frontImage);
+      blobUrls.backImage && URL.revokeObjectURL(blobUrls.backImage);
+    };
+  }, [id, email]);
 
   const dbCleanerNavigator = async () => {
-    await supabase.from('VERIFICATION REQUEST').delete().eq('request_id', id)
+    await supabase.from("VERIFICATION REQUEST").delete().eq("request_id", id);
 
     await supabase.storage
-      .from('bystander')
-      .remove([frontImagePath, backImagePath])
+      .from("bystander")
+      .remove([frontImagePath, backImagePath]);
 
-    navigate('/verification-request')
-  }
+    navigate("/verification-request");
+  };
 
   const handleAcceptVerification = async () => {
     const { error } = await supabase
-      .from('BYSTANDER')
+      .from("BYSTANDER")
       .update({ is_verified: true })
-      .eq('user_id', bystanderId)
+      .eq("user_id", bystanderId);
 
     if (!error) {
-      dbCleanerNavigator()
+      dbCleanerNavigator();
       toast({
-        title: 'Verified Successfully',
-        description: 'Successfully verified user account.',
-      })
+        title: "Verified Successfully",
+        description: "Successfully verified user account.",
+      });
     }
-  }
+  };
   const handleRejectVerification = async () => {
-    dbCleanerNavigator()
+    dbCleanerNavigator();
     toast({
-      title: 'Rejected Successfully',
-      description: 'Successfully rejected user account verification.',
+      title: "Rejected Successfully",
+      description: "Successfully rejected user account verification.",
       duration: 1000,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -173,8 +169,8 @@ export default function RequestInfoPage() {
             className="md:row-span-2"
             contentClassName="grid-cols-1"
           >
-            <IdImage label="Front" src={blobUrls.frontImage} />
-            <IdImage label="Back" src={blobUrls.backImage} />
+            <IdImage label="Front" src={blobUrls.frontImage} loading={imageLoading} />
+            <IdImage label="Back" src={blobUrls.backImage} loading={imageLoading} />
           </InfoCard>
           <InfoCard LabelIcon={MapPinHouse} label="Address Information">
             <InfoCardField label="City" value={city} />
@@ -201,5 +197,5 @@ export default function RequestInfoPage() {
         />
       </div>
     </>
-  )
+  );
 }
