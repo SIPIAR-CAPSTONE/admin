@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 export default function IdImage({ label, loading, src }) {
   return (
-    <div className="max-w-xs space-y-2">
+    <div className="max-w-xs space-y-2  max-h-[75%]">
       <Label className="text-sm ray-500">{label}</Label>
       <Dialog>
         <DialogTrigger asChild>
@@ -27,11 +27,16 @@ export default function IdImage({ label, loading, src }) {
         <DialogContent className="max-w-3xl">
           <DialogTitle className="hidden" />
           <Description className="hidden" />
-          <img
-            src={src}
-            alt={`ID ${label} (Full Size)`}
-            className="object-contain w-full h-auto"
-          />
+          {src ? (
+            <img
+              loading="lazy"
+              src={src}
+              alt={`ID ${label} (Full Size)`}
+              className="object-contain w-full h-auto"
+            />
+          ) : (
+            <IdImagePreviewSkeleton className="h-[30rem]" />
+          )}
         </DialogContent>
       </Dialog>
     </div>
@@ -52,11 +57,12 @@ const ImagePreview = ({ loading, src, label }) => {
   );
 };
 
-const IdImagePreviewSkeleton = () => {
+const IdImagePreviewSkeleton = ({ className }) => {
   return (
     <div
       className={cn(
-        "flex items-center justify-center h-[11.25rem] bg-neutral-300 rounded dark:bg-neutral-700"
+        "flex items-center justify-center h-[11.25rem] bg-neutral-300 rounded dark:bg-neutral-700",
+        className
       )}
     >
       <svg

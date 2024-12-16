@@ -152,7 +152,7 @@ export default function BugInfoPage() {
             label="Report Image"
             contentClassName="grid-cols-1"
           >
-            {blobUrl ? <IdImage src={blobUrl} loading={loading} /> : ""}
+           <IdImage src={blobUrl} loading={loading} />
           </InfoCard>
         </div>
 
