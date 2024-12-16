@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 import moment from "moment";
+import DonutChartSkeleton from "../Skeletons/DonutChartSkeleton";
 
 export const description = "A donut chart with an active sector";
 
@@ -56,7 +57,12 @@ const chartConfig = {
   },
 };
 
-export function PeakTimeIncidentChart({ chartData, className, ...props }) {
+export function PeakTimeIncidentChart({
+  chartData,
+  loading,
+  className,
+  ...props
+}) {
   const currentYear = moment().year();
 
   return (
@@ -69,25 +75,29 @@ export function PeakTimeIncidentChart({ chartData, className, ...props }) {
         <CardDescription>January - December {currentYear}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto md:mt-4 aspect-square max-h-72 2xl:max-h-80"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey="incidents"
-              nameKey="timeBlock"
-              innerRadius={60}
-              strokeWidth={5}
-              activeIndex={0}
-            />
-          </PieChart>
-        </ChartContainer>
+        {loading ? (
+          <DonutChartSkeleton />
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto md:mt-4 aspect-square max-h-72 2xl:max-h-80"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey="incidents"
+                nameKey="timeBlock"
+                innerRadius={60}
+                strokeWidth={5}
+                activeIndex={0}
+              />
+            </PieChart>
+          </ChartContainer>
+        )}
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
