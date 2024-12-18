@@ -1,71 +1,65 @@
-import { useState } from "react";
-import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { useState } from 'react'
+import { ChevronsUpDown, LogOut } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { getNameInitial } from "@/components/Sidebar/sidebar.helper";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
+} from '@/components/ui/sidebar'
+import { getNameInitial } from '@/components/Sidebar/sidebar.helper'
+import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher'
 
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
-import NotificationModal from "@/components/Notification/NotificationModal";
-import { useAuth } from "@/context/AuthProvider";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
+import { useAuth } from '@/context/AuthProvider'
+import { useNavigate } from 'react-router-dom'
+import { useToast } from '@/hooks/use-toast'
 
 export function NavUser({ user }) {
-  const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-  const { isMobile } = useSidebar();
-  const nameInitial = getNameInitial(user.name);
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+  const { isMobile } = useSidebar()
+  const nameInitial = getNameInitial(user.name)
 
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const openNotification = () => setIsNotificationOpen(true);
-  const closeNotification = () => setIsNotificationOpen(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
+  const openConfirmationDialog = () => setIsLogoutDialogOpen(true)
 
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const openConfirmationDialog = () => setIsLogoutDialogOpen(true);
-
-  const { logout } = useAuth();
-  const navigate = useNavigate();
+  const { logout } = useAuth()
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
 
-      const { error } = await logout();
+      const { error } = await logout()
       if (error) {
         toast({
-          title: "Logout failed",
+          title: 'Logout failed',
           description: error.message,
-          variant: "destructive",
-        });
+          variant: 'destructive',
+        })
       } else {
-        navigate("/");
+        navigate('/')
       }
     } catch (error) {
       toast({
-        title: "Logout failed",
+        title: 'Logout failed',
         description: error.message,
-        variant: "destructive",
-      });
+        variant: 'destructive',
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <>
@@ -92,7 +86,7 @@ export function NavUser({ user }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg dark:bg-neutral-700"
-              side={isMobile ? "bottom" : "right"}
+              side={isMobile ? 'bottom' : 'right'}
               align="end"
               sideOffset={4}
             >
@@ -111,12 +105,6 @@ export function NavUser({ user }) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem onClick={openNotification}>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
               <ThemeSwitcher />
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={openConfirmationDialog}>
@@ -137,10 +125,6 @@ export function NavUser({ user }) {
         variant="destructive"
         loading={loading}
       />
-      <NotificationModal
-        isOpen={isNotificationOpen}
-        handleClose={closeNotification}
-      />
     </>
-  );
+  )
 }
