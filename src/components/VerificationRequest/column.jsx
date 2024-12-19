@@ -74,7 +74,7 @@ export const columns = [
     },
   },
   {
-    accessorKey: "requestDate",
+    accessorKey: "requestTime",
     header: () => {
       return <TableHeadButton label="Request Time" noIcon />;
     },

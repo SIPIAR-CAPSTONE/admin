@@ -48,7 +48,7 @@ export const columns = [
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "time",
     header: () => {
       return <TableHeadButton label="Time" noIcon />;
     },
