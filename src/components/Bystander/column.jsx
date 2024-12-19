@@ -22,14 +22,27 @@ export const columns = [
     header: ({ column }) => {
       return (
         <TableHeadButton
-          label="Bystander"
+          label="First Name"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         />
       );
     },
     cell: ({ row }) => {
-      const fullName = `${row.getValue("firstName")} ${row.original.lastName}`;
-      return <div>{fullName}</div>;
+      return <div>{row.getValue("firstName")}</div>;
+    },
+  },
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Last Name"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("lastName")}</div>;
     },
   },
   {
