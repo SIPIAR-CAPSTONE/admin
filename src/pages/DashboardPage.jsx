@@ -91,7 +91,11 @@ export default function DashboardPage() {
         .select("*")
         .not("date", "is", null);
 
-      const currentIncidents = peakMonth.filter(
+      const currentDayIncidents = peakMonth.filter(
+        (record) => new Date(record.date).getDay() === moment().day()
+      ).length;
+
+      const currentMonthIncidents = peakMonth.filter(
         (record) =>
           new Date(record.date).getMonth() === moment().month() &&
           new Date(record.date).getFullYear() === moment().year()
@@ -137,23 +141,21 @@ export default function DashboardPage() {
       setTopSummary([
         {
           id: 1,
-          title: "Total Incidents",
-          value: previousIncidents + currentIncidents,
-          valuePostfix: "",
-          increase: currentIncidents,
-          description: "added this month",
+          title: "Todays Incidents",
+          value: currentDayIncidents,
+          description: "Total incidents today",
           icon: OctagonAlert,
         },
         {
           id: 2,
-          title: "Total Bystanders",
-          value: previousBystanders + currentBystanders,
+          title: "Overall Total Incidents",
+          value: previousIncidents + currentMonthIncidents,
           valuePostfix: "",
-          increase: currentBystanders,
-          increasePostfix: "",
+          increase: currentMonthIncidents,
           description: "added this month",
-          icon: User,
+          icon: OctagonAlert,
         },
+
         {
           id: 3,
           title: "Verified Bystanders",
@@ -383,22 +385,19 @@ export default function DashboardPage() {
 const TopSummaryPlaceholder = [
   {
     id: 1,
-    title: "Total Incidents",
+    title: "Todays Incidents",
+    value: null,
+    description: "Total incidents today",
+    icon: OctagonAlert,
+  },
+  {
+    id: 2,
+    title: "Overall Total Incidents",
     value: null,
     valuePostfix: "",
     increase: null,
     description: "added this month",
     icon: OctagonAlert,
-  },
-  {
-    id: 2,
-    title: "Total Bystanders",
-    value: null,
-    valuePostfix: "",
-    increase: null,
-    increasePostfix: "",
-    description: "added this month",
-    icon: User,
   },
   {
     id: 3,
