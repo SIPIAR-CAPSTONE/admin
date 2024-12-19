@@ -15,8 +15,6 @@ import RequestInfoPage from "@/pages/RequestInfoPage";
 import BystanderInfoPage from "@/pages/BystanderInfoPage";
 import VerificationRequestPage from "@/pages/VerificationRequestPage";
 import BystandersPage from "@/pages/BystandersPage";
-import BugReportPage from "@/pages/BugReportPage";
-import BugInfoPage from "@/pages/BugInfoPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 function App() {
@@ -40,8 +38,6 @@ function App() {
           <Route path="incidents" element={<IncidentHistoryPage />} />
           <Route path="incidents/:id" element={<IncidentInfoPage />} />
           <Route path="broadcast" element={<BroadcastPage />} />
-          <Route path="bug-report" element={<BugReportPage />} />
-          <Route path="bug-report/:id" element={<BugInfoPage />} />
         </Route>
         <Route path="login" element={<LoginPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />

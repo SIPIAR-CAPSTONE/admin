@@ -5,7 +5,6 @@ import {
   BadgeCheck,
   FileClock,
   Users,
-  Bug,
 } from "lucide-react";
 
 import { NavMain } from "@/components/Sidebar/NavMain";
@@ -51,12 +50,7 @@ const data = {
       name: "Verification Request",
       url: "verification-request",
       icon: BadgeCheck,
-    },
-    {
-      name: "Bug Report",
-      url: "bug-report",
-      icon: Bug,
-    },
+    }
   ],
 };
 
