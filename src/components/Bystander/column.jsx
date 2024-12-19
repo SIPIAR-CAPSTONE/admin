@@ -4,13 +4,6 @@ import { cn, exactMatchFilter } from "@/lib/utils";
 
 export const columns = [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => {
-      return <div>{row.getValue("id")}</div>;
-    },
-  },
-  {
     accessorKey: "email",
     header: ({ column }) => {
       return (

@@ -3,13 +3,6 @@ import TableHeadButton from "@/components/DataTable/TableHeadButton";
 
 export const columns = [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => {
-      return <div>{row.getValue("id")}</div>;
-    },
-  },
-  {
     accessorKey: "email",
     header: ({ column }) => {
       return (
