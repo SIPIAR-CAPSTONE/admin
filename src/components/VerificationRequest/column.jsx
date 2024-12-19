@@ -45,6 +45,20 @@ export const columns = [
     },
   },
   {
+    accessorKey: "barangay",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Barangay"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("barangay")}</div>;
+    },
+  },
+  {
     accessorKey: "requestDate",
     header: ({ column }) => {
       return (
@@ -55,8 +69,18 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      const date = moment(row.getValue("requestDate")).format("YYYY-MM-DD");
+      const date = moment(row.getValue("requestDate")).format("MMMM D, YYYY");
       return <div>{date}</div>;
+    },
+  },
+  {
+    accessorKey: "requestDate",
+    header: () => {
+      return <TableHeadButton label="Request Time" noIcon />;
+    },
+    cell: ({ row }) => {
+      const time = moment(row.getValue("requestDate")).format("hh:mm A");
+      return <div>{time}</div>;
     },
   },
 ];
