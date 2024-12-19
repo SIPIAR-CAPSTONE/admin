@@ -2,10 +2,11 @@ import moment from "moment";
 import TableHeadButton from "@/components/DataTable/TableHeadButton";
 import { Badge } from "@/components/ui/badge";
 import { capitalize, cn, exactMatchFilter } from "@/lib/utils";
+import { getResponseTimeDuration } from "../Dashboard/dashboard.helper";
 
 export const columns = [
   {
-    accessorKey: "firstName",
+    accessorKey: "bystanderName",
     header: ({ column }) => {
       return (
         <TableHeadButton
@@ -15,7 +16,47 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.original.reporterName}</div>;
+      return <div>{row.getValue("bystanderName")}</div>;
+    },
+  },
+  {
+    accessorKey: "responderName",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Responder"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("responderName")}</div>;
+    },
+  },
+  {
+    accessorKey: "responseTime",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Response Time"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const incidentRequestDate = row.getValue("date");
+      const responseTime = row.getValue("responseTime");
+
+      if (!responseTime || responseTime === "-")
+        return <div>Not yet responded</div>;
+
+      const duration = getResponseTimeDuration(
+        incidentRequestDate,
+        responseTime,
+        true
+      );
+
+      return <div>{duration}</div>;
     },
   },
   {

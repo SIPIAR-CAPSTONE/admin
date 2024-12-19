@@ -49,21 +49,27 @@ export default function IncidentHistoryPage() {
         const formattedData = data.map((item) => ({
           broadcastId: item?.broadcast_id || "N/A",
           id: item?.broadcast_id || "N/A",
-          reporterName: item.USER
+          bystanderName: item.USER
             ? `${item?.USER?.first_name || ""} ${
                 item?.USER?.last_name || ""
               }`.trim()
-            : "Unknown Reporter",
-          emergencyType: item?.emergency_type || "N/A",
-          date: item?.date || "N/A",
-          phoneNumber: item?.USER?.phone_number || "N/A",
+            : "Bystander Reporter",
+          emergencyType: item?.emergency_type || "-",
+          date: item?.date || "-",
+          phoneNumber: item?.USER?.phone_number || "-",
           condition: item?.condition || "N/A",
-          barangay: item?.barangay || "N/A",
-          landmark: item?.landmark || "N/A",
-          location: item?.address || "N/A",
-          remarks: item?.remarks || "N/A",
-          email: item?.RESPONDER?.email || "N/A",
+          barangay: item?.barangay || "-",
+          landmark: item?.landmark || "-",
+          location: item?.address || "-",
+          remarks: item?.remarks || "-",
+          email: item?.RESPONDER?.email || "-",
           status: item?.status,
+          responseTime: item?.response_time || "-",
+          responderName: item?.RESPONDER
+            ? `${item?.RESPONDER?.first_name || ""} ${
+                item?.RESPONDER?.last_name || ""
+              }`.trim()
+            : "-",
         }));
 
         setIncidentHistory(formattedData);
@@ -86,7 +92,7 @@ export default function IncidentHistoryPage() {
           tableName="Incident History"
           columns={columns}
           data={incidentHistory}
-          searchColumn="location"
+          searchColumn="barangay"
           filterTitle="Condition"
           filterColumn="condition"
           filterOptions={filterOptions}
