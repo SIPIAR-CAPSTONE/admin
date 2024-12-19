@@ -8,7 +8,12 @@ import IncidentOverviewGraph from "@/components/Dashboard/IncidentOverviewChart"
 import H1 from "@/components/ui/H1";
 import { PeakTimeIncidentChart } from "@/components/Dashboard/PeakTimeIncidentChart";
 import { Button } from "@/components/ui/button";
-import { organizeAnalyticsData } from "@/components/Dashboard/dashboard.helper";
+import {
+  formatMinutesTime,
+  getAverageResponseTimeInMinutes,
+  getResponseTimeDuration,
+  organizeAnalyticsData,
+} from "@/components/Dashboard/dashboard.helper";
 import { downloadExcel } from "@/lib/utils";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import supabase from "@/supabase/config";
@@ -24,22 +29,6 @@ const data = {
 };
 
 export default function DashboardPage() {
-  const formatResponseTime = (responseTimeInMinutes) => {
-    responseTimeInMinutes = Math.round(responseTimeInMinutes * 100) / 100;
-
-    if (responseTimeInMinutes < 60) {
-      return `${responseTimeInMinutes.toFixed(2)} minute${
-        responseTimeInMinutes === 1 ? "" : "s"
-      }`;
-    } else {
-      const hours = Math.floor(responseTimeInMinutes / 60);
-      const minutes = Math.round(responseTimeInMinutes % 60);
-      return `${hours} hour${hours === 1 ? "" : "s"} ${minutes} minute${
-        minutes === 1 ? "" : "s"
-      }`;
-    }
-  };
-
   const [isConfirmationDialogOpen, setConfirmationIsDialogOpen] =
     useState(false);
   const openConfirmationDialog = () => setConfirmationIsDialogOpen(true);
@@ -131,22 +120,19 @@ export default function DashboardPage() {
         .select("*", { count: "exact" })
         .eq("is_verified", true);
 
-      const responseTimes = peakMonth
-        .filter((record) => record.response_time !== null)
-        .map((record) => {
-          const incidentDate = new Date(record.date);
-          const responseDate = new Date(record.response_time);
-
-          return (responseDate - incidentDate) / (1000 * 60);
-        });
-
-      const averageResponseTime =
-        responseTimes.length > 0
-          ? responseTimes.reduce((acc, time) => acc + time, 0) /
-            responseTimes.length
-          : 0;
+      //remove not yet responded incidents
+      const respondedIncidents = peakMonth.filter(
+        (record) => record.response_time !== null
+      );
+      //get response time for each incidents
+      const incidentsResponseTime = respondedIncidents.map((record) =>
+        getResponseTimeDuration(record.date, record.response_time)
+      );
+      const averageResponseTime = getAverageResponseTimeInMinutes(
+        incidentsResponseTime
+      );
       const averageResponseTimeFormatted =
-        formatResponseTime(averageResponseTime);
+        formatMinutesTime(averageResponseTime);
 
       setTopSummary([
         {

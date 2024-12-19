@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function organizeAnalyticsData(
   topSummary,
   incidentOverview,
@@ -34,4 +36,48 @@ export function organizeAnalyticsData(
   };
 
   return [organizedData];
+}
+
+export function getResponseTimeDuration(
+  incidentRequestedTime,
+  responseTime,
+  format = false
+) {
+  const start = moment(incidentRequestedTime);
+  const end = moment(responseTime);
+  const duration = moment.duration(end.diff(start));
+
+  // Calculate total hours and minutes
+  const totalMinutes = duration.asMinutes();
+  const totalHours = duration.asHours();
+
+  if (format) {
+    return formatDuration(totalHours, totalMinutes);
+  }
+  return totalMinutes;
+}
+
+function formatDuration(totalHours, totalMinutes) {
+  if (totalHours >= 1) {
+    const hours = Math.floor(totalHours);
+    const minutes = Math.round((totalHours - hours) * 60);
+    return `${hours}.${minutes} hour${hours > 1 ? "s" : ""}`;
+  } else {
+    return `${Math.round(totalMinutes)} minute${totalMinutes > 1 ? "s" : ""}`;
+  }
+}
+
+export function getAverageResponseTimeInMinutes(responseTimes) {
+  const totalMinutes = responseTimes.reduce((total, time) => total + time, 0);
+  return totalMinutes / responseTimes.length;
+}
+
+export function formatMinutesTime(durationInMinutes) {
+  if (durationInMinutes >= 60) {
+    const hours = (durationInMinutes / 60).toFixed(1);
+    return `${hours} hours`;
+  } else {
+    const minutes = Math.round(durationInMinutes);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+  }
 }
