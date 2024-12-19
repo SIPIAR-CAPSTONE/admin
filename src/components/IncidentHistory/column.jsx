@@ -148,7 +148,9 @@ export const columns = [
             "rounded-md",
             condition === "Stable"
               ? "bg-green-500  dark:bg-green-600 dark:text-white"
-              : "bg-red-500  dark:bg-red-600 dark:text-white"
+              : condition === "Unstable"
+              ? "bg-red-500  dark:bg-red-600 dark:text-white"
+              : "bg-gray-500  dark:bg-gray-600 dark:text-white"
           )}
         >
           {condition}

@@ -99,7 +99,7 @@ export default function IncidentHistoryPage() {
           func={fetchIncidentHistory}
           statePropKeys={[
             "id",
-            "reporterName",
+            "bystanderName",
             "emergencyType",
             "date",
             "phoneNumber",
@@ -108,9 +108,9 @@ export default function IncidentHistoryPage() {
             "landmark",
             "location",
             "remarks",
-            "broadcastId",
-            "email",
             "status",
+            "responseTime",
+            "responderName",
           ]}
         />
       </div>
