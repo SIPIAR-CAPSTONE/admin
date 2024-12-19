@@ -41,7 +41,7 @@ export default function BystandersPage() {
       if (error) {
         console.error("Error fetching bystander data:", error);
       } else {
-        console.log("data", data);
+
 
         const formattedData = data.map((item) => ({
           id: String(item.bystander_id),

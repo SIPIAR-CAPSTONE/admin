@@ -26,8 +26,6 @@ export default function VerificationRequestPage() {
       if (error) {
         console.error("Error fetching bystander data:", error);
       } else {
-        console.log("VERIFICATION - REQ", data);
-
         const formattedData = data.map((item) => ({
           id: String(item.request_id),
           bystanderId: String(item.user_id),

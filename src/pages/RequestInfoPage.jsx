@@ -82,7 +82,12 @@ export default function RequestInfoPage() {
 
         setBlobUrls({ frontImage, backImage });
       } catch (error) {
-        console.log("Error fetching images", error.message);
+        toast({
+          title: "Error fetching images",
+          description: error.message,
+          variant: "destructive",
+          duration: 1000,
+        });
       } finally {
         setImageLoading(false);
       }
@@ -169,8 +174,16 @@ export default function RequestInfoPage() {
             className="md:row-span-2"
             contentClassName="grid-cols-1"
           >
-            <IdImage label="Front" src={blobUrls.frontImage} loading={imageLoading} />
-            <IdImage label="Back" src={blobUrls.backImage} loading={imageLoading} />
+            <IdImage
+              label="Front"
+              src={blobUrls.frontImage}
+              loading={imageLoading}
+            />
+            <IdImage
+              label="Back"
+              src={blobUrls.backImage}
+              loading={imageLoading}
+            />
           </InfoCard>
           <InfoCard LabelIcon={MapPinHouse} label="Address Information">
             <InfoCardField label="City" value={city} />

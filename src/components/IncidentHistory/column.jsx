@@ -15,7 +15,6 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      console.log(row.original);
       return <div>{row.original.reporterName}</div>;
     },
   },

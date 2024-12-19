@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/config";
+import { useToast } from "@/hooks/use-toast";
 
 const filterOptions = [
   {
@@ -23,6 +24,7 @@ const breadCrumbs = [{ name: "Incident History", href: "" }];
 export default function IncidentHistoryPage() {
   const [incidentHistory, setIncidentHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const fetchIncidentHistory = async () => {
     try {
@@ -37,7 +39,12 @@ export default function IncidentHistoryPage() {
         )`);
 
       if (error) {
-        console.error("Error fetching bug reports:", error);
+        toast({
+          title: "Error fetching incident history",
+          description: error.message,
+          variant: "destructive",
+          duration: 1000,
+        });
       } else {
         const formattedData = data.map((item) => ({
           broadcastId: item?.broadcast_id || "N/A",
@@ -60,8 +67,6 @@ export default function IncidentHistoryPage() {
         }));
 
         setIncidentHistory(formattedData);
-        console.log("state -data", incidentHistory);
-        console.log("formatted data", formattedData);
       }
     } finally {
       setLoading(false);
