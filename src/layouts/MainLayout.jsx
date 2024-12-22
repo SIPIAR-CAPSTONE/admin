@@ -1,6 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/Sidebar/AppSidebar";
-import { Outlet } from "react-router-dom";
 
 export default function MainLayout({ children }) {
   return (

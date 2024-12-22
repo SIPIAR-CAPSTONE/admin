@@ -1,4 +1,4 @@
-import { User, UserCheck, Timer, OctagonAlert } from "lucide-react";
+import { UserCheck, Timer, OctagonAlert, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import moment from "moment";
 
@@ -105,20 +105,6 @@ export default function DashboardPage() {
         (record) => new Date(record.date).getMonth() !== moment().month()
       ).length;
 
-      const { data: bystander } = await supabase
-        .from("BYSTANDER")
-        .select("*", { count: "exact" });
-
-      const currentBystanders = bystander.filter(
-        (record) =>
-          new Date(record.created_at).getMonth() === moment().month() &&
-          new Date(record.created_at).getFullYear() === moment().year()
-      ).length;
-
-      const previousBystanders = bystander.filter(
-        (record) => new Date(record.created_at).getMonth() !== moment().month()
-      ).length;
-
       const { data: verifiedBystanders } = await supabase
         .from("BYSTANDER")
         .select("*", { count: "exact" })
@@ -155,13 +141,11 @@ export default function DashboardPage() {
           description: "added this month",
           icon: OctagonAlert,
         },
-
         {
           id: 3,
-          title: "Verified Bystanders",
-          value: verifiedBystanders.length,
-          valuePostfix: "",
-          icon: UserCheck,
+          title: "Active Bystanders",
+          value: "not yet implemented",
+          icon: Users,
         },
         {
           id: 4,
@@ -401,9 +385,8 @@ const TopSummaryPlaceholder = [
   },
   {
     id: 3,
-    title: "Verified Bystanders",
+    title: "Active Bystanders",
     value: null,
-    valuePostfix: "",
     icon: UserCheck,
   },
   {

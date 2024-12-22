@@ -29,11 +29,6 @@ export default function NotFoundPage() {
               <MoveLeft size={16} />
               <span className="font-normal">Go Back</span>
             </Button>
-
-            {/* TODO: add this after adding the authentication checking
-            {user && (
-              <Button onClick={() => navigation("/")}>Take me home</Button>
-            )} */}
           </div>
         </div>
       </div>
