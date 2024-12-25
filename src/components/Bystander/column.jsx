@@ -4,13 +4,6 @@ import { cn, exactMatchFilter } from "@/lib/utils";
 
 export const columns = [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => {
-      return <div>{row.getValue("id")}</div>;
-    },
-  },
-  {
     accessorKey: "email",
     header: ({ column }) => {
       return (
@@ -50,6 +43,20 @@ export const columns = [
     },
     cell: ({ row }) => {
       return <div>{row.getValue("lastName")}</div>;
+    },
+  },
+  {
+    accessorKey: "barangay",
+    header: ({ column }) => {
+      return (
+        <TableHeadButton
+          label="Barangay"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue("barangay")}</div>;
     },
   },
   {

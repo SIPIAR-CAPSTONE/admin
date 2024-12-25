@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/config";
+import { useToast } from "@/hooks/use-toast";
 
 const filterOptions = [
   {
@@ -23,6 +24,7 @@ const breadCrumbs = [{ name: "Incident History", href: "" }];
 export default function IncidentHistoryPage() {
   const [incidentHistory, setIncidentHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const fetchIncidentHistory = async () => {
     try {
@@ -37,31 +39,40 @@ export default function IncidentHistoryPage() {
         )`);
 
       if (error) {
-        console.error("Error fetching bug reports:", error);
+        toast({
+          title: "Error fetching incident history",
+          description: error.message,
+          variant: "destructive",
+          duration: 1000,
+        });
       } else {
         const formattedData = data.map((item) => ({
           broadcastId: item?.broadcast_id || "N/A",
           id: item?.broadcast_id || "N/A",
-          reporterName: item.USER
+          bystanderName: item.USER
             ? `${item?.USER?.first_name || ""} ${
                 item?.USER?.last_name || ""
               }`.trim()
-            : "Unknown Reporter",
-          emergencyType: item?.emergency_type || "N/A",
-          date: item?.date || "N/A",
-          phoneNumber: item?.USER?.phone_number || "N/A",
+            : "Bystander Reporter",
+          emergencyType: item?.emergency_type || "-",
+          date: item?.date || "-",
+          phoneNumber: item?.USER?.phone_number || "-",
           condition: item?.condition || "N/A",
-          barangay: item?.barangay || "N/A",
-          landmark: item?.landmark || "N/A",
-          location: item?.address || "N/A",
-          remarks: item?.remarks || "N/A",
-          email: item?.RESPONDER?.email || "N/A",
+          barangay: item?.barangay || "-",
+          landmark: item?.landmark || "-",
+          location: item?.address || "-",
+          remarks: item?.remarks || "-",
+          email: item?.RESPONDER?.email || "-",
           status: item?.status,
+          responseTime: item?.response_time || "-",
+          responderName: item?.RESPONDER
+            ? `${item?.RESPONDER?.first_name || ""} ${
+                item?.RESPONDER?.last_name || ""
+              }`.trim()
+            : "-",
         }));
 
         setIncidentHistory(formattedData);
-        console.log("state -data", incidentHistory);
-        console.log("formatted data", formattedData);
       }
     } finally {
       setLoading(false);
@@ -81,14 +92,14 @@ export default function IncidentHistoryPage() {
           tableName="Incident History"
           columns={columns}
           data={incidentHistory}
-          searchColumn="location"
+          searchColumn="barangay"
           filterTitle="Condition"
           filterColumn="condition"
           filterOptions={filterOptions}
           func={fetchIncidentHistory}
           statePropKeys={[
             "id",
-            "reporterName",
+            "bystanderName",
             "emergencyType",
             "date",
             "phoneNumber",
@@ -97,9 +108,9 @@ export default function IncidentHistoryPage() {
             "landmark",
             "location",
             "remarks",
-            "broadcastId",
-            "email",
             "status",
+            "responseTime",
+            "responderName",
           ]}
         />
       </div>

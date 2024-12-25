@@ -1,4 +1,4 @@
-import { User, UserCheck, Timer, OctagonAlert } from "lucide-react";
+import { UserCheck, Timer, OctagonAlert, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import moment from "moment";
 
@@ -8,7 +8,12 @@ import IncidentOverviewGraph from "@/components/Dashboard/IncidentOverviewChart"
 import H1 from "@/components/ui/H1";
 import { PeakTimeIncidentChart } from "@/components/Dashboard/PeakTimeIncidentChart";
 import { Button } from "@/components/ui/button";
-import { organizeAnalyticsData } from "@/components/Dashboard/dashboard.helper";
+import {
+  formatMinutesTime,
+  getAverageResponseTimeInMinutes,
+  getResponseTimeDuration,
+  organizeAnalyticsData,
+} from "@/components/Dashboard/dashboard.helper";
 import { downloadExcel } from "@/lib/utils";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import supabase from "@/supabase/config";
@@ -24,22 +29,6 @@ const data = {
 };
 
 export default function DashboardPage() {
-  const formatResponseTime = (responseTimeInMinutes) => {
-    responseTimeInMinutes = Math.round(responseTimeInMinutes * 100) / 100;
-
-    if (responseTimeInMinutes < 60) {
-      return `${responseTimeInMinutes.toFixed(2)} minute${
-        responseTimeInMinutes === 1 ? "" : "s"
-      }`;
-    } else {
-      const hours = Math.floor(responseTimeInMinutes / 60);
-      const minutes = Math.round(responseTimeInMinutes % 60);
-      return `${hours} hour${hours === 1 ? "" : "s"} ${minutes} minute${
-        minutes === 1 ? "" : "s"
-      }`;
-    }
-  };
-
   const [isConfirmationDialogOpen, setConfirmationIsDialogOpen] =
     useState(false);
   const openConfirmationDialog = () => setConfirmationIsDialogOpen(true);
@@ -102,7 +91,11 @@ export default function DashboardPage() {
         .select("*")
         .not("date", "is", null);
 
-      const currentIncidents = peakMonth.filter(
+      const currentDayIncidents = peakMonth.filter(
+        (record) => new Date(record.date).getDay() === moment().day()
+      ).length;
+
+      const currentMonthIncidents = peakMonth.filter(
         (record) =>
           new Date(record.date).getMonth() === moment().month() &&
           new Date(record.date).getFullYear() === moment().year()
@@ -112,68 +105,47 @@ export default function DashboardPage() {
         (record) => new Date(record.date).getMonth() !== moment().month()
       ).length;
 
-      const { data: bystander } = await supabase
-        .from("BYSTANDER")
-        .select("*", { count: "exact" });
-
-      const currentBystanders = bystander.filter(
-        (record) =>
-          new Date(record.created_at).getMonth() === moment().month() &&
-          new Date(record.created_at).getFullYear() === moment().year()
-      ).length;
-
-      const previousBystanders = bystander.filter(
-        (record) => new Date(record.created_at).getMonth() !== moment().month()
-      ).length;
-
       const { data: verifiedBystanders } = await supabase
         .from("BYSTANDER")
         .select("*", { count: "exact" })
         .eq("is_verified", true);
 
-      const responseTimes = peakMonth
-        .filter((record) => record.response_time !== null)
-        .map((record) => {
-          const incidentDate = new Date(record.date);
-          const responseDate = new Date(record.response_time);
-
-          return (responseDate - incidentDate) / (1000 * 60);
-        });
-
-      const averageResponseTime =
-        responseTimes.length > 0
-          ? responseTimes.reduce((acc, time) => acc + time, 0) /
-            responseTimes.length
-          : 0;
+      //remove not yet responded incidents
+      const respondedIncidents = peakMonth.filter(
+        (record) => record.response_time !== null
+      );
+      //get response time for each incidents
+      const incidentsResponseTime = respondedIncidents.map((record) =>
+        getResponseTimeDuration(record.date, record.response_time)
+      );
+      const averageResponseTime = getAverageResponseTimeInMinutes(
+        incidentsResponseTime
+      );
       const averageResponseTimeFormatted =
-        formatResponseTime(averageResponseTime);
+        formatMinutesTime(averageResponseTime);
 
       setTopSummary([
         {
           id: 1,
-          title: "Total Incidents",
-          value: previousIncidents + currentIncidents,
-          valuePostfix: "",
-          increase: currentIncidents,
-          description: "added this month",
+          title: "Todays Incidents",
+          value: currentDayIncidents,
+          description: "Total incidents today",
           icon: OctagonAlert,
         },
         {
           id: 2,
-          title: "Total Bystanders",
-          value: previousBystanders + currentBystanders,
+          title: "Overall Total Incidents",
+          value: previousIncidents + currentMonthIncidents,
           valuePostfix: "",
-          increase: currentBystanders,
-          increasePostfix: "",
+          increase: currentMonthIncidents,
           description: "added this month",
-          icon: User,
+          icon: OctagonAlert,
         },
         {
           id: 3,
-          title: "Verified Bystanders",
-          value: verifiedBystanders.length,
-          valuePostfix: "",
-          icon: UserCheck,
+          title: "Active Bystanders",
+          value: "not yet implemented",
+          icon: Users,
         },
         {
           id: 4,
@@ -397,7 +369,14 @@ export default function DashboardPage() {
 const TopSummaryPlaceholder = [
   {
     id: 1,
-    title: "Total Incidents",
+    title: "Todays Incidents",
+    value: null,
+    description: "Total incidents today",
+    icon: OctagonAlert,
+  },
+  {
+    id: 2,
+    title: "Overall Total Incidents",
     value: null,
     valuePostfix: "",
     increase: null,
@@ -405,20 +384,9 @@ const TopSummaryPlaceholder = [
     icon: OctagonAlert,
   },
   {
-    id: 2,
-    title: "Total Bystanders",
-    value: null,
-    valuePostfix: "",
-    increase: null,
-    increasePostfix: "",
-    description: "added this month",
-    icon: User,
-  },
-  {
     id: 3,
-    title: "Verified Bystanders",
+    title: "Active Bystanders",
     value: null,
-    valuePostfix: "",
     icon: UserCheck,
   },
   {

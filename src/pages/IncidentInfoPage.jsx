@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   BookUser,
   ClipboardList,
@@ -6,87 +6,67 @@ import {
   OctagonAlert,
 } from "lucide-react";
 
-import InfoCard from '@/components/InfoCard/InfoCard'
-import InfoCardField from '@/components/InfoCard/InfoCardField'
-import TopBar from '@/components/TopBar/TopBar'
-import ConfirmationDialog from '@/components/ui/ConfirmationDialog'
-import H1 from '@/components/ui/H1'
+import InfoCard from "@/components/InfoCard/InfoCard";
+import InfoCardField from "@/components/InfoCard/InfoCardField";
+import TopBar from "@/components/TopBar/TopBar";
+import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import H1 from "@/components/ui/H1";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
-} from '@/components/ui/menubar'
-import { useLocation } from 'react-router-dom'
-import { cn, downloadExcel, getDateString, getTimeString } from '@/lib/utils'
-import { useToast } from '@/hooks/use-toast'
-import { Label } from '@/components/ui/label'
-import moment from 'moment'
-import supabase from '@/supabase/config'
+} from "@/components/ui/menubar";
+import { useLocation } from "react-router-dom";
+import { cn, downloadExcel, getDateString, getTimeString } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
+import moment from "moment";
+import { getResponseTimeDuration } from "@/components/Dashboard/dashboard.helper";
 
 const data = {
   breadcrumbs: [
     {
-      name: 'Incident History',
-      href: '..',
+      name: "Incident History",
+      href: "..",
     },
     {
-      name: 'Incident Info',
-      href: '',
+      name: "Incident Info",
+      href: "",
     },
   ],
-}
+};
 
 export default function IncidentInfoPage() {
-  const { state } = useLocation()
+  const { state } = useLocation();
   const {
     id,
     location,
     landmark,
-    reporterName,
     emergencyType,
     date,
     barangay,
     remarks,
     phoneNumber,
     condition,
-    broadcastId,
-    email
-  } = state
-  const { toast } = useToast()
+    email,
+    responderName,
+    responseTime,
+    bystanderName,
+  } = state;
+  const { toast } = useToast();
 
-  const reportDateSubmitted = getDateString(date)
-  const reportTimeSubmitted = getTimeString(date)
+  const reportDateSubmitted = getDateString(date);
+  const reportTimeSubmitted = getTimeString(date);
 
-  const handleReportDelete = async () => {
-    await supabase
-      .from('broadcast')
-      .delete()
-      .eq('broadcast_id', broadcastId)
-      .select()
+  const incidentRequestDate = date;
+  const responseTimeDate = responseTime;
 
-    const { error } = await supabase
-      .from('incident_history')
-      .delete()
-      .eq('incident_id', id)
-      .select()
-
-    if (error) {
-      toast({
-        title: 'Error Deletion',
-        description: error.message,
-        duration: 1000,
-      })
-      return
-    }
-
-    toast({
-      title: 'Deleted Successfully',
-      description: 'Successfully deleted incident report.',
-      duration: 1000,
-    })
-  }
+  const duration =
+    !responseTimeDate || responseTimeDate === "-"
+      ? "-"
+      : getResponseTimeDuration(incidentRequestDate, responseTimeDate, true);
 
   const handleDownloadReport = () => {
     const jsonData = [
@@ -103,17 +83,15 @@ export default function IncidentInfoPage() {
         phoneNumber,
         condition,
       },
-    ]
-    const timestamp = moment().format('YYYY-MM-DD')
-    const fileName = `Incident-Report_${timestamp}_${id}`
+    ];
+    const timestamp = moment().format("YYYY-MM-DD");
+    const fileName = `Incident-Report_${timestamp}_${id}`;
 
-    downloadExcel(jsonData, fileName)
-  }
+    downloadExcel(jsonData, fileName);
+  };
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-
-  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
-  const openDownloadDialog = () => setIsDownloadDialogOpen(true)
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
+  const openDownloadDialog = () => setIsDownloadDialogOpen(true);
 
   return (
     <>
@@ -140,12 +118,13 @@ export default function IncidentInfoPage() {
             label="Incident Details"
             className="row-span-2"
           >
-            <InfoCardField label="Bystander Name" value={reporterName} />
-            <InfoCardField label="Emergency Type" value={emergencyType} />
-            <InfoCardField label="Date" value={reportDateSubmitted} />
-            <InfoCardField label="Time" value={reportTimeSubmitted} />
+            <InfoCardField label="Bystander Name" value={bystanderName} />
+            <InfoCardField label="Responder Name" value={responderName} />
+            <InfoCardField label="Incident Date" value={reportDateSubmitted} />
+            <InfoCardField label="Incident Time" value={reportTimeSubmitted} />
+            <InfoCardField label="Response Time" value={duration} />
             <InfoCardField label="Contact Number" value={phoneNumber} />
-            <InfoCardField label="Responder" value={email} />
+            <InfoCardField label="Emergency Type" value={emergencyType} />
             <div className="h-40 space-y-2">
               <Label className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 Patient Status
@@ -175,25 +154,27 @@ export default function IncidentInfoPage() {
         />
       </div>
     </>
-  )
+  );
 }
 
 function ConditionCard({ condition, className }) {
   return (
     <div
       className={cn(
-        'w-32 h-20 px-2 py-3 text-center border rounded-md shadow border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600',
-        className,
+        "w-32 h-20 px-2 py-3 text-center border rounded-md shadow border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600",
+        className
       )}
     >
       <span className="block text-sm text-neutral-600 dark:text-neutral-300">
         condition
       </span>
-      {condition === 'Stable' ? (
+      {condition === "Stable" ? (
         <span className="block text-lg font-bold text-green-500">STABLE</span>
-      ) : (
+      ) : condition === "Stable" ? (
         <span className="block text-lg font-bold text-red-500">UNSTABLE</span>
+      ) : (
+        <span className="block text-lg font-bold text-gray-500"> N/A </span>
       )}
     </div>
-  )
+  );
 }

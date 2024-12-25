@@ -11,7 +11,7 @@ export default function BarChartSkeleton() {
   useEffect(() => {
     const handleResize = () => {
       const screenHeight = window.innerHeight;
-      setChartHeight(screenHeight - 468); // Adjust proportion (e.g., 60% of screen height)
+      setChartHeight(screenHeight * 0.45); // Adjust proportion (e.g., 60% of screen height)
     };
 
     handleResize(); // Set initial height

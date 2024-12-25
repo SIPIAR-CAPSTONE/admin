@@ -4,38 +4,66 @@ import { login, logout, getUser } from "@/services/api";
 
 const AuthContext = createContext({
   user: null,
+  role: null,
+  auth: false,
 });
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [auth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Function to fetch user role
+  const fetchUserRole = async (sessionUser) => {
+    const { user } = sessionUser;
+
+    //TODO: Replace this
+    //! Assuming role is stored in user metadata
+    const userRole = user?.user_metadata?.role || "verifier";
+    setRole(userRole);
+  };
+
   useEffect(() => {
-    getUser(setUser, setLoading);
-
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        if (!session?.user) {
-          console.error("User not found");
-          return;
-        }
-        setUser(session?.user);
-        setAuth(true);
-      } else if (event === "SIGNED_OUT") {
-        setUser(null);
-        setAuth(false);
+    const initializeAuth = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
       }
-    });
+      if (session?.user) {
+        setUser(session.user);
+        setAuth(true);
+        await fetchUserRole(session.user);
+      }
+      setLoading(false);
+    };
 
-    return () => data.subscription.unsubscribe();
+    initializeAuth();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session?.user) {
+          setUser(session.user);
+          setAuth(true);
+          await fetchUserRole(session.user);
+        } else if (event === "SIGNED_OUT") {
+          setUser(null);
+          setRole(null);
+          setAuth(false);
+        }
+      }
+    );
+
+    return () => listener.subscription.unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, auth, login, logout }}>
+    <AuthContext.Provider value={{ user, role, auth, login, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );

@@ -19,6 +19,7 @@ export default function TopBar({
   breadcrumbsData = [],
   addBackButton = false,
   className,
+  renderTrailer,
   ...props
 }) {
   return (
@@ -69,6 +70,7 @@ export default function TopBar({
           </Link>
         </div>
       )}
+      {renderTrailer && renderTrailer()}
     </div>
   );
 }

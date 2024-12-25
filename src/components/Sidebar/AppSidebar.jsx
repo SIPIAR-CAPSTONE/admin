@@ -5,7 +5,7 @@ import {
   BadgeCheck,
   FileClock,
   Users,
-  Bug,
+  Ambulance,
 } from "lucide-react";
 
 import { NavMain } from "@/components/Sidebar/NavMain";
@@ -19,17 +19,23 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import AppLogo from "@/components/Sidebar/AppLogo";
+import { useAuth } from "@/context/AuthProvider";
 
 const data = {
-  user: {
+  adminUser: {
     name: "admin",
-    email: "m@example.com",
+    email: "sipiaradmin@gmail.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
+  verifierUser: {
+    name: "verifier",
+    email: "sipiarverifier@gmail.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  adminNav: [
     {
       name: "Dashboard",
-      url: "/",
+      url: "dashboard",
       icon: LayoutDashboard,
     },
     {
@@ -42,26 +48,31 @@ const data = {
       url: "incidents",
       icon: FileClock,
     },
-    {
-      name: "Bystanders",
-      url: "bystanders",
-      icon: Users,
-    },
+  ],
+  verifierNav: [
     {
       name: "Verification Request",
       url: "verification-request",
       icon: BadgeCheck,
     },
     {
-      name: "Bug Report",
-      url: "bug-report",
-      icon: Bug,
+      name: "Bystanders",
+      url: "bystanders",
+      icon: Users,
+    },
+    {
+      name: "Responders",
+      url: "responders",
+      icon: Ambulance,
     },
   ],
 };
 
 export function AppSidebar({ ...props }) {
   const { state } = useSidebar();
+  const { role } = useAuth();
+  const sidebarNav = role === "admin" ? data.adminNav : data.verifierNav;
+  const user = role === "admin" ? data.adminUser : data.verifierUser;
 
   return (
     <Sidebar collapsible="icon" className="pt-2 bg-sidebar" {...props}>
@@ -69,10 +80,10 @@ export function AppSidebar({ ...props }) {
         <AppLogo logoOnly={state === "collapsed"} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain navLinks={data.navMain} />
+        <NavMain navLinks={sidebarNav} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
