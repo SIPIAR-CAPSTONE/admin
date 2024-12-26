@@ -24,7 +24,7 @@ export default function NotFoundPage() {
             <Button
               className="space-x-2.5 dark:bg-neutral-900 dark:text-white dark:border-neutral-600"
               variant="outline"
-              onClick={() => navigation(-1)}
+              onClick={() => navigation("/")}
             >
               <MoveLeft size={16} />
               <span className="font-normal">Go Back</span>
