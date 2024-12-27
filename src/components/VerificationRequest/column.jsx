@@ -69,7 +69,11 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      const date = moment(row.getValue("requestDate")).format("MMMM D, YYYY");
+      const requestDate = row.getValue("requestDate");
+
+      if (!requestDate) return <div>-</div>;
+
+      const date = moment(requestDate).format("MMMM D, YYYY");
       return <div>{date}</div>;
     },
   },
@@ -79,7 +83,11 @@ export const columns = [
       return <TableHeadButton label="Request Time" noIcon />;
     },
     cell: ({ row }) => {
-      const time = moment(row.getValue("requestDate")).format("hh:mm A");
+      const requestDate = row.getValue("requestDate");
+
+      if (!requestDate) return <div>-</div>;
+
+      const time = moment(requestDate).format("hh:mm A");
       return <div>{time}</div>;
     },
   },

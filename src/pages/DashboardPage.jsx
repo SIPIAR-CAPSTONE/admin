@@ -1,4 +1,4 @@
-import { UserCheck, Timer, OctagonAlert, Users } from "lucide-react";
+import { Timer, OctagonAlert, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import moment from "moment";
 
@@ -18,6 +18,7 @@ import { downloadExcel } from "@/lib/utils";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import supabase from "@/supabase/config";
 import AnalyticsCardSkeleton from "@/components/Skeletons/AnalyticsCardSkeleton";
+import useActiveUsers from "@/hooks/useActiveUser";
 
 const data = {
   breadcrumbs: [
@@ -29,11 +30,13 @@ const data = {
 };
 
 export default function DashboardPage() {
+  const { totalActiveUsers, loading: activeUsersLoading } = useActiveUsers(10);
+
   const [isConfirmationDialogOpen, setConfirmationIsDialogOpen] =
     useState(false);
   const openConfirmationDialog = () => setConfirmationIsDialogOpen(true);
   const [loading, setLoading] = useState(false);
-  const [TopSummary, setTopSummary] = useState([]);
+  const [topSummary, setTopSummary] = useState([]);
 
   const [incidentOverviewChartData, setIncidentOverviewChartData] = useState(
     []
@@ -105,11 +108,6 @@ export default function DashboardPage() {
         (record) => new Date(record.date).getMonth() !== moment().month()
       ).length;
 
-      const { data: verifiedBystanders } = await supabase
-        .from("BYSTANDER")
-        .select("*", { count: "exact" })
-        .eq("is_verified", true);
-
       //remove not yet responded incidents
       const respondedIncidents = peakMonth.filter(
         (record) => record.response_time !== null
@@ -127,25 +125,25 @@ export default function DashboardPage() {
       setTopSummary([
         {
           id: 1,
+          title: "Active Users",
+          value: totalActiveUsers,
+          icon: Users,
+        },
+        {
+          id: 2,
           title: "Todays Incidents",
           value: currentDayIncidents,
           description: "Total incidents today",
           icon: OctagonAlert,
         },
         {
-          id: 2,
+          id: 3,
           title: "Overall Total Incidents",
           value: previousIncidents + currentMonthIncidents,
           valuePostfix: "",
           increase: currentMonthIncidents,
           description: "added this month",
           icon: OctagonAlert,
-        },
-        {
-          id: 3,
-          title: "Active Bystanders",
-          value: "not yet implemented",
-          icon: Users,
         },
         {
           id: 4,
@@ -298,9 +296,31 @@ export default function DashboardPage() {
     };
   }, []);
 
+  const updateTopSummaryActiveUsers = () => {
+    if (activeUsersLoading || loading) return;
+
+    setTopSummary((prevTopSummary) => {
+      let newTopSummary = [...prevTopSummary];
+      newTopSummary[0] = {
+        id: 1,
+        title: "Active Users",
+        value: totalActiveUsers,
+        icon: Users,
+      };
+
+      return newTopSummary;
+    });
+  };
+
+  useEffect(() => {
+    if ((!activeUsersLoading, !loading)) {
+      updateTopSummaryActiveUsers();
+    }
+  }, [activeUsersLoading, loading]);
+
   const handleDownload = () => {
     const formattedAnalyticData = organizeAnalyticsData(
-      TopSummary,
+      topSummary,
       incidentOverviewChartData,
       peakTimeChartData
     );
@@ -320,7 +340,7 @@ export default function DashboardPage() {
         </div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {loading
-            ? TopSummaryPlaceholder.map((item) => (
+            ? topSummaryPlaceholder.map((item) => (
                 <AnalyticsCardSkeleton
                   key={item.id}
                   title={item.title}
@@ -328,7 +348,7 @@ export default function DashboardPage() {
                   Icon={item.icon}
                 />
               ))
-            : TopSummary.map((item) => (
+            : topSummary.map((item) => (
                 <AnalyticsCard
                   key={item.id}
                   title={item.title}
@@ -366,28 +386,28 @@ export default function DashboardPage() {
   );
 }
 
-const TopSummaryPlaceholder = [
+const topSummaryPlaceholder = [
   {
     id: 1,
+    title: "Active Users",
+    value: null,
+    icon: Users,
+  },
+  {
+    id: 2,
     title: "Todays Incidents",
     value: null,
     description: "Total incidents today",
     icon: OctagonAlert,
   },
   {
-    id: 2,
+    id: 3,
     title: "Overall Total Incidents",
     value: null,
     valuePostfix: "",
     increase: null,
     description: "added this month",
     icon: OctagonAlert,
-  },
-  {
-    id: 3,
-    title: "Active Bystanders",
-    value: null,
-    icon: UserCheck,
   },
   {
     id: 4,
