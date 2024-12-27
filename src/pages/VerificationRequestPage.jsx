@@ -16,12 +16,20 @@ export default function VerificationRequestPage() {
     try {
       setLoading(true);
 
-      const { data, error } = await supabase.from("VERIFICATION REQUEST")
-        .select(`
-        *,
-        USER:user_id (
-          *
-        )`);
+      const { data, error } = await supabase
+        .from("VERIFICATION REQUEST")
+        .select(
+          `
+          *,
+          USER:user_id,
+          BYSTANDER:user_id (
+            *,
+            BYSTANDER(
+              verified_date
+            )
+          )
+          `
+        );
 
       if (error) {
         console.error("Error fetching bystander data:", error);
@@ -29,18 +37,18 @@ export default function VerificationRequestPage() {
         const formattedData = data.map((item) => ({
           id: String(item.request_id),
           bystanderId: String(item.user_id),
-          firstName: item.USER.first_name,
-          middleName: item.USER.middle_name,
-          lastName: item.USER.last_name,
-          suffix: item.USER.suffix,
-          birthDate: item.USER.birth_date,
-          phoneNumber: item.USER.phone_number,
+          firstName: item.BYSTANDER.first_name,
+          middleName: item.BYSTANDER.middle_name,
+          lastName: item.BYSTANDER.last_name,
+          suffix: item.BYSTANDER.suffix,
+          birthDate: item.BYSTANDER.birth_date,
+          phoneNumber: item.BYSTANDER.phone_number,
           city: "Cagayan de Oro City",
-          barangay: item.USER.barangay,
-          street: item.USER.street,
-          houseNumber: item.USER.house_number,
-          email: item.USER.email,
-          request_date: item.USER.request_date,
+          barangay: item.BYSTANDER.barangay,
+          street: item.BYSTANDER.street,
+          houseNumber: item.BYSTANDER.house_number,
+          email: item.BYSTANDER.email,
+          requestDate: item.request_date,
         }));
 
         setBystanderData(formattedData);
@@ -79,7 +87,6 @@ export default function VerificationRequestPage() {
             "street",
             "houseNumber",
             "email",
-            "request_date",
           ]}
         />
       </div>

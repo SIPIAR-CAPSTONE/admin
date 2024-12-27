@@ -76,6 +76,7 @@ export default function BystandersPage() {
           )
         )
       `);
+
       if (error) {
         console.error("Error fetching bystander data:", error.message);
       }
@@ -94,11 +95,7 @@ export default function BystandersPage() {
           houseNumber: item.USER.house_number,
           email: item.USER.email,
           isVerified: item.is_verified,
-          verifiedDate:
-            item.USER["VERIFICATION REQUEST"] &&
-            item.USER["VERIFICATION REQUEST"].length > 0
-              ? item.USER["VERIFICATION REQUEST"][0].request_date
-              : null,
+          verifiedDate: item.verified_date,
         }));
 
         setBystanderData(formattedData);

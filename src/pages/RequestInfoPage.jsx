@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getDate } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import supabase from "@/supabase/config";
+import moment from "moment";
 
 const data = {
   breadcrumbs: [
@@ -45,7 +46,7 @@ export default function RequestInfoPage() {
 
   const { toast } = useToast();
 
-  const formattedBirthDate = getDate(birthDate);
+  const formattedBirthDate = moment(birthDate).format("MMMM DD, YYYY");
   const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const openAcceptDialog = () => setIsAcceptDialogOpen(true);
@@ -104,7 +105,7 @@ export default function RequestInfoPage() {
 
   const dbCleanerNavigator = async () => {
     await supabase.from("VERIFICATION REQUEST").delete().eq("request_id", id);
-
+    
     await supabase.storage
       .from("bystander")
       .remove([frontImagePath, backImagePath]);
@@ -115,7 +116,7 @@ export default function RequestInfoPage() {
   const handleAcceptVerification = async () => {
     const { error } = await supabase
       .from("BYSTANDER")
-      .update({ is_verified: true })
+      .update({ is_verified: true, verified_date: moment() })
       .eq("user_id", bystanderId);
 
     if (!error) {
