@@ -56,7 +56,6 @@ const editBystanderFormSchema = z.object({
 export default function BystanderInfoPage() {
   const { state } = useLocation();
   const {
-    id,
     firstName,
     middleName,
     lastName,
@@ -70,10 +69,10 @@ export default function BystanderInfoPage() {
     verifiedDate,
   } = state;
   const birthDateParse = getDate(birthDate);
-  const verificationDate = getDateString(verifiedDate);
+  const verificationDate = verifiedDate ? getDateString(verifiedDate) : "N/A";
   const { role } = useAuth();
   const [loading, setLoading] = useState(false);
-
+  
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const openDeleteDialog = () => setDeleteDialogIsOpen(true);
 

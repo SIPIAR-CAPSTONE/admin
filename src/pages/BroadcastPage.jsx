@@ -7,6 +7,7 @@ import AlertListHeader from "@/components/Broadcast/AlertListHeader";
 import BroadcastMap from "@/components/Broadcast/BroadcastMap";
 import useBroadcast from "@/hooks/useBroadcast";
 import BroadcastListSkeleton from "@/components/Skeletons/BroadcastListSkeleton";
+import useActiveUsers from "@/hooks/useActiveUser";
 
 const data = {
   breadcrumbs: [
@@ -20,7 +21,12 @@ const data = {
 export default function BroadcastPage() {
   const [focusPosition, setFocusPosition] = useState({});
   const [selectedFilterStatus, setSelectedFilterStatus] = useState(null);
-  const { emergencyAlerts, responders, loading } = useBroadcast();
+  const {
+    emergencyAlerts,
+    responders,
+    loading: broadcastLoading,
+  } = useBroadcast();
+  const { users: activeUsers } = useActiveUsers();
 
   const filteredAlerts = useMemo(
     () =>
@@ -29,29 +35,31 @@ export default function BroadcastPage() {
           ? true
           : alert.status === selectedFilterStatus
       ),
-    [selectedFilterStatus, emergencyAlerts]
+    [selectedFilterStatus, emergencyAlerts, focusPosition]
   );
 
   const alertsLength = filteredAlerts.length;
 
-  const listContent = filteredAlerts.map((alert) => {
-    const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`;
-    const position = {
-      lat: alert.latitude,
-      lng: alert.longitude,
-    };
+  const listContent = useMemo(() => {
+    return filteredAlerts.map((alert) => {
+      const fullName = `${alert?.USER?.first_name} ${alert?.USER?.last_name}`;
+      const position = {
+        lat: alert.latitude,
+        lng: alert.longitude,
+      };
 
-    return (
-      <AlertListItem
-        key={alert.broadcast_id}
-        bystanderName={fullName}
-        location={alert.address}
-        status={alert.status}
-        time={alert.date}
-        onClick={() => setFocusPosition(position)}
-      />
-    );
-  });
+      return (
+        <AlertListItem
+          key={alert.broadcast_id}
+          bystanderName={fullName}
+          location={alert.address}
+          status={alert.status}
+          time={alert.date}
+          onClick={() => setFocusPosition(position)}
+        />
+      );
+    });
+  }, [filteredAlerts, focusPosition]);
 
   return (
     <>
@@ -62,6 +70,7 @@ export default function BroadcastPage() {
           <div className="flex-1 border aspect-video">
             <BroadcastMap
               emergencyAlerts={filteredAlerts}
+              activeUsers={activeUsers}
               responders={responders}
               focusPosition={focusPosition}
             />
@@ -76,7 +85,7 @@ export default function BroadcastPage() {
             />
             <ScrollArea className="md:w-96 h-[28.5rem] px-2.5 2xl:h-[42rem]">
               <div className="space-y-2">
-                {loading ? <BroadcastListSkeleton /> : listContent}
+                {broadcastLoading ? <BroadcastListSkeleton /> : listContent}
               </div>
             </ScrollArea>
           </div>

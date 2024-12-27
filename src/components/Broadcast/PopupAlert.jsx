@@ -48,6 +48,7 @@ function PopupAlert({ alert, responders }) {
     }
   };
 
+  //* assign the emergency alert request to the responder
   const handleSave = async () => {
     try {
       if (!selectedResponder.id) return;
@@ -62,29 +63,29 @@ function PopupAlert({ alert, responders }) {
         toast({
           title: "Error fetching responder",
           description: fetchREsponderError.message,
-          duration: 1000,
+          duration: 2000,
           variant: "destructive",
         });
         return;
       }
       const userId = data.user_id;
 
-      const { error } = await supabase
+      const { error: updateBroadcastError } = await supabase
         .from("BROADCAST")
         .update({ responder_id: userId })
         .eq("broadcast_id", alert.broadcast_id);
 
-      if (!error) {
+      if (!updateBroadcastError) {
         toast({
           title: "Assigned Successfully",
           description: "Successfully assigned responder.",
-          duration: 1000,
+          duration: 2000,
         });
       } else {
         toast({
           title: "Assigning Unsuccessful",
           description: "Responder not assigned.",
-          duration: 1000,
+          duration: 2000,
           variant: "destructive",
         });
         return;
@@ -99,16 +100,17 @@ function PopupAlert({ alert, responders }) {
         toast({
           title: "Error updating responder availability",
           description: updateResponderError.message,
-          duration: 1000,
+          duration: 2000,
           variant: "destructive",
         });
         return;
       }
+
     } catch (error) {
       toast({
-        title: "Error updating responder availability",
+        title: "Error",
         description: error.message,
-        duration: 1000,
+        duration: 2000,
         variant: "destructive",
       });
     } finally {

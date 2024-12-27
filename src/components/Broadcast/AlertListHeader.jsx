@@ -7,9 +7,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "../ui/separator";
-import { useState } from "react";
+import { memo, useState } from "react";
 
-export default function AlertListHeader({
+function AlertListHeader({
   label,
   length = 0,
   selectedFilterStatus,
@@ -30,6 +30,8 @@ export default function AlertListHeader({
     </div>
   );
 }
+
+export default memo(AlertListHeader);
 
 function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +84,6 @@ function SelectFilter({ selectedFilterStatus, setSelectedFilterStatus }) {
     </Popover>
   );
 }
-
 
 function ListCount({ length }) {
   return (

@@ -2,8 +2,15 @@ import { useEffect, useRef } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { DEFAULT_POSITION } from "./BroadcastMap";
 import MapPin from "@/assets/MapPin.png";
+import BystanderPin from "@/assets/bystanderMapPin.png";
+import ResponderPin from "@/assets/responderMapPin.png";
 
-export default function CustomerMarker({ position, focusPosition, children }) {
+export default function CustomerMarker({
+  position,
+  focusPosition,
+  type = "alert",
+  children,
+}) {
   const markerRef = useRef();
   const map = useMap();
 
@@ -26,9 +33,14 @@ export default function CustomerMarker({ position, focusPosition, children }) {
 
   //add ere your custom marker
   const customIcon = L.icon({
-    iconUrl: MapPin,
-    iconSize: [35, 35],
-    iconAnchor: [18, 30],
+    iconUrl:
+      type === "alert"
+        ? MapPin
+        : type === "responder"
+        ? ResponderPin
+        : BystanderPin,
+    iconSize: [30, 30],
+    iconAnchor: [16, 28],
   });
 
   return (
