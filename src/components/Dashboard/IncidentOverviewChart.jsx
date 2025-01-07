@@ -37,7 +37,7 @@ export default function IncidentOverviewChart({
     <Card className={cn("dark:bg-neutral-800 h-full", className)} {...props}>
       <CardHeader>
         <CardTitle>Incidents Overview</CardTitle>
-        <CardDescription>January - December {currentYear}</CardDescription>
+        <CardDescription>Previous year - {currentYear}</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (

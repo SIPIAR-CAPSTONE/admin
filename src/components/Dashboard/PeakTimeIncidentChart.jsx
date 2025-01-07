@@ -72,7 +72,7 @@ export function PeakTimeIncidentChart({
     >
       <CardHeader className="items-center pb-0">
         <CardTitle>Peak TIme Incident</CardTitle>
-        <CardDescription>January - December {currentYear}</CardDescription>
+        <CardDescription>Previous year - {currentYear}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         {loading ? (
