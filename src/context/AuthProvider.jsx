@@ -18,11 +18,13 @@ export const AuthProvider = ({ children }) => {
 
   // Function to fetch user role
   const fetchUserRole = async (sessionUser) => {
-    const { user } = sessionUser;
 
-    //TODO: Replace this
-    //! Assuming role is stored in user metadata
-    const userRole = user?.user_metadata?.role || "verifier";
+    const { data } = await supabase
+    .from('USER')
+    .select('admin_role')
+    .eq('user_id', sessionUser.id)
+
+    const userRole = data[0]['admin_role'];
     setRole(userRole);
   };
 
