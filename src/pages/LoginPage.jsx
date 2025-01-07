@@ -1,5 +1,5 @@
 import { AtSign, Eye, EyeOff, LoaderCircle, Lock } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -36,7 +36,7 @@ export default function LoginPage() {
   const [serverErrorMsg, setServerErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { login, role } = useAuth();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -46,6 +46,12 @@ export default function LoginPage() {
     },
   });
 
+  useEffect(() => {
+    if (role) {
+      navigate("/");
+    }
+  }, [role]);
+
   async function onSubmit(values) {
     try {
       setServerErrorMsg("");
@@ -54,8 +60,6 @@ export default function LoginPage() {
       const { error } = await login(values.email, values.password);
       if (error) {
         setServerErrorMsg(error.message);
-      } else {
-        navigate("/");
       }
     } finally {
       setLoading(false);

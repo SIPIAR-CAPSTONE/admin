@@ -74,7 +74,7 @@ export default function IncidentInfoPage() {
         id,
         location,
         landmark,
-        reporterName,
+        bystanderName,
         emergencyType,
         date: reportDateSubmitted,
         time: reportTimeSubmitted,
@@ -84,6 +84,7 @@ export default function IncidentInfoPage() {
         condition,
       },
     ];
+    console.log(jsonData);
     const timestamp = moment().format("YYYY-MM-DD");
     const fileName = `Incident-Report_${timestamp}_${id}`;
 

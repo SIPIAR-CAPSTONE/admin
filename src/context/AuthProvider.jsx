@@ -18,31 +18,37 @@ export const AuthProvider = ({ children }) => {
 
   // Function to fetch user role
   const fetchUserRole = async (sessionUser) => {
-
     const { data } = await supabase
-    .from('USER')
-    .select('admin_role')
-    .eq('user_id', sessionUser.id)
+      .from("USER")
+      .select("admin_role")
+      .eq("user_id", sessionUser.id);
 
-    const userRole = data[0]['admin_role'];
+    const userRole = data[0]["admin_role"];
+    console.log("fetchUserRole ", userRole);
     setRole(userRole);
   };
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Error fetching session:", error);
+      try {
+        setLoading(true);
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error("Error fetching session:", error);
+        }
+
+        if (session?.user) {
+          setUser(session.user);
+          setAuth(true);
+          await fetchUserRole(session.user);
+        }
+      } finally {
+        setLoading(false);
       }
-      if (session?.user) {
-        setUser(session.user);
-        setAuth(true);
-        await fetchUserRole(session.user);
-      }
-      setLoading(false);
     };
 
     initializeAuth();
@@ -50,9 +56,11 @@ export const AuthProvider = ({ children }) => {
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session?.user) {
-          setUser(session.user);
-          setAuth(true);
-          await fetchUserRole(session.user);
+          setTimeout(async () => {
+            setUser(session.user);
+            setAuth(true);
+            await fetchUserRole(session.user);
+          });
         } else if (event === "SIGNED_OUT") {
           setUser(null);
           setRole(null);
@@ -61,7 +69,9 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      if (listener) listener.subscription.unsubscribe();
+    };
   }, []);
 
   return (
