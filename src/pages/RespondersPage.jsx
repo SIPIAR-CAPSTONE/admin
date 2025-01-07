@@ -129,10 +129,7 @@ export default function RespondersPage() {
 
   return (
     <div>
-      <TopBar
-        breadcrumbsData={breadCrumbs}
-        renderTrailer={createRespondersButton}
-      />
+      
       <ResponderFormDialog
         title="Create New Responder"
         open={formIsOpen}

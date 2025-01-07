@@ -137,10 +137,7 @@ export default function BystandersPage() {
 
   return (
     <div>
-      <TopBar
-        breadcrumbsData={breadCrumbs}
-        renderTrailer={createBystanderButton}
-      />
+      
       <BystanderFormDialog
         title="Create New Bystander"
         open={formIsOpen}
