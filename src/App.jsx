@@ -19,24 +19,9 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute";
 import InitialAuthenticatedPage from "@/pages/InitialAuthenticatedPage";
 import ResponderInfoPage from "@/pages/ResponderInfoPage";
-import { useEffect } from "react";
 
 function App() {
   useTheme(); //initialize theme
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        window.location.reload(); // Refresh the entire page
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
 
   return (
     <>
