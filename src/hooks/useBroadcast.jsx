@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import supabase from "@/supabase/config";
 import { useToast } from "@/hooks/use-toast";
 
@@ -9,9 +9,6 @@ export default function useBroadcast() {
   const emergencyAlertsLength = emergencyAlerts.length;
   let pollingInterval;
   const { toast } = useToast();
-
-  const isInitialized = useRef(false);
-  const isFetching = useRef(false);
 
   const fetchResponders = async () => {
     const { data, error } = await supabase.from("RESPONDER").select(`
@@ -32,17 +29,8 @@ export default function useBroadcast() {
   };
 
   const fetchAlerts = async () => {
-    // Prevent double fetching
-    if (isFetching.current) {
-      console.log("fetchAlerts already in progress, skipping...");
-      return;
-    }
-
-    isFetching.current = true;
-
     try {
       setLoading(true);
-      console.log("refetch alert1");
       const { data, error } = await supabase.from("BROADCAST").select(`
         *,
         USER: user_id (first_name, last_name),
@@ -59,12 +47,10 @@ export default function useBroadcast() {
       if (data) {
         setEmergencyAlerts(data);
       }
-      console.log("fetch Alerts: ", data);
     } catch (error) {
       console.log("error", error.message);
     } finally {
       setLoading(false);
-      isFetching.current = false;
     }
   };
 
@@ -74,12 +60,6 @@ export default function useBroadcast() {
    *
    */
   useEffect(() => {
-    if (isInitialized.current) {
-      return; // Prevent reinitializing on rerenders
-    }
-
-    isInitialized.current = true; // Mark as initialized
-
     fetchResponders();
     fetchAlerts();
 
@@ -87,11 +67,33 @@ export default function useBroadcast() {
     pollingInterval = setInterval(() => {
       fetchResponders();
       fetchAlerts();
-      console.log("refetch every 20 seconds");
     }, 20000);
 
     return () => {
       clearInterval(pollingInterval);
+    };
+  }, []);
+
+  /*
+   *
+   * Observe the broadcast table for changes then refetch
+   *
+   */
+  useEffect(() => {
+    const channels = supabase
+      .channel("broadcast-all-channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "BROADCAST" },
+        async () => {
+          console.log("realtime: new data received");
+          fetchAlerts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channels.unsubscribe();
     };
   }, []);
 
