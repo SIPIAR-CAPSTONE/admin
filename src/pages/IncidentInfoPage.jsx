@@ -171,7 +171,7 @@ function ConditionCard({ condition, className }) {
       </span>
       {condition === "Stable" ? (
         <span className="block text-lg font-bold text-green-500">STABLE</span>
-      ) : condition === "Stable" ? (
+      ) : condition === "Unstable" ? (
         <span className="block text-lg font-bold text-red-500">UNSTABLE</span>
       ) : (
         <span className="block text-lg font-bold text-gray-500"> N/A </span>
