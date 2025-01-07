@@ -101,7 +101,7 @@ export function PeakTimeIncidentChart({
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Year {currentYear} <TrendingUp className="w-4 h-4" />
+          Previous year {currentYear} <TrendingUp className="w-4 h-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Display the most common times incidents occur.
